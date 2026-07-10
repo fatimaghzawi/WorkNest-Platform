@@ -754,7 +754,7 @@ button.wn-proposals-overview__tile {
   100% { background-position: -200% 0; }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .wn-proposals-overview {
     grid-template-columns: 1fr;
   }

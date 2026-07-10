@@ -267,6 +267,20 @@
   }
 }
 
+@media (max-width: 768px) {
+  .wn-reports-overview__tiles {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-reports-table-wrap {
+    margin-left: calc(-1 * var(--space-2));
+    margin-right: calc(-1 * var(--space-2));
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 @media (max-width: 640px) {
   .wn-reports-overview__tiles {
     grid-template-columns: 1fr;

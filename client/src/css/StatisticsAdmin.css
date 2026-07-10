@@ -696,6 +696,17 @@
   }
 }
 
+@media (max-width: 768px) {
+  .wn-stats-overview__tiles {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-stats-panel__legend-inline,
+  .wn-stats-panel__header {
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 640px) {
   .wn-stats-overview__tiles {
     grid-template-columns: 1fr;
