@@ -963,6 +963,22 @@
   }
 }
 
+@media (max-width: 768px) {
+  .wn-interview-card__title,
+  .wn-interview-card__meta,
+  .wn-interview-card__time,
+  .wn-dashboard-mini-cal__item-title,
+  .wn-dashboard-mini-cal__item-meta {
+    white-space: normal;
+    overflow: visible;
+    overflow-wrap: anywhere;
+  }
+
+  .wn-interviews-overview__tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 640px) {
   .wn-interview-calendar__cell {
     min-height: 52px;

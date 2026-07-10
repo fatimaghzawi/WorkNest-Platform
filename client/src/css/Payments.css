@@ -227,8 +227,32 @@
   color: var(--color-text-main);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .wn-money-card__footer {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-payment-tx {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .wn-payment-tx__amount {
+    white-space: normal;
+  }
+
   .wn-deposit-modal__row {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-money-card {
+    padding: 16px;
+  }
+
+  .wn-money-card__amount {
+    font-size: 1.6rem;
   }
 }
