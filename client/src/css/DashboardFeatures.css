@@ -1092,7 +1092,7 @@ margin-top: var(--space-3);
   color: var(--color-primary-main);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .wn-proposal-grid {
     grid-template-columns: 1fr;
   }

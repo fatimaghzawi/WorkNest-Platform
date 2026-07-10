@@ -1228,13 +1228,18 @@ button.wn-jobs-overview__tile {
   background: var(--color-brand-dashboard-background);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .wn-jobs-overview {
     grid-template-columns: 1fr;
   }
 
   .wn-jobs-filters {
     margin-left: 0;
+    width: 100%;
+  }
+
+  .wn-jobs-search {
+    min-width: 100%;
     width: 100%;
   }
 
