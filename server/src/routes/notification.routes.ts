@@ -1,0 +1,16 @@
+﻿const { Router } = require('express');
+const notificationController = require('../controllers/notification.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { authorize } = require('../middlewares/role.middleware');
+const asyncHandler = require('../utils/asyncHandler');
+
+const router = Router();
+
+router.use(authenticate, authorize('client', 'freelancer'));
+
+router.get('/unread-count', asyncHandler(notificationController.getUnreadCount));
+router.patch('/read-all', asyncHandler(notificationController.markAllNotificationsRead));
+router.get('/', asyncHandler(notificationController.listNotifications));
+router.patch('/:id/read', asyncHandler(notificationController.markNotificationRead));
+
+module.exports = router;

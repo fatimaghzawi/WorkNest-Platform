@@ -1,0 +1,234 @@
+.wn-money-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  padding: 22px;
+  color: #fff;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 42%),
+    linear-gradient(135deg, #49225b 0%, #6e3482 48%, #a56abd 100%);
+  box-shadow: 0 18px 40px rgba(73, 34, 91, 0.28);
+}
+
+.wn-money-card--compact {
+  padding: 18px;
+}
+
+.wn-money-card__chip {
+  width: 42px;
+  height: 30px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  background: linear-gradient(135deg, #f5d67b, #d4a017);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.wn-money-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.wn-money-card__brand {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+
+.wn-money-card__status {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.wn-money-card__status--pending {
+  background: rgba(251, 191, 36, 0.22);
+}
+
+.wn-money-card__status--held {
+  background: rgba(34, 197, 94, 0.22);
+}
+
+.wn-money-card__status--released {
+  background: rgba(59, 130, 246, 0.22);
+}
+
+.wn-money-card__amount {
+  margin: 18px 0 4px;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.wn-money-card__currency {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.82;
+}
+
+.wn-money-card__project {
+  margin: 14px 0 0;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.wn-money-card__footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.wn-money-card__label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  margin-bottom: 4px;
+}
+
+.wn-money-card__footer strong {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.wn-deposit-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.wn-deposit-modal__intro {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.wn-deposit-modal__stripe {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.wn-deposit-modal__stripe-copy {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.wn-deposit-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.wn-deposit-modal__form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.wn-deposit-modal__form input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-brand-surface);
+  font: inherit;
+}
+
+.wn-deposit-modal__row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.wn-deposit-modal__error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.wn-deposit-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.wn-payments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: var(--space-4);
+}
+
+.wn-payment-tx {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.wn-payment-tx:last-child {
+  border-bottom: none;
+}
+
+.wn-payment-tx__copy strong {
+  display: block;
+  color: var(--color-text-main);
+}
+
+.wn-payment-tx__copy span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.wn-payment-tx__amount {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary-main);
+  white-space: nowrap;
+}
+
+.wn-escrow-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.28);
+}
+
+.wn-escrow-banner p {
+  margin: 0;
+  color: var(--color-text-main);
+}
+
+@media (max-width: 640px) {
+  .wn-deposit-modal__row {
+    grid-template-columns: 1fr;
+  }
+}

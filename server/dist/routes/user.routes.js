@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const { Router } = require('express');
+const userController = require('../controllers/user.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { authorize } = require('../middlewares/role.middleware');
+const { validate } = require('../middlewares/validation.middleware');
+const asyncHandler = require('../utils/asyncHandler');
+const { userIdSchema, createUserSchema, updateUserSchema, listUsersSchema, } = require('../validators/user.validator');
+const router = Router();
+router.use(authenticate, authorize('admin'));
+router.get('/', validate(listUsersSchema), asyncHandler(userController.listUsers));
+router.get('/stats', asyncHandler(userController.getUserStats));
+router.get('/:id', validate(userIdSchema), asyncHandler(userController.getUser));
+router.post('/', validate(createUserSchema), asyncHandler(userController.createUser));
+router.patch('/:id', validate(updateUserSchema), asyncHandler(userController.updateUser));
+router.delete('/:id', validate(userIdSchema), asyncHandler(userController.deleteUser));
+module.exports = router;

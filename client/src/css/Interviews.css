@@ -1,0 +1,1495 @@
+/* Interviews — glassmorphism calendar studio */
+
+.wn-interviews-page {
+  position: relative;
+  min-height: 100%;
+}
+
+.wn-interviews-page__backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wn-interviews-page__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  animation: wn-interview-float 14s ease-in-out infinite;
+}
+
+.wn-interviews-page__blob--1 {
+  width: 320px;
+  height: 320px;
+  top: -80px;
+  right: 5%;
+  background: rgba(165, 106, 189, 0.45);
+}
+
+.wn-interviews-page__blob--2 {
+  width: 280px;
+  height: 280px;
+  bottom: 10%;
+  left: -60px;
+  background: rgba(110, 52, 130, 0.35);
+  animation-delay: -4s;
+}
+
+.wn-interviews-page__blob--3 {
+  width: 200px;
+  height: 200px;
+  top: 40%;
+  right: 25%;
+  background: rgba(245, 235, 250, 0.9);
+  animation-delay: -8s;
+}
+
+.wn-interviews-page__content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Glass primitives */
+.wn-glass-panel {
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 8px 32px rgba(73, 34, 91, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.wn-glass-card {
+  background: rgba(255, 255, 255, 0.52);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 6px 24px rgba(73, 34, 91, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.wn-glass-cell {
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.wn-glass-header {
+  background: linear-gradient(
+    135deg,
+    rgba(73, 34, 91, 0.88) 0%,
+    rgba(110, 52, 130, 0.82) 50%,
+    rgba(165, 106, 189, 0.78) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Overview */
+.wn-interviews-overview {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.wn-interviews-overview__spotlight {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 28px 24px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: var(--color-primary-main);
+}
+
+.wn-interviews-overview__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+.wn-interviews-overview__orb--a {
+  width: 140px;
+  height: 140px;
+  top: -30px;
+  right: -20px;
+  background: rgba(165, 106, 189, 0.25);
+}
+
+.wn-interviews-overview__orb--b {
+  width: 100px;
+  height: 100px;
+  bottom: 20px;
+  left: -20px;
+  background: rgba(110, 52, 130, 0.15);
+}
+
+.wn-interviews-overview__eyebrow {
+  position: relative;
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-secondary-main);
+}
+
+.wn-interviews-overview__total {
+  position: relative;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2.8rem, 5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.wn-interviews-overview__headline {
+  position: relative;
+  margin: 8px 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.wn-interviews-overview__caption {
+  position: relative;
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.wn-interviews-overview__meter {
+  position: relative;
+  margin-top: 16px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(110, 52, 130, 0.12);
+  overflow: hidden;
+}
+
+.wn-interviews-overview__meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6e3482, #a56abd);
+}
+
+.wn-interviews-overview__tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.wn-interviews-overview__tile {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 22px;
+  text-align: left;
+}
+
+.wn-interviews-overview__tile:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 14px 36px rgba(73, 34, 91, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.wn-interviews-overview__tile-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.wn-interviews-overview__tile--upcoming .wn-interviews-overview__tile-icon {
+  background: rgba(110, 52, 130, 0.12);
+  color: var(--color-secondary-main);
+}
+
+.wn-interviews-overview__tile--pending .wn-interviews-overview__tile-icon {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+}
+
+.wn-interviews-overview__tile--confirmed .wn-interviews-overview__tile-icon {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+}
+
+.wn-interviews-overview__tile--done .wn-interviews-overview__tile-icon {
+  background: rgba(34, 197, 94, 0.12);
+  color: #15803d;
+}
+
+.wn-interviews-overview__tile-value {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-primary-main);
+  line-height: 1.1;
+}
+
+.wn-interviews-overview__tile-label {
+  margin: 4px 0 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.wn-interviews-overview__tile-hint {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+}
+
+.wn-interviews-overview--loading .wn-interviews-overview__spotlight,
+.wn-interviews-overview--loading .wn-glass-card {
+  min-height: 220px;
+  animation: wn-interview-shimmer 1.2s infinite;
+}
+
+.wn-interviews-overview--loading .wn-glass-card {
+  min-height: 100px;
+}
+
+/* Layout */
+.wn-interviews-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+  align-items: start;
+}
+
+/* Calendar */
+.wn-interview-calendar {
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.wn-interview-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 20px 22px;
+  color: #fff;
+}
+
+.wn-interview-calendar__kicker {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.88;
+}
+
+.wn-interview-calendar__month {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.wn-interview-calendar__nav {
+  display: flex;
+  gap: 8px;
+}
+
+.wn-interview-calendar__nav-btn,
+.wn-interview-calendar__today-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  color: inherit;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.wn-interview-calendar__nav-btn {
+  width: 38px;
+  height: 38px;
+}
+
+.wn-interview-calendar__today-btn {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.wn-interview-calendar__nav-btn:hover,
+.wn-interview-calendar__today-btn:hover {
+  background: rgba(255, 255, 255, 0.26);
+  transform: translateY(-1px);
+}
+
+.wn-interview-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  padding: 0 10px;
+  background: transparent;
+}
+
+.wn-interview-calendar__weekday {
+  padding: 10px 4px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.wn-interview-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding: 10px 12px 14px;
+}
+
+.wn-interview-calendar__cell {
+  position: relative;
+  min-height: 100px;
+  padding: 8px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.wn-interview-calendar__cell:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 28px rgba(73, 34, 91, 0.1);
+  border-color: rgba(165, 106, 189, 0.45);
+}
+
+.wn-interview-calendar__cell--outside {
+  opacity: 0.45;
+}
+
+.wn-interview-calendar__cell--today .wn-interview-calendar__day-num {
+  background: linear-gradient(135deg, #6e3482, #a56abd);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(110, 52, 130, 0.35);
+}
+
+.wn-interview-calendar__cell--selected {
+  border-color: rgba(110, 52, 130, 0.55);
+  box-shadow:
+    0 0 0 2px rgba(165, 106, 189, 0.25),
+    0 12px 30px rgba(73, 34, 91, 0.12);
+  background: rgba(245, 235, 250, 0.75);
+}
+
+.wn-interview-calendar__cell--has-events {
+  border-color: rgba(165, 106, 189, 0.35);
+}
+
+.wn-interview-calendar__day-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.wn-interview-calendar__badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  background: rgba(110, 52, 130, 0.15);
+  color: var(--color-secondary-main);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.wn-interview-calendar__dots {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.wn-interview-calendar__event-chip {
+  display: block;
+  padding: 4px 7px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 3px solid transparent;
+  backdrop-filter: blur(6px);
+}
+
+.wn-interview-calendar__event-chip--scheduled {
+  background: rgba(245, 158, 11, 0.18);
+  color: #b45309;
+  border-left-color: #f59e0b;
+}
+
+.wn-interview-calendar__event-chip--confirmed {
+  background: rgba(59, 130, 246, 0.18);
+  color: #1d4ed8;
+  border-left-color: #3b82f6;
+}
+
+.wn-interview-calendar__event-chip--completed {
+  background: rgba(34, 197, 94, 0.18);
+  color: #15803d;
+  border-left-color: #22c55e;
+}
+
+.wn-interview-calendar__event-chip--cancelled {
+  background: rgba(107, 114, 128, 0.15);
+  color: #4b5563;
+  border-left-color: #9ca3af;
+}
+
+.wn-interview-calendar__event-chip--declined {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+  border-left-color: #ef4444;
+}
+
+.wn-interview-calendar__more {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.wn-interview-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(10px);
+}
+
+.wn-interview-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.wn-interview-legend__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);
+}
+
+/* Agenda */
+.wn-interview-agenda {
+  border-radius: 28px;
+  overflow: hidden;
+  position: sticky;
+  top: calc(var(--layout-navbar-height, 64px) + 16px);
+}
+
+.wn-interview-agenda__header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.wn-interview-agenda__kicker {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.wn-interview-agenda__date {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-primary-main);
+  margin: 0 0 4px;
+}
+
+.wn-interview-agenda__count {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.wn-interview-agenda__add {
+  margin-top: 12px;
+}
+
+.wn-interview-agenda__empty {
+  margin: 16px;
+  padding: 28px 20px;
+  border-radius: 20px;
+  text-align: center;
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.wn-interview-agenda__empty p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.wn-interview-agenda__timeline {
+  list-style: none;
+  margin: 0;
+  padding: 16px 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 560px;
+  overflow-y: auto;
+}
+
+.wn-interview-agenda__item {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.wn-interview-agenda__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 18px;
+}
+
+.wn-interview-agenda__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85);
+  flex-shrink: 0;
+}
+
+.wn-interview-agenda__dot--scheduled { background: #f59e0b; }
+.wn-interview-agenda__dot--confirmed { background: #3b82f6; }
+.wn-interview-agenda__dot--completed { background: #22c55e; }
+.wn-interview-agenda__dot--cancelled { background: #9ca3af; }
+.wn-interview-agenda__dot--declined { background: #ef4444; }
+
+.wn-interview-agenda__line {
+  flex: 1;
+  width: 2px;
+  margin-top: 6px;
+  min-height: 24px;
+  background: linear-gradient(180deg, rgba(110, 52, 130, 0.3), rgba(110, 52, 130, 0.05));
+  border-radius: 999px;
+}
+
+.wn-interview-card {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 18px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  margin-bottom: 8px;
+}
+
+.wn-interview-card:hover {
+  transform: translateX(4px);
+  border-color: rgba(165, 106, 189, 0.5);
+  box-shadow:
+    0 12px 32px rgba(73, 34, 91, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.wn-interview-card--active {
+  border-color: var(--color-primary-main);
+  box-shadow: 0 0 0 2px rgba(110, 52, 130, 0.15);
+}
+
+.wn-interview-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.wn-interview-card__time {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-secondary-main);
+}
+
+.wn-interview-card__duration {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(110, 52, 130, 0.1);
+  color: var(--color-primary-main);
+}
+
+.wn-interview-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0 0 4px;
+  line-height: 1.35;
+}
+
+.wn-interview-card__meta {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.wn-interview-card__link-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(110, 52, 130, 0.08);
+  border: 1px solid rgba(110, 52, 130, 0.12);
+  color: var(--color-secondary-main);
+}
+
+.wn-interview-card__link {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-primary-main);
+  text-decoration: none;
+  word-break: break-all;
+  line-height: 1.45;
+}
+
+.wn-interview-card__link:hover {
+  text-decoration: underline;
+}
+
+.wn-interview-card__copy {
+  border: none;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--color-secondary-main);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.wn-interview-card__copy:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.wn-interview-card__password {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.wn-interview-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.wn-interview-card__join {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-secondary-main);
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(110, 52, 130, 0.1);
+  border: 1px solid rgba(110, 52, 130, 0.15);
+  transition: background 0.15s ease;
+}
+
+.wn-interview-card__join:hover {
+  background: rgba(110, 52, 130, 0.18);
+}
+
+/* Detail modal glass */
+.wn-interviews-page .wn-modal {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 24px 60px rgba(73, 34, 91, 0.18);
+}
+
+.wn-interviews-page .wn-modal-overlay {
+  background: rgba(73, 34, 91, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Detail modal */
+.wn-interview-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.wn-interview-detail__meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.wn-interview-detail__duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.wn-interview-detail__job {
+  margin: 0 0 6px;
+  font-family: var(--font-heading);
+  color: var(--color-primary-main);
+  font-size: 1.2rem;
+}
+
+.wn-interview-detail__date {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.wn-interview-detail__time {
+  margin: 6px 0 0;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.wn-interview-detail__people {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 0;
+}
+
+.wn-interview-detail__people dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.wn-interview-detail__people dd {
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+
+.wn-interview-detail__link-panel {
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.wn-interview-detail__link-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.wn-interview-detail__link-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.wn-interview-detail__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--color-border-light);
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--color-secondary-main);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wn-interview-detail__copy:hover {
+  border-color: var(--color-primary-main);
+}
+
+.wn-interview-detail__link {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary-main);
+  word-break: break-all;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.wn-interview-detail__link:hover {
+  text-decoration: underline;
+}
+
+.wn-interview-detail__password {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.wn-interview-detail__link-missing {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.wn-interview-detail__notes-label {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.wn-interview-detail__notes-body {
+  margin: 0;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+}
+
+@keyframes wn-interview-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(12px, -18px) scale(1.05); }
+}
+
+@keyframes wn-interview-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (max-width: 1024px) {
+  .wn-interviews-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-interviews-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-interview-agenda {
+    position: static;
+  }
+
+  .wn-interview-calendar__cell {
+    min-height: 72px;
+    padding: 6px 4px;
+  }
+
+  .wn-interview-calendar__event-chip {
+    display: none;
+  }
+
+  .wn-interview-calendar__dots--has-events::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent-main);
+    margin-top: auto;
+    align-self: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .wn-interview-calendar__cell {
+    min-height: 52px;
+  }
+
+  .wn-interview-calendar__day-num {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+
+  .wn-interviews-overview__tiles {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dashboard mini calendar */
+.wn-dashboard-mini-cal {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.wn-dashboard-mini-cal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.wn-dashboard-mini-cal__kicker {
+  margin: 0 0 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-secondary-main);
+}
+
+.wn-dashboard-mini-cal__month {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary-main);
+}
+
+.wn-dashboard-mini-cal__nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.wn-dashboard-mini-cal__nav-btn,
+.wn-dashboard-mini-cal__today {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-light);
+  border-radius: 10px;
+  background: var(--color-brand-background);
+  color: var(--color-primary-main);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.wn-dashboard-mini-cal__nav-btn {
+  width: 30px;
+  height: 30px;
+}
+
+.wn-dashboard-mini-cal__today {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.wn-dashboard-mini-cal__nav-btn:hover,
+.wn-dashboard-mini-cal__today:hover {
+  background: rgba(73, 34, 91, 0.08);
+  transform: translateY(-1px);
+}
+
+.wn-dashboard-mini-cal__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.wn-dashboard-mini-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.wn-dashboard-mini-cal__grid--loading {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.wn-dashboard-mini-cal__cell {
+  position: relative;
+  min-height: 34px;
+  padding: 4px 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font: inherit;
+  color: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.wn-dashboard-mini-cal__cell:hover {
+  background: rgba(73, 34, 91, 0.06);
+}
+
+.wn-dashboard-mini-cal__cell--outside {
+  opacity: 0.35;
+}
+
+.wn-dashboard-mini-cal__cell--today .wn-dashboard-mini-cal__day {
+  background: linear-gradient(135deg, #6e3482, #a56abd);
+  color: #fff;
+}
+
+.wn-dashboard-mini-cal__cell--selected {
+  border-color: rgba(110, 52, 130, 0.35);
+  background: rgba(231, 219, 239, 0.55);
+}
+
+.wn-dashboard-mini-cal__cell--has-events {
+  border-color: rgba(165, 106, 189, 0.22);
+}
+
+.wn-dashboard-mini-cal__day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.wn-dashboard-mini-cal__markers {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 6px;
+}
+
+.wn-dashboard-mini-cal__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.wn-dashboard-mini-cal__count {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--color-secondary-main);
+  line-height: 1;
+}
+
+.wn-dashboard-mini-cal__agenda {
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.wn-dashboard-mini-cal__agenda-title {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.wn-dashboard-mini-cal__agenda-sub {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.wn-dashboard-mini-cal__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.wn-dashboard-mini-cal__item {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--color-brand-background);
+  border: 1px solid var(--color-border-light);
+}
+
+.wn-dashboard-mini-cal__item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.wn-dashboard-mini-cal__item-top strong {
+  font-size: 0.78rem;
+  color: var(--color-primary-main);
+}
+
+.wn-dashboard-mini-cal__item-title {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wn-dashboard-mini-cal__item-meta {
+  margin: 4px 0 0;
+  font-size: 0.72rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wn-dashboard-mini-cal__empty {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.wn-dashboard-mini-cal__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 2px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border-light);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-secondary-main);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.wn-dashboard-mini-cal__link:hover {
+  color: var(--color-primary-main);
+}
+
+/* Dashboard mini calendar */
+.wn-dashboard-mini-cal {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.wn-dashboard-mini-cal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.wn-dashboard-mini-cal__kicker {
+  margin: 0 0 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-secondary-main);
+}
+
+.wn-dashboard-mini-cal__month {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary-main);
+}
+
+.wn-dashboard-mini-cal__nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.wn-dashboard-mini-cal__nav-btn,
+.wn-dashboard-mini-cal__today {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-light);
+  border-radius: 10px;
+  background: var(--color-brand-background);
+  color: var(--color-primary-main);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.wn-dashboard-mini-cal__nav-btn {
+  width: 30px;
+  height: 30px;
+}
+
+.wn-dashboard-mini-cal__today {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.wn-dashboard-mini-cal__nav-btn:hover,
+.wn-dashboard-mini-cal__today:hover {
+  background: rgba(73, 34, 91, 0.08);
+  transform: translateY(-1px);
+}
+
+.wn-dashboard-mini-cal__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.wn-dashboard-mini-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.wn-dashboard-mini-cal__grid--loading {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.wn-dashboard-mini-cal__cell {
+  position: relative;
+  min-height: 38px;
+  padding: 4px 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font: inherit;
+  color: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.wn-dashboard-mini-cal__cell:hover {
+  background: rgba(73, 34, 91, 0.06);
+  border-color: rgba(73, 34, 91, 0.12);
+}
+
+.wn-dashboard-mini-cal__cell--outside {
+  opacity: 0.35;
+}
+
+.wn-dashboard-mini-cal__cell--today .wn-dashboard-mini-cal__day {
+  background: linear-gradient(135deg, #6e3482, #a56abd);
+  color: #fff;
+}
+
+.wn-dashboard-mini-cal__cell--selected {
+  background: rgba(165, 106, 189, 0.12);
+  border-color: rgba(110, 52, 130, 0.28);
+}
+
+.wn-dashboard-mini-cal__cell--has-events {
+  border-color: rgba(165, 106, 189, 0.2);
+}
+
+.wn-dashboard-mini-cal__day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.wn-dashboard-mini-cal__markers {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  min-height: 6px;
+}
+
+.wn-dashboard-mini-cal__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.wn-dashboard-mini-cal__count {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--color-secondary-main);
+  line-height: 1;
+}
+
+.wn-dashboard-mini-cal__agenda {
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.wn-dashboard-mini-cal__agenda-title {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.wn-dashboard-mini-cal__agenda-sub {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+}
+
+.wn-dashboard-mini-cal__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.wn-dashboard-mini-cal__item {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--color-brand-background);
+  border: 1px solid var(--color-border-light);
+}
+
+.wn-dashboard-mini-cal__item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.wn-dashboard-mini-cal__item-top strong {
+  font-size: 0.78rem;
+  color: var(--color-primary-main);
+}
+
+.wn-dashboard-mini-cal__item-title {
+  margin: 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wn-dashboard-mini-cal__item-meta {
+  margin: 4px 0 0;
+  font-size: 0.72rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wn-dashboard-mini-cal__empty {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.wn-dashboard-mini-cal__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 2px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border-light);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-secondary-main);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.wn-dashboard-mini-cal__link:hover {
+  color: var(--color-primary-main);
+}

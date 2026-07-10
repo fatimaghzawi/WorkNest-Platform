@@ -1,0 +1,21 @@
+services:
+  # Backend API only — frontend deploys on Vercel (free tier)
+  - type: web
+    name: worknest-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_NAME
+        value: WorkNest
+      - key: APP_URL
+        value: https://worknest-17xd.onrender.com
+      - key: CLIENT_URL
+        value: https://work-nest-eight.vercel.app
+      # Set in Render dashboard: MONGO_URI, JWT_SECRET, JWT_REFRESH_SECRET,
+      # ELASTICEMAIL_API_KEY, EMAIL_FROM
+

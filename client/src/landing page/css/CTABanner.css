@@ -1,0 +1,104 @@
+/* CTABanner.css */
+
+.wn-cta-section {
+  padding: var(--space-6) var(--layout-grid-margin) var(--space-5);
+  background: var(--color-brand-surface);
+}
+
+.wn-cta {
+  background: var(--color-secondary-main);
+  font-family: var(--font-body);
+  clip-path: polygon(3% 0, 97% 0, 100% 50%, 97% 100%, 3% 100%, 0 50%);
+  margin: 0;
+}
+
+.wn-cta__inner {
+  max-width: var(--layout-max-container-width);
+  margin: 0 auto;
+  padding: var(--space-4) var(--layout-grid-margin);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.wn-cta__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.35rem, 4vw, 26px);
+  font-weight: 600;
+  color: var(--color-text-inverted);
+  margin: 0 0 4px;
+}
+
+.wn-cta__subtitle {
+  font-size: 14px;
+  color: var(--color-brand-light-purple);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.wn-cta__actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.wn-cta__actions .wn-btn {
+  min-width: 140px;
+}
+
+.primary {
+  background-color: var(--color-brand-light-purple);
+  color: var(--primary-main);
+}
+
+.secondary {
+  background-color: var(--color-accent-main);
+  color: var(--color-text-inverted);
+}
+
+.primary:hover {
+  background-color: var(--color-accent-main);
+  color: var(--color-text-inverted);
+}
+
+.secondary:hover {
+  background-color: var(--color-brand-light-purple);
+  color: var(--primary-main);
+}
+
+@media (max-width: 768px) {
+  .wn-cta-section {
+    padding: var(--space-5) var(--layout-grid-margin) var(--space-4);
+  }
+
+  .wn-cta {
+    clip-path: none;
+    border-radius: var(--radius-xl);
+  }
+
+  .wn-cta__inner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .wn-cta__actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .wn-cta__actions .wn-btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-cta-section {
+    padding: var(--space-4) var(--space-2) var(--space-3);
+  }
+}

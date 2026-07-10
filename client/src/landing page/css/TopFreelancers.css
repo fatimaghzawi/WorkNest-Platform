@@ -1,0 +1,130 @@
+/* TopFreelancers.css */
+
+.wn-freelancers {
+  background-color: var(--color-brand-surface);
+  font-family: var(--font-body);
+}
+
+.wn-freelancers__inner {
+  max-width: var(--layout-max-container-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--layout-grid-margin);
+}
+
+.wn-freelancers__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.wn-freelancers__title {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin: 0;
+}
+
+.wn-freelancers__view-all {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary-main);
+  text-decoration: none;
+}
+
+.wn-freelancers__view-all:hover {
+  text-decoration: underline;
+}
+
+.wn-freelancers__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+@media (max-width: 1000px) {
+  .wn-freelancers__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .wn-freelancers__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-freelancers__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+    margin-bottom: var(--space-3);
+  }
+
+  .wn-freelancers__inner {
+    padding: var(--space-5) var(--layout-grid-margin);
+  }
+}
+
+.wn-freelancer-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: var(--space-3);
+  background-color: var(--color-brand-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-low);
+  transition: var(--transition-fast);
+}
+
+.wn-freelancer-card:hover {
+  box-shadow: var(--shadow-med);
+  border-color: var(--color-accent-main);
+}
+
+.wn-freelancer-card__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--color-primary-main);
+  color: var(--color-text-inverted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.wn-freelancer-card__name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin: 0;
+}
+
+.wn-freelancer-card__role {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 0 0 4px;
+}
+
+.wn-freelancer-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.wn-freelancer-card__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--color-status-warning);
+  font-weight: 600;
+}

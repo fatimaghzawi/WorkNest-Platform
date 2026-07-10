@@ -1,0 +1,48 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const { Router } = require('express');
+const { sendSuccess } = require('../utils/response');
+const authRoutes = require('./auth.routes');
+const userRoutes = require('./user.routes');
+const profileRoutes = require('./profile.routes');
+const categoryRoutes = require('./category.routes');
+const skillRoutes = require('./skill.routes');
+const jobRoutes = require('./job.routes');
+const proposalRoutes = require('./proposal.routes');
+const interviewRoutes = require('./interview.routes');
+const workspaceRoutes = require('./workspace.routes');
+const projectRoutes = require('./project.routes');
+const milestoneRoutes = require('./milestone.routes');
+const deliveryRoutes = require('./delivery.routes');
+const paymentRoutes = require('./payment.routes');
+const notificationRoutes = require('./notification.routes');
+const adminRoutes = require('./admin.routes');
+const dashboardRoutes = require('./dashboard.routes');
+const logRoutes = require('./log.routes');
+const router = Router();
+router.get('/health', (req, res) => {
+    return sendSuccess(res, {
+        message: 'WorkNest API is running',
+        data: {
+            timestamp: new Date().toISOString(),
+        },
+    });
+});
+router.use('/auth', authRoutes);
+router.use('/users', userRoutes);
+router.use('/profiles', profileRoutes);
+router.use('/categories', categoryRoutes);
+router.use('/skills', skillRoutes);
+router.use('/jobs', jobRoutes);
+router.use('/proposals', proposalRoutes);
+router.use('/interviews', interviewRoutes);
+router.use('/workspaces', workspaceRoutes);
+router.use('/projects', projectRoutes);
+router.use('/milestones', milestoneRoutes);
+router.use('/deliveries', deliveryRoutes);
+router.use('/payments', paymentRoutes);
+router.use('/notifications', notificationRoutes);
+router.use('/admin', adminRoutes);
+router.use('/dashboard', dashboardRoutes);
+router.use('/logs', logRoutes);
+module.exports = router;

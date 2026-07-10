@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const { Router } = require('express');
+const paymentController = require('../controllers/payment.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { authorize } = require('../middlewares/role.middleware');
+const { validate } = require('../middlewares/validation.middleware');
+const asyncHandler = require('../utils/asyncHandler');
+const { createCheckoutSessionSchema, confirmCheckoutSchema, projectIdSchema, listPaymentsSchema, } = require('../validators/payment.validator');
+const router = Router();
+router.use(authenticate, authorize('client', 'freelancer'));
+router.get('/wallet', asyncHandler(paymentController.getWalletSummary));
+router.get('/', validate(listPaymentsSchema), asyncHandler(paymentController.listPayments));
+router.get('/project/:projectId', validate(projectIdSchema), asyncHandler(paymentController.getPaymentByProject));
+router.post('/project/:projectId/checkout-session', authorize('client'), validate(createCheckoutSessionSchema), asyncHandler(paymentController.createCheckoutSession));
+router.post('/project/:projectId/confirm-checkout', authorize('client'), validate(confirmCheckoutSchema), asyncHandler(paymentController.confirmCheckoutSession));
+module.exports = router;

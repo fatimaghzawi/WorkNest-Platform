@@ -1,0 +1,59 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Payment = require('../models/Payment').default;
+const create = (data) => Payment.create(data);
+const findById = (id) => Payment.findById(id).lean();
+const findByProjectId = (projectId) => Payment.findOne({ projectId }).lean();
+const findByProjectIds = (projectIds) => Payment.find({ projectId: { $in: projectIds } }).lean();
+const updateById = (id, data) => Payment.findByIdAndUpdate(id, data, { returnDocument: 'after', runValidators: true }).lean();
+const updateByProjectId = (projectId, data) => Payment.findOneAndUpdate({ projectId }, data, {
+    returnDocument: 'after',
+    runValidators: true,
+}).lean();
+const deleteByProjectId = (projectId) => Payment.deleteOne({ projectId });
+const deleteByJobId = (jobId) => Payment.deleteMany({ jobId });
+const findForUser = ({ userId, role, status, skip, limit }) => {
+    const filter = {};
+    if (role === 'client')
+        filter.clientId = userId;
+    else if (role === 'freelancer')
+        filter.freelancerId = userId;
+    if (status)
+        filter.status = status;
+    return Payment.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean();
+};
+const countForUser = (userId, role, status) => {
+    const filter = {};
+    if (role === 'client')
+        filter.clientId = userId;
+    else if (role === 'freelancer')
+        filter.freelancerId = userId;
+    if (status)
+        filter.status = status;
+    return Payment.countDocuments(filter);
+};
+const sumForUser = async (userId, role, status) => {
+    const match = { status };
+    if (role === 'client')
+        match.clientId = userId;
+    else if (role === 'freelancer')
+        match.freelancerId = userId;
+    const rows = await Payment.aggregate([
+        { $match: match },
+        { $group: { _id: null, total: { $sum: '$amount' } } },
+    ]);
+    return rows[0]?.total || 0;
+};
+module.exports = {
+    create,
+    findById,
+    findByProjectId,
+    findByProjectIds,
+    updateById,
+    updateByProjectId,
+    deleteByProjectId,
+    deleteByJobId,
+    findForUser,
+    countForUser,
+    sumForUser,
+};

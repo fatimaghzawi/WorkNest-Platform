@@ -1,0 +1,80 @@
+﻿const { Router } = require('express');
+const interviewController = require('../controllers/interview.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { authorize } = require('../middlewares/role.middleware');
+const { validate } = require('../middlewares/validation.middleware');
+const asyncHandler = require('../utils/asyncHandler');
+const {
+  interviewIdSchema,
+  createInterviewSchema,
+  updateInterviewSchema,
+  listInterviewsSchema,
+} = require('../validators/interview.validator');
+
+const router = Router();
+
+router.get(
+  '/',
+  authenticate,
+  authorize('client', 'freelancer', 'admin'),
+  validate(listInterviewsSchema),
+  asyncHandler(interviewController.listMyInterviews)
+);
+
+router.post(
+  '/',
+  authenticate,
+  authorize('client', 'admin'),
+  validate(createInterviewSchema),
+  asyncHandler(interviewController.createInterview)
+);
+
+router.get(
+  '/:id',
+  authenticate,
+  authorize('client', 'freelancer', 'admin'),
+  validate(interviewIdSchema),
+  asyncHandler(interviewController.getInterview)
+);
+
+router.patch(
+  '/:id',
+  authenticate,
+  authorize('client', 'admin'),
+  validate(updateInterviewSchema),
+  asyncHandler(interviewController.updateInterview)
+);
+
+router.patch(
+  '/:id/cancel',
+  authenticate,
+  authorize('client', 'admin'),
+  validate(interviewIdSchema),
+  asyncHandler(interviewController.cancelInterview)
+);
+
+router.patch(
+  '/:id/complete',
+  authenticate,
+  authorize('client', 'admin', 'freelancer'),
+  validate(interviewIdSchema),
+  asyncHandler(interviewController.completeInterview)
+);
+
+router.patch(
+  '/:id/confirm',
+  authenticate,
+  authorize('freelancer', 'admin'),
+  validate(interviewIdSchema),
+  asyncHandler(interviewController.confirmInterview)
+);
+
+router.patch(
+  '/:id/decline',
+  authenticate,
+  authorize('freelancer', 'admin'),
+  validate(interviewIdSchema),
+  asyncHandler(interviewController.declineInterview)
+);
+
+module.exports = router;

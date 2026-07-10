@@ -1,0 +1,120 @@
+/* Input.css */
+
+.wn-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-body);
+  width: 100%;
+}
+
+.wn-field__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-main);
+}
+
+.wn-field__required {
+  color: var(--color-status-error);
+  margin-left: 2px;
+}
+
+.wn-field__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.wn-input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--color-text-main);
+  background-color: var(--color-brand-surface);
+  border: 1px solid var(--color-border-main);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  transition: var(--transition-normal);
+}
+
+.wn-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.wn-input:hover:not(:disabled):not(:focus) {
+  border-color: var(--color-accent-main);
+}
+
+.wn-input:focus {
+  outline: none;
+  border-color: var(--color-accent-main);
+  box-shadow: 0 0 0 2px rgba(165, 106, 189, 0.25);
+}
+
+.wn-input:disabled {
+  background-color: var(--color-brand-dashboard-background);
+  color: var(--color-text-muted);
+  border-color: var(--color-border-light);
+  cursor: not-allowed;
+}
+
+/* Icon / adornment slots */
+.wn-field__control--has-left-icon .wn-input {
+  padding-left: 40px;
+}
+.wn-field__control--has-right-icon .wn-input {
+  padding-right: 40px;
+}
+
+.wn-field__icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.wn-field__icon--left { left: 12px; }
+.wn-field__icon--right { right: 12px; }
+
+.wn-field__icon--clickable {
+  pointer-events: auto;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Error state */
+.wn-field--error .wn-input {
+  border-color: var(--color-status-error);
+}
+.wn-field--error .wn-input:focus {
+  border-color: var(--color-status-error);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+/* Helper / error text row */
+.wn-field__message {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.wn-field__message--helper {
+  color: var(--color-text-secondary);
+}
+
+.wn-field__message--error {
+  color: var(--color-status-error);
+}
+
+/* Textarea variant */
+.wn-input--textarea {
+  resize: vertical;
+  min-height: 96px;
+  line-height: 24px;
+}

@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const { sendError } = require('../utils/response');
+const notFound = (req, res) => {
+    return sendError(res, {
+        statusCode: 404,
+        message: `Route not found: ${req.method} ${req.originalUrl}`,
+    });
+};
+module.exports = notFound;

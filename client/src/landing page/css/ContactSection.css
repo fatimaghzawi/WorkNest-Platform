@@ -1,0 +1,64 @@
+.wn-contact-cta {
+  padding: 80px var(--layout-grid-margin);
+  background: var(--color-brand-surface);
+}
+
+.wn-contact-cta__content {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 56px;
+  text-align: center;
+
+  background: var(--color-brand-light-purple);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-med);
+}
+
+.wn-contact-cta__content h2 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: var(--space-2);
+}
+
+.wn-contact-cta__content p {
+  max-width: 600px;
+  margin: 0 auto var(--space-4);
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .wn-contact-cta {
+    padding: 64px var(--layout-grid-margin);
+  }
+
+  .wn-contact-cta__content {
+    padding: 40px 24px;
+  }
+
+  .wn-contact-cta__content h2 {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-contact-cta {
+    padding: 48px var(--layout-grid-margin);
+  }
+
+  .wn-contact-cta__content {
+    padding: 32px 20px;
+  }
+
+  .wn-contact-cta__content h2 {
+    font-size: 1.5rem;
+  }
+
+  .wn-contact-cta__content p {
+    font-size: 0.95rem;
+  }
+}

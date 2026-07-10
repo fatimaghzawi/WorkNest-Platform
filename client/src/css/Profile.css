@@ -1,0 +1,861 @@
+/* =========================================================
+   FREELANCER PROFILE PAGE
+   ========================================================= */
+
+.wn-profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-bottom: 32px;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.wn-profile-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--color-brand-surface);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-med);
+}
+
+.wn-profile-banner {
+  height: 200px;
+  position: relative;
+  background: linear-gradient(
+    125deg,
+    var(--color-primary-main) 0%,
+    #6e3482 42%,
+    var(--color-secondary-main) 100%
+  );
+}
+
+.wn-profile-banner::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 48px;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.18), transparent);
+  pointer-events: none;
+}
+
+.wn-profile-banner__mesh {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(255, 255, 255, 0.22), transparent 42%),
+    radial-gradient(circle at 82% 12%, rgba(255, 255, 255, 0.14), transparent 38%),
+    radial-gradient(circle at 70% 85%, rgba(0, 0, 0, 0.12), transparent 45%);
+}
+
+.wn-profile-header {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 0 28px 24px;
+  margin-top: -68px;
+  position: relative;
+  z-index: 2;
+}
+
+.wn-profile-user {
+  flex: 1;
+  min-width: 0;
+}
+
+.wn-profile-user__top {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.wn-profile-identity {
+  flex: 1;
+  min-width: 0;
+  padding: 22px 24px 20px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow:
+    0 12px 40px rgba(73, 34, 91, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.wn-profile-user__eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-secondary-main);
+}
+
+.wn-profile-user__name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3em 0.45em;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 3.2vw, 2.35rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.wn-profile-user__name-first {
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.wn-profile-user__name-last {
+  font-weight: 800;
+  background: linear-gradient(
+    120deg,
+    var(--color-primary-main) 0%,
+    #8b4fa8 55%,
+    var(--color-secondary-main) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.wn-profile-user__email {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  word-break: break-word;
+  background: var(--color-brand-background);
+  border: 1px solid var(--color-border-light);
+  max-width: 100%;
+}
+
+.wn-profile-user__email svg {
+  flex-shrink: 0;
+  color: var(--color-secondary-main);
+  opacity: 0.9;
+}
+
+.wn-profile-user__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.wn-profile-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: var(--color-brand-background);
+  border: 1px solid var(--color-border-light);
+}
+
+.wn-profile-pill--role {
+  color: var(--color-primary-main);
+  background: rgba(73, 34, 91, 0.08);
+  border-color: rgba(73, 34, 91, 0.14);
+}
+
+.wn-profile-pill--verified {
+  color: #166534;
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.wn-profile-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-shrink: 0;
+  padding-top: 4px;
+}
+
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
+.wn-profile-avatar-wrapper {
+  position: relative;
+  width: 144px;
+  height: 144px;
+  flex-shrink: 0;
+}
+
+.wn-profile-avatar,
+.wn-profile-avatar-placeholder {
+  width: 144px;
+  height: 144px;
+  border-radius: 50%;
+  border: 5px solid var(--color-brand-surface);
+  box-shadow: 0 12px 32px rgba(73, 34, 91, 0.22);
+}
+
+.wn-profile-avatar {
+  object-fit: cover;
+  display: block;
+}
+
+.wn-profile-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary-main), var(--color-secondary-main));
+}
+
+.wn-profile-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.52);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.wn-profile-avatar-wrapper:hover .wn-profile-avatar-overlay,
+.wn-profile-avatar-overlay:focus-visible {
+  opacity: 1;
+}
+
+.wn-profile-avatar-overlay:disabled {
+  cursor: wait;
+}
+
+/* =========================================================
+   STATS STRIP
+   ========================================================= */
+
+.wn-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--color-border-light);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.wn-profile-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 24px;
+  background: var(--color-brand-surface);
+}
+
+.wn-profile-stat__value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-primary-main);
+}
+
+.wn-profile-stat__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+/* =========================================================
+   LAYOUT GRID
+   ========================================================= */
+
+.wn-profile-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.wn-profile-main,
+.wn-profile-sidebar-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.wn-profile-card {
+  background: var(--color-brand-surface);
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-low, 0 4px 14px rgba(73, 34, 91, 0.06));
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wn-profile-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-med);
+}
+
+.wn-profile-card--portfolio {
+  background:
+    linear-gradient(var(--color-brand-surface), var(--color-brand-surface)) padding-box,
+    linear-gradient(135deg, rgba(73, 34, 91, 0.35), rgba(165, 106, 189, 0.35)) border-box;
+  border: 1px solid transparent;
+}
+
+.wn-profile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.wn-profile-card-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.wn-profile-card-title h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.wn-profile-card-title p {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+}
+
+.wn-profile-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  color: var(--color-primary-main);
+  background: rgba(73, 34, 91, 0.08);
+}
+
+.wn-profile-card-icon--accent {
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary-main), var(--color-secondary-main));
+}
+
+.wn-profile-card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  color: var(--color-primary-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.wn-profile-card-action:hover {
+  background: rgba(73, 34, 91, 0.08);
+}
+
+/* =========================================================
+   BIO
+   ========================================================= */
+
+.wn-profile-bio {
+  margin: 0;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+  font-size: 0.96rem;
+  white-space: pre-wrap;
+}
+
+/* =========================================================
+   PORTFOLIO LINK
+   ========================================================= */
+
+.wn-profile-portfolio-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  background: linear-gradient(135deg, rgba(73, 34, 91, 0.06), rgba(165, 106, 189, 0.1));
+  border: 1px solid rgba(73, 34, 91, 0.12);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.wn-profile-portfolio-link:hover {
+  transform: translateY(-1px);
+  border-color: rgba(73, 34, 91, 0.28);
+}
+
+.wn-profile-portfolio-link__host {
+  font-weight: 700;
+  color: var(--color-primary-main);
+  word-break: break-all;
+}
+
+.wn-profile-portfolio-link__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-secondary-main);
+}
+
+/* =========================================================
+   CONTACT & STATUS LISTS
+   ========================================================= */
+
+.wn-profile-contact-list,
+.wn-profile-status-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wn-profile-contact-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--color-brand-background);
+}
+
+.wn-profile-contact-list__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  color: var(--color-primary-main);
+  background: rgba(73, 34, 91, 0.08);
+}
+
+.wn-profile-contact-list__label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: 4px;
+}
+
+.wn-profile-contact-list strong {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--color-text-main);
+  word-break: break-word;
+}
+
+.wn-profile-status-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.wn-profile-status-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.wn-profile-status-list span {
+  font-size: 0.86rem;
+  color: var(--color-text-secondary);
+}
+
+.wn-profile-status-list strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.86rem;
+}
+
+/* =========================================================
+   SKILLS
+   ========================================================= */
+
+.wn-profile-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.wn-profile-skill {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(73, 34, 91, 0.08), rgba(165, 106, 189, 0.14));
+  color: var(--color-primary-main);
+  font-size: 0.86rem;
+  font-weight: 600;
+  border: 1px solid rgba(73, 34, 91, 0.1);
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.wn-profile-skill:hover {
+  transform: translateY(-1px);
+  background: var(--color-primary-main);
+  color: #fff;
+}
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.wn-profile-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  min-height: 120px;
+  padding: 20px;
+  color: var(--color-text-secondary);
+  border: 1.5px dashed var(--color-border-main);
+  border-radius: 16px;
+  background: var(--color-brand-background);
+}
+
+.wn-profile-empty--compact {
+  min-height: 96px;
+  padding: 16px;
+}
+
+.wn-profile-empty p {
+  margin: 0;
+  max-width: 36ch;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.wn-profile-empty__cta {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--color-primary-main), var(--color-secondary-main));
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.wn-profile-empty__cta:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+/* =========================================================
+   EDIT FORM (MODAL)
+   ========================================================= */
+
+.wn-profile-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.wn-profile-edit-section {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.wn-profile-edit-section legend {
+  padding: 0;
+  margin-bottom: 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary-main);
+}
+
+.wn-profile-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.wn-profile-edit-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.wn-profile-edit-skill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.wn-profile-edit-skill span {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* =========================================================
+   STATUS COLORS
+   ========================================================= */
+
+.wn-profile-success {
+  color: var(--color-status-success, #16a34a);
+}
+
+.wn-profile-warning {
+  color: var(--color-status-warning, #d97706);
+}
+
+.wn-profile-danger {
+  color: var(--color-status-error, #dc2626);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .wn-profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .wn-profile-header {
+    flex-direction: column;
+    align-items: center;
+    margin-top: -56px;
+    padding: 0 16px 20px;
+    gap: 16px;
+  }
+
+  .wn-profile-user {
+    width: 100%;
+  }
+
+  .wn-profile-user__top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .wn-profile-identity {
+    text-align: center;
+    padding: 20px 18px 18px;
+  }
+
+  .wn-profile-user__name {
+    justify-content: center;
+  }
+
+  .wn-profile-user__email {
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .wn-profile-user__badges {
+    justify-content: center;
+  }
+
+  .wn-profile-actions {
+    width: 100%;
+    justify-content: center;
+    padding-top: 0;
+  }
+
+  .wn-profile-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-profile-stat {
+    text-align: center;
+  }
+
+  .wn-profile-avatar,
+  .wn-profile-avatar-placeholder,
+  .wn-profile-avatar-wrapper {
+    width: 120px;
+    height: 120px;
+  }
+
+  .wn-profile-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-profile-card {
+    padding: 20px;
+  }
+
+  .wn-profile-banner {
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-profile-page {
+    gap: 20px;
+  }
+
+  .wn-profile-portfolio-link {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Public freelancer profile (client view) */
+.wn-public-profile__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-secondary-main);
+  text-decoration: none;
+}
+
+.wn-public-profile__back:hover {
+  color: var(--color-primary-main);
+}
+
+.wn-public-profile__header {
+  align-items: flex-end;
+}
+
+.wn-public-profile__header .wn-profile-user {
+  width: 100%;
+}
+
+.wn-public-profile__avatar-wrap .wn-user-avatar--xl {
+  width: 144px;
+  height: 144px;
+  font-size: 2.5rem;
+  border: 5px solid var(--color-brand-surface);
+  box-shadow: 0 12px 32px rgba(73, 34, 91, 0.22);
+}
+
+.wn-public-profile__muted {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.wn-public-profile__track-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.wn-public-profile__track-item {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--color-brand-background);
+  border: 1px solid var(--color-border-light);
+}
+
+.wn-public-profile__track-item strong {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--color-primary-main);
+  margin-bottom: 4px;
+}
+
+.wn-public-profile__track-item span {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+}
+
+.wn-public-profile__projects {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.wn-public-profile__projects li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-brand-surface);
+}
+
+.wn-public-profile__projects li strong {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--color-text-main);
+}
+
+.wn-public-profile__projects li span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.wn-public-profile__projects time {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}

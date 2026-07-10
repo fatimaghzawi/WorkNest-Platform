@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const { Router } = require('express');
+const categoryController = require('../controllers/category.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { authorize } = require('../middlewares/role.middleware');
+const { validate } = require('../middlewares/validation.middleware');
+const asyncHandler = require('../utils/asyncHandler');
+const { categoryIdSchema, createCategorySchema, updateCategorySchema, listCategoriesSchema, } = require('../validators/category.validator');
+const router = Router();
+router.get('/', validate(listCategoriesSchema), asyncHandler(categoryController.listCategories));
+router.get('/:id', validate(categoryIdSchema), asyncHandler(categoryController.getCategory));
+router.post('/', authenticate, authorize('admin'), validate(createCategorySchema), asyncHandler(categoryController.createCategory));
+router.patch('/:id', authenticate, authorize('admin'), validate(updateCategorySchema), asyncHandler(categoryController.updateCategory));
+router.delete('/:id', authenticate, authorize('admin'), validate(categoryIdSchema), asyncHandler(categoryController.deleteCategory));
+module.exports = router;

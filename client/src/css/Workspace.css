@@ -1,0 +1,473 @@
+/* WorkNest project workspace — kanban & project shell */
+
+.wn-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.wn-workspace__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.wn-workspace__project-select {
+  min-width: min(100%, 320px);
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  background: var(--color-brand-surface);
+  color: var(--color-text-main);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.wn-workspace__project-select:focus {
+  outline: none;
+  border-color: var(--color-accent-main);
+  box-shadow: 0 0 0 3px rgba(165, 106, 189, 0.2);
+}
+
+.wn-workspace__summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-2);
+}
+
+.wn-workspace__summary-item {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--color-brand-surface);
+  border: 1px solid var(--color-border-light);
+}
+
+.wn-workspace__summary-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.wn-workspace__summary-value {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--color-primary-main);
+}
+
+.wn-workspace__layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.wn-workspace__board-wrap {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.wn-workspace__tasks-pagination {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-1);
+}
+
+.wn-workspace-attachments__pagination {
+  margin-top: var(--space-2);
+  display: flex;
+  justify-content: center;
+}
+
+.wn-kanban {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(240px, 1fr));
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+  scroll-snap-type: x proximity;
+}
+
+.wn-kanban__column {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+  max-height: calc(100dvh - 320px);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--color-brand-background), var(--color-brand-surface));
+  border: 1px solid var(--color-border-light);
+  scroll-snap-align: start;
+}
+
+.wn-kanban__column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.wn-kanban__column-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.wn-kanban__column-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.wn-kanban__column-dot--todo { background: var(--color-text-muted); }
+.wn-kanban__column-dot--progress { background: var(--color-status-info); }
+.wn-kanban__column-dot--review { background: var(--color-status-warning); }
+.wn-kanban__column-dot--done { background: var(--color-status-success); }
+
+.wn-kanban__column-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  background: var(--color-brand-light-purple);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.wn-kanban__column-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wn-kanban__column-body--drag-over {
+  background: rgba(165, 106, 189, 0.08);
+}
+
+.wn-task-card {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-brand-surface);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-low);
+  cursor: grab;
+  transition: var(--transition-fast);
+}
+
+.wn-task-card:hover {
+  border-color: rgba(165, 106, 189, 0.45);
+  box-shadow: var(--shadow-med);
+  transform: translateY(-1px);
+}
+
+.wn-task-card--dragging {
+  opacity: 0.55;
+  cursor: grabbing;
+}
+
+.wn-task-card__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+.wn-task-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.wn-task-card__priority {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.wn-task-card__priority--low {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+}
+
+.wn-task-card__priority--medium {
+  background: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+}
+
+.wn-task-card__priority--high {
+  background: rgba(239, 68, 68, 0.12);
+  color: #b91c1c;
+}
+
+.wn-task-card__due {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.wn-workspace__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wn-workspace-panel {
+  border-radius: var(--radius-lg);
+  background: var(--color-brand-surface);
+  border: 1px solid var(--color-border-light);
+  overflow: hidden;
+}
+
+.wn-workspace-panel__header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border-light);
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary-main);
+}
+
+.wn-workspace-panel__body {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.wn-workspace-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wn-workspace-panel__list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wn-workspace-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-brand-light-purple);
+  color: var(--color-primary-main);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.wn-workspace-team {
+  margin: 0;
+  padding: 0;
+}
+
+.wn-workspace-team__item {
+  list-style: none;
+}
+
+.wn-workspace-team__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  margin: 0 -10px;
+  border-radius: var(--radius-md);
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.wn-workspace-team__link:hover {
+  background: rgba(165, 106, 189, 0.08);
+}
+
+.wn-workspace-team__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.wn-workspace-team__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.wn-workspace-team__role {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-transform: capitalize;
+}
+
+.wn-workspace-team__empty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.wn-workspace-attachments__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.wn-workspace-attachments__hint {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+.wn-workspace-attachments {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wn-workspace-attachments__item {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.wn-workspace-attachments__preview {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-brand-light-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wn-workspace-attachments__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wn-workspace-attachments__file-icon {
+  color: var(--color-primary-main);
+  display: inline-flex;
+}
+
+.wn-workspace-attachments__meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wn-workspace-attachments__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-main);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.wn-workspace-attachments__name:hover {
+  color: var(--color-accent-main);
+}
+
+.wn-workspace-attachments__details {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.wn-workspace-attachments__delete {
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wn-workspace-attachments__delete:hover:not(:disabled) {
+  color: var(--color-error-main, #c0392b);
+  background: rgba(192, 57, 43, 0.08);
+}
+
+.wn-workspace-attachments__delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wn-workspace__add-task {
+  margin: 0 10px 10px;
+  padding: 8px 10px;
+  border: 1px dashed rgba(165, 106, 189, 0.45);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-secondary-main);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.wn-workspace__add-task:hover {
+  background: var(--color-brand-light-purple);
+  border-style: solid;
+}
+
+@media (max-width: 1100px) {
+  .wn-workspace__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-kanban {
+    grid-template-columns: repeat(4, minmax(260px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .wn-kanban {
+    grid-template-columns: 1fr;
+    overflow-x: visible;
+  }
+
+  .wn-kanban__column {
+    min-height: 280px;
+    max-height: none;
+  }
+}

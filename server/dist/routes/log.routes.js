@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const { Router } = require('express');
+const logController = require('../controllers/log.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { authorize } = require('../middlewares/role.middleware');
+const asyncHandler = require('../utils/asyncHandler');
+const router = Router();
+router.use(authenticate, authorize('admin'));
+router.get('/stats', asyncHandler(logController.getLogStats));
+router.get('/', asyncHandler(logController.listLogs));
+module.exports = router;

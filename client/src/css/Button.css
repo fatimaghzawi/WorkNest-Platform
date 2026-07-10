@@ -1,0 +1,167 @@
+/* Button.css */
+
+.wn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  font-family: var(--font-body);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-normal);
+  user-select: none;
+  text-decoration: none;
+}
+
+.wn-btn:focus-visible {
+  outline: var(--color-accent-focus-ring) solid 2px;
+  outline-offset: 2px;
+}
+
+.wn-btn:disabled,
+.wn-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* --- Sizes (mapped to theme.sizes.button) --- */
+.wn-btn--sm {
+  height: var(--size-button-sm);
+  padding: 0 var(--space-2);
+  font-size: 13px;
+  line-height: 18px;
+  border-radius: var(--radius-sm);
+}
+
+.wn-btn--md {
+  height: var(--size-button-md);
+  padding: 12px 24px; /* theme.components.button.padding */
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.wn-btn--lg {
+  height: var(--size-button-lg);
+  padding: 0 var(--space-4);
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.wn-btn--full-width {
+  width: 100%;
+}
+
+/* --- Variant: Primary --- */
+.wn-btn--primary {
+  background-color: var(--color-primary-main);
+  color: var(--color-text-inverted);
+}
+.wn-btn--primary:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+}
+.wn-btn--primary:active:not(:disabled) {
+  background-color: var(--color-primary-active);
+}
+.wn-btn--primary:disabled {
+  background-color: var(--color-primary-disabled);
+  color: var(--color-text-inverted);
+}
+
+/* --- Variant: Secondary --- */
+.wn-btn--secondary {
+  background-color: var(--color-secondary-main);
+  color: var(--color-text-inverted);
+}
+.wn-btn--secondary:hover:not(:disabled) {
+  background-color: var(--color-secondary-hover);
+}
+.wn-btn--secondary:active:not(:disabled) {
+  background-color: var(--color-secondary-active);
+}
+.wn-btn--secondary:disabled {
+  background-color: var(--color-primary-disabled);
+  color: var(--color-text-inverted);
+}
+
+/* --- Variant: Outline --- */
+.wn-btn--outline {
+  background-color: transparent;
+  color: var(--color-primary-main);
+  border-color: var(--color-border-main);
+}
+.wn-btn--outline:hover:not(:disabled) {
+  background-color: var(--color-brand-background);
+  border-color: var(--color-accent-main);
+  color: var(--color-primary-hover);
+}
+.wn-btn--outline:active:not(:disabled) {
+  background-color: var(--color-brand-light-purple);
+}
+.wn-btn--outline:disabled {
+  color: var(--color-text-muted);
+  border-color: var(--color-border-light);
+}
+
+/* --- Variant: Ghost (text button) --- */
+.wn-btn--ghost {
+  background-color: transparent;
+  color: var(--color-primary-main);
+  padding-left: var(--space-1);
+  padding-right: var(--space-1);
+}
+.wn-btn--ghost:hover:not(:disabled) {
+  background-color: var(--color-brand-background);
+  color: var(--color-primary-hover);
+}
+.wn-btn--ghost:active:not(:disabled) {
+  background-color: var(--color-brand-light-purple);
+}
+.wn-btn--ghost:disabled {
+  color: var(--color-text-muted);
+}
+
+/* --- Variant: Danger (rejections, destructive actions) --- */
+.wn-btn--danger {
+  background-color: var(--color-status-error);
+  color: var(--color-text-inverted);
+}
+.wn-btn--danger:hover:not(:disabled) {
+  background-color: #DC2626;
+}
+.wn-btn--danger:active:not(:disabled) {
+  background-color: #B91C1C;
+}
+.wn-btn--danger:disabled {
+  background-color: rgba(239, 68, 68, 0.4);
+}
+
+/* --- Icon slots --- */
+.wn-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Loading state --- */
+.wn-btn__spinner {
+  display: inline-flex;
+  animation: wn-btn-spin 0.7s linear infinite;
+}
+
+@keyframes wn-btn-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.wn-btn--loading .wn-btn__label {
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wn-btn__spinner {
+    animation-duration: 1.4s;
+  }
+}

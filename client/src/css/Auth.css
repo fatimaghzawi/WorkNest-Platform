@@ -1,0 +1,777 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap');
+
+/* ── Page shell ───────────────────────────────────────────── */
+.wn-auth-page {
+  height: 100dvh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ede4f3;
+  font-family: var(--font-body);
+}
+
+.wn-auth-page__main {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  height: calc(100dvh - var(--layout-navbar-height));
+  max-height: calc(100dvh - var(--layout-navbar-height));
+  overflow: hidden;
+}
+
+/* ── Sliding panel (login left ↔ signup right) ─────────── */
+.wn-auth-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 2;
+  transform: translateX(0);
+  transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: clamp(16px, 2.5vh, 28px) clamp(20px, 3vw, 40px);
+  background: linear-gradient(
+    160deg,
+    #2d1438 0%,
+    var(--color-primary-main) 38%,
+    #5a2d6e 100%
+  );
+  isolation: isolate;
+  box-shadow: 6px 0 40px rgba(45, 20, 56, 0.22);
+}
+
+.wn-auth-page__main--reversed .wn-auth-panel {
+  transform: translateX(100%);
+}
+
+.wn-auth-form-area {
+  position: absolute;
+  top: 0;
+  left: auto;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 1;
+  transform: translateX(0);
+  transition:
+    transform 0.85s cubic-bezier(0.76, 0, 0.24, 1),
+    left 0.85s cubic-bezier(0.76, 0, 0.24, 1),
+    right 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform, left, right;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(12px, 2vh, 24px) clamp(16px, 3vw, 32px);
+  background: linear-gradient(145deg, #f3eaf8 0%, #ebe0f2 50%, #e8ddf0 100%);
+}
+
+.wn-auth-page__main--reversed .wn-auth-form-area {
+  right: auto;
+  left: 0;
+  transform: translateX(0);
+}
+
+/* ── Content enter animations ───────────────────────────── */
+@keyframes wn-auth-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wn-auth-fade-slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes wn-auth-fade-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes wn-auth-feature-in {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.wn-auth-panel__content {
+  animation: wn-auth-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+}
+
+.wn-auth-panel__feature {
+  animation: wn-auth-feature-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.wn-auth-card--enter {
+  animation: wn-auth-fade-slide-left 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+.wn-auth-page__main[data-swap='to-register'] .wn-auth-card--enter {
+  animation-name: wn-auth-fade-slide-right;
+}
+
+.wn-auth-page__main[data-swap='to-login'] .wn-auth-card--enter {
+  animation-name: wn-auth-fade-slide-left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wn-auth-panel,
+  .wn-auth-form-area {
+    transition: none;
+  }
+
+  .wn-auth-panel__content,
+  .wn-auth-panel__feature,
+  .wn-auth-card--enter {
+    animation: none;
+  }
+}
+
+/* ── Panel visuals ─────────────────────────────────────────── */
+.wn-auth-panel__mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.wn-auth-panel__gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(165, 106, 189, 0.35), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 75%, rgba(110, 52, 130, 0.4), transparent 50%);
+}
+
+.wn-auth-panel__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(4px);
+}
+
+.wn-auth-panel__ring--1 {
+  width: 280px;
+  height: 280px;
+  top: -60px;
+  right: -40px;
+}
+
+.wn-auth-panel__ring--2 {
+  width: 180px;
+  height: 180px;
+  bottom: 12%;
+  left: -30px;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.wn-auth-panel__ring--3 {
+  width: 120px;
+  height: 120px;
+  top: 38%;
+  right: 12%;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.wn-auth-panel__glass {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  max-height: 100%;
+  padding: clamp(20px, 2.5vh, 28px);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 24px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  color: var(--color-text-inverted);
+}
+
+.wn-auth-panel__logo-link {
+  display: inline-block;
+  margin-bottom: clamp(12px, 1.5vh, 20px);
+}
+
+.wn-auth-panel__logo {
+  height: 28px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+
+.wn-auth-panel__eyebrow {
+  display: inline-block;
+  margin-bottom: var(--space-2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.wn-auth-panel__title {
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 2.8vw, 32px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.wn-auth-panel__accent {
+  color: #d4b8e8;
+  font-weight: 600;
+}
+
+.wn-auth-panel__text {
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: clamp(12px, 1.5vh, 20px);
+}
+
+.wn-auth-panel__features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: clamp(12px, 1.5vh, 20px);
+}
+
+.wn-auth-panel__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.wn-auth-panel__feature:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.wn-auth-panel__feature-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+}
+
+.wn-auth-panel__feature-copy strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.wn-auth-panel__feature-copy span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.45;
+}
+
+.wn-auth-panel__metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: clamp(10px, 1.2vh, 16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.wn-auth-panel__metric-value {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.wn-auth-panel__metric-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.02em;
+}
+
+/* ── Form area mesh ───────────────────────────────────────── */
+.wn-auth-form-area__mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.wn-auth-form-area__blur {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.wn-auth-form-area__blur--1 {
+  width: 360px;
+  height: 360px;
+  top: -12%;
+  right: -8%;
+  background: rgba(165, 106, 189, 0.35);
+}
+
+.wn-auth-form-area__blur--2 {
+  width: 300px;
+  height: 300px;
+  bottom: -10%;
+  left: -10%;
+  background: rgba(110, 52, 130, 0.2);
+}
+
+/* ── Glass form card ────────────────────────────────────── */
+.wn-auth-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  max-height: 100%;
+  padding: clamp(22px, 2.5vh, 32px);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 24px;
+  box-shadow:
+    0 4px 24px rgba(73, 34, 91, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+}
+
+.wn-auth-card__header {
+  margin-bottom: clamp(14px, 1.8vh, 20px);
+}
+
+.wn-auth-card__eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-accent-main);
+  margin-bottom: 8px;
+}
+
+.wn-auth-card__title {
+  font-family: var(--font-heading);
+  font-size: clamp(22px, 2.5vw, 28px);
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.wn-auth-card__subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* Glass inputs inside auth card */
+.wn-auth-card .wn-input {
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(73, 34, 91, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.wn-auth-card .wn-input:hover:not(:disabled):not(:focus) {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(165, 106, 189, 0.45);
+}
+
+.wn-auth-card .wn-input:focus {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--color-accent-main);
+  box-shadow: 0 0 0 3px rgba(165, 106, 189, 0.18);
+}
+
+.wn-auth-card .wn-field__icon {
+  color: var(--color-accent-main);
+  opacity: 0.85;
+}
+
+/* ── Form elements ──────────────────────────────────────── */
+.wn-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.5vh, 16px);
+}
+
+.wn-auth-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Role picker */
+.wn-auth-role-picker__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.wn-auth-role-picker {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.wn-auth-role-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid rgba(73, 34, 91, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  text-align: left;
+  font-family: var(--font-body);
+}
+
+.wn-auth-role-option:hover {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(165, 106, 189, 0.4);
+}
+
+.wn-auth-role-option--active {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: var(--color-primary-main);
+  box-shadow:
+    0 0 0 1px rgba(73, 34, 91, 0.08),
+    0 4px 16px rgba(73, 34, 91, 0.1);
+}
+
+.wn-auth-role-option__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--color-primary-main);
+  background: rgba(245, 235, 250, 0.8);
+  border: 1px solid rgba(165, 106, 189, 0.2);
+  border-radius: 10px;
+}
+
+.wn-auth-role-option--active .wn-auth-role-option__icon {
+  background: var(--color-primary-main);
+  border-color: transparent;
+  color: #fff;
+}
+
+.wn-auth-role-option__title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-text-main);
+}
+
+.wn-auth-role-option__desc {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+}
+
+/* Password strength */
+.wn-auth-strength {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: -6px;
+}
+
+.wn-auth-strength__bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.wn-auth-strength__bar {
+  height: 3px;
+  flex: 1;
+  border-radius: 2px;
+  background: rgba(73, 34, 91, 0.1);
+  transition: var(--transition-normal);
+}
+
+.wn-auth-strength__bar--1 { background: #ef4444; }
+.wn-auth-strength__bar--2 { background: #f59e0b; }
+.wn-auth-strength__bar--3 { background: #3b82f6; }
+.wn-auth-strength__bar--4 { background: #22c55e; }
+
+.wn-auth-strength__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  min-width: 42px;
+  text-align: right;
+}
+
+/* Alerts */
+.wn-auth-alert {
+  padding: 14px 16px 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: var(--space-2);
+  border: 1px solid transparent;
+  border-left-width: 3px;
+}
+
+.wn-auth-alert--error {
+  background: rgba(254, 242, 242, 0.75);
+  color: #991b1b;
+  border-color: rgba(239, 68, 68, 0.25);
+  border-left-color: #ef4444;
+  backdrop-filter: blur(8px);
+}
+
+.wn-auth-alert--success {
+  background: rgba(240, 253, 244, 0.75);
+  color: #166534;
+  border-color: rgba(34, 197, 94, 0.25);
+  border-left-color: #22c55e;
+  backdrop-filter: blur(8px);
+}
+
+/* Success panel */
+.wn-auth-success {
+  text-align: center;
+  padding: var(--space-2) 0;
+}
+
+.wn-auth-success__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-3);
+  color: #16a34a;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 50%;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.12);
+}
+
+.wn-auth-success__svg {
+  width: 36px;
+  height: 36px;
+}
+
+.wn-auth-success__title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+}
+
+.wn-auth-success__body {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+.wn-auth-success__body a {
+  color: var(--color-primary-main);
+  font-weight: 600;
+}
+
+/* Footer links */
+.wn-auth-footer-text {
+  margin-top: clamp(12px, 1.5vh, 18px);
+  padding-top: clamp(10px, 1.2vh, 14px);
+  border-top: 1px solid rgba(73, 34, 91, 0.1);
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.wn-auth-footer-text a {
+  color: var(--color-primary-main);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.wn-auth-footer-text a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.wn-auth-forgot {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-primary-main);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+.wn-auth-forgot:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.wn-auth-password-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.wn-auth-password-row .wn-field__label {
+  margin-bottom: 0;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .wn-auth-page {
+    height: auto;
+    max-height: none;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .wn-auth-page__main {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    min-height: calc(100dvh - var(--layout-navbar-height));
+  }
+
+  .wn-auth-panel {
+    display: none;
+  }
+
+  .wn-auth-form-area {
+    position: relative;
+    width: 100%;
+    left: 0;
+    right: 0;
+    transform: none;
+    transition: none;
+    align-items: center;
+    padding: clamp(12px, 2vh, 20px) 16px;
+    min-height: calc(100dvh - var(--layout-navbar-height));
+  }
+
+  .wn-auth-card {
+    width: 100%;
+    max-width: 480px;
+  }
+}
+
+@media (max-height: 820px) {
+  .wn-auth-panel__features {
+    gap: 6px;
+  }
+
+  .wn-auth-panel__feature {
+    padding: 8px 10px;
+  }
+
+  .wn-auth-panel__feature-copy strong {
+    font-size: 12px;
+  }
+
+  .wn-auth-panel__feature-copy span {
+    font-size: 11px;
+  }
+
+  .wn-auth-role-picker {
+    gap: 8px;
+  }
+
+  .wn-auth-form__row {
+    gap: 10px;
+  }
+}
+
+@media (max-height: 760px) {
+  .wn-auth-panel__metric {
+    display: none;
+  }
+
+  .wn-auth-card .wn-input {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 15px;
+  }
+
+  .wn-auth-form {
+    gap: 10px;
+  }
+
+  .wn-auth-card__subtitle {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-auth-form__row,
+  .wn-auth-role-picker {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-auth-card {
+    padding: 28px 22px;
+    border-radius: 20px;
+  }
+}
