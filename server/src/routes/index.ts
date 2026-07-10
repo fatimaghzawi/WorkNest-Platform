@@ -13,6 +13,7 @@ const paymentRoutes = require('./payment.routes');
 const notificationRoutes = require('./notification.routes');
 const dashboardRoutes = require('./dashboard.routes');
 const logRoutes = require('./log.routes');
+const landingRoutes = require('./landing.route');
 
 const router = Router();
 
@@ -37,5 +38,6 @@ router.use('/payments', paymentRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/logs', logRoutes);
+router.use('/landing', landingRoutes);
 
 module.exports = router;
