@@ -1,22 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
-import { FileText } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { FileText, X } from 'lucide-react';
 import Pagination from '../../../components/common/Pagination';
-import { interviewsApi } from '../../../api/interviews.api';
 import { proposalsApi } from '../../../api/proposals.api';
+import { jobsApi } from '../../../api/jobs.api';
 import DashboardPageHeader from '../../_shared/DashboardPageHeader';
 import EmptyState from '../../_shared/EmptyState';
 import ProposalQueue from '../components/proposals/ProposalQueue';
 import ProposalReviewPanel from '../components/proposals/ProposalReviewPanel';
 import ProposalsOverview, { type ProposalPipelineStats } from '../components/proposals/ProposalsOverview';
-import ScheduleInterviewModal, {
-  type PrefillProposal,
-} from '../../_shared/interviews/ScheduleInterviewModal';
-import type { CreateInterviewPayload } from '../../../types/interview';
 import type { Proposal, ProposalStatus } from '../../../types/proposal';
 import { getApiErrorMessage } from '../../../utils/apiError';
-import { getProposalFreelancer, getProposalJobTitle } from '../../../utils/proposal';
 import { useToast } from '../../../hooks/useToast';
-import { useConfirm } from '../../../context/ConfirmContext';
 import '../../../css/DesignSystem.css';
 import '../../../css/AdminAnalytics.css';
 import '../../../css/DashboardFeatures.css';
@@ -40,17 +35,16 @@ const emptyStats: ProposalPipelineStats = {
 
 export default function AdminProposals() {
   const toast = useToast();
-  const confirm = useConfirm();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const jobIdFilter = searchParams.get('jobId') || '';
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [stats, setStats] = useState<ProposalPipelineStats>(emptyStats);
+  const [jobTitle, setJobTitle] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [loading, setLoading] = useState(true);
-  const [actionBusy, setActionBusy] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
-  const [scheduleOpen, setScheduleOpen] = useState(false);
-  const [prefill, setPrefill] = useState<PrefillProposal | null>(null);
 
   const loadStats = useCallback(async () => {
     try {
@@ -68,6 +62,7 @@ export default function AdminProposals() {
         page,
         limit: 10,
         status: statusFilter === 'all' ? undefined : statusFilter,
+        jobId: jobIdFilter || undefined,
       });
       const nextProposals = response.data.data;
       setProposals(nextProposals);
@@ -83,7 +78,32 @@ export default function AdminProposals() {
     } finally {
       if (!silent) setLoading(false);
     }
-  }, [page, statusFilter, toast]);
+  }, [page, statusFilter, jobIdFilter, toast]);
+
+  useEffect(() => {
+    if (!jobIdFilter) {
+      setJobTitle(null);
+      return;
+    }
+
+    let cancelled = false;
+    jobsApi
+      .getById(jobIdFilter)
+      .then((response) => {
+        if (!cancelled) setJobTitle(response.data.data.title);
+      })
+      .catch(() => {
+        if (!cancelled) setJobTitle(null);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [jobIdFilter]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [jobIdFilter]);
 
   useEffect(() => {
     loadProposals();
@@ -92,10 +112,6 @@ export default function AdminProposals() {
   useEffect(() => {
     loadStats();
   }, [loadStats]);
-
-  const refreshAll = async (silent = true) => {
-    await Promise.all([loadProposals(silent), loadStats()]);
-  };
 
   const handleStageClick = (status: ProposalStatus) => {
     setStatusFilter((current) => (current === status ? 'all' : status));
@@ -113,74 +129,13 @@ export default function AdminProposals() {
     }
   }, [loading, proposals]);
 
-  const handleStatusChange = async (
-    proposalId: string,
-    nextStatus: 'accepted' | 'rejected'
-  ) => {
-    const proposal = proposals.find((item) => item._id === proposalId);
-    const jobTitle = proposal ? getProposalJobTitle(proposal) : 'this job';
-    const confirmed = await confirm({
-      title: nextStatus === 'accepted' ? 'Accept proposal' : 'Reject proposal',
-      message:
-        nextStatus === 'accepted'
-          ? `Accept this proposal for "${jobTitle}"? The job moves to in progress, a project is created, and other pending proposals are rejected.`
-          : 'Reject this proposal? The freelancer will be notified that their submission was declined.',
-      confirmLabel: nextStatus === 'accepted' ? 'Accept' : 'Reject',
-      variant: nextStatus === 'accepted' ? 'primary' : 'danger',
-    });
-    if (!confirmed) return;
+  const hasFilters = statusFilter !== 'all' || Boolean(jobIdFilter);
 
-    setActionBusy(true);
-    try {
-      const response = await proposalsApi.updateStatus(proposalId, nextStatus);
-      const updated = response.data.data;
-      setProposals((current) =>
-        current.map((item) => (item._id === updated._id ? updated : item))
-      );
-      setSelectedProposal(updated);
-      if (nextStatus === 'accepted') {
-        toast.success('Proposal accepted. Job is in progress and workspace is ready.');
-      } else {
-        toast.success('Proposal rejected.');
-      }
-      void loadStats();
-      void loadProposals(true);
-    } catch (err) {
-      toast.error(getApiErrorMessage(err, 'Failed to update proposal.'));
-    } finally {
-      setActionBusy(false);
-    }
+  const clearJobFilter = () => {
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('jobId');
+    setSearchParams(nextParams, { replace: true });
   };
-
-  const openSchedule = (proposal: Proposal) => {
-    const job = proposal.jobId && typeof proposal.jobId === 'object' ? proposal.jobId : null;
-    const freelancer = getProposalFreelancer(proposal);
-    setPrefill({
-      proposalId: proposal._id,
-      jobId: job?._id || String(proposal.jobId),
-      jobTitle: job?.title || 'Job',
-      freelancerId: freelancer?._id || String(proposal.freelancerId),
-      freelancerName: freelancer
-        ? `${freelancer.firstName} ${freelancer.lastName}`
-        : 'Freelancer',
-    });
-    setScheduleOpen(true);
-  };
-
-  const handleSchedule = async (payload: CreateInterviewPayload) => {
-    try {
-      await interviewsApi.create(payload);
-      toast.success('Interview scheduled.');
-      setScheduleOpen(false);
-      setPrefill(null);
-      await refreshAll(true);
-    } catch (err) {
-      toast.error(getApiErrorMessage(err, 'Failed to schedule interview.'));
-      throw err;
-    }
-  };
-
-  const hasFilters = statusFilter !== 'all';
 
   if (loading && proposals.length === 0) {
     return (
@@ -210,7 +165,7 @@ export default function AdminProposals() {
         hero
         eyebrow="Admin"
         title="Proposal management"
-        subtitle="Review and manage proposals submitted across all jobs."
+        subtitle="View proposals submitted across all jobs. Clients accept or reject bids from their dashboard."
       />
 
       <ProposalsOverview
@@ -220,6 +175,18 @@ export default function AdminProposals() {
       />
 
       <section className="wn-analytics-card wn-proposals-toolbar">
+        {jobIdFilter && (
+          <div className="wn-proposals-job-filter">
+            <span>
+              Showing proposals for{' '}
+              <strong>{jobTitle || 'this job'}</strong>
+            </span>
+            <button type="button" className="wn-proposals-job-filter__clear" onClick={clearJobFilter}>
+              <X size={14} />
+              Clear job filter
+            </button>
+          </div>
+        )}
         <div className="wn-proposals-filters">
           {STATUS_FILTERS.map((filter) => (
             <button
@@ -248,7 +215,9 @@ export default function AdminProposals() {
               title={hasFilters ? 'No proposals match your filters' : 'No proposals found'}
               description={
                 hasFilters
-                  ? 'Try another status filter.'
+                  ? jobIdFilter
+                    ? 'No proposals were submitted for this job with the current filters.'
+                    : 'Try another status filter.'
                   : 'Proposals will appear here once freelancers start applying.'
               }
             />
@@ -269,33 +238,16 @@ export default function AdminProposals() {
         </section>
 
         {selectedProposal ? (
-          <ProposalReviewPanel
-            proposal={selectedProposal}
-            busy={actionBusy}
-            onAccept={(id) => handleStatusChange(id, 'accepted')}
-            onReject={(id) => handleStatusChange(id, 'rejected')}
-            onSchedule={openSchedule}
-          />
+          <ProposalReviewPanel proposal={selectedProposal} />
         ) : (
           !loading &&
           proposals.length > 0 && (
             <section className="wn-analytics-card wn-proposal-review wn-proposal-review--empty">
-              <p>Select a proposal from the queue to review it.</p>
+              <p>Select a proposal from the queue to view details.</p>
             </section>
           )
         )}
       </div>
-
-      <ScheduleInterviewModal
-        open={scheduleOpen}
-        mode="admin"
-        prefill={prefill}
-        onClose={() => {
-          setScheduleOpen(false);
-          setPrefill(null);
-        }}
-        onScheduled={handleSchedule}
-      />
     </div>
   );
 }

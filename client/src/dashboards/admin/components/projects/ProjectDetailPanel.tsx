@@ -73,8 +73,8 @@ export default function ProjectDetailPanel({ project }: { project: Project }) {
         <Button variant="outline" to="/admin/interviews">
           Interviews
         </Button>
-        <Button variant="outline" to="/admin/proposals">
-          Proposals
+        <Button variant="outline" to={`/admin/proposals?jobId=${project.jobId}`}>
+          Job proposals
         </Button>
       </div>
     </section>

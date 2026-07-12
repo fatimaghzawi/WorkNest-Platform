@@ -59,7 +59,7 @@ export default function UserDetailPanel({
         <h2 className="wn-member-panel__name">{fullName}</h2>
         <p className="wn-member-panel__id">ID #{user._id.slice(-8).toUpperCase()}</p>
         <p className="wn-member-panel__location">
-          <MapPin size={14} />
+          {/* <MapPin size={14} /> */}
           {ROLE_LABELS[user.role]} · {user.email}
         </p>
 
@@ -121,7 +121,7 @@ export default function UserDetailPanel({
           </div>
         )}
 
-        {user.role === 'freelancer' && (
+        {/* {user.role === 'freelancer' && (
           <div>
             <p className="wn-member-panel__section-title">Services</p>
             <ul className="wn-member-panel__services">
@@ -135,9 +135,9 @@ export default function UserDetailPanel({
               )}
             </ul>
           </div>
-        )}
+        )} */}
 
-        {user.role === 'client' && (
+        {/* {user.role === 'client' && (
           <div>
             <p className="wn-member-panel__section-title">Client services</p>
             <ul className="wn-member-panel__services">
@@ -155,7 +155,7 @@ export default function UserDetailPanel({
               </li>
             </ul>
           </div>
-        )}
+        )} */}
 
         <div>
           <p className="wn-member-panel__section-title">Account</p>
@@ -193,6 +193,9 @@ export default function UserDetailPanel({
             <div>
               <span>Email</span>
               <strong>{user.emailVerified ? 'Verified' : 'Unverified'}</strong>
+              {!user.isActive && user.emailVerified && (
+                <span className="wn-member-panel__email-hint"> (inactive account)</span>
+              )}
             </div>
           </div>
         </div>

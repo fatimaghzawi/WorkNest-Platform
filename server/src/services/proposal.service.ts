@@ -20,6 +20,10 @@ const buildProposalFilter = (query: Record<string, unknown> = {}, baseFilter: Re
     filter.status = query.status;
   }
 
+  if (query.jobId) {
+    filter.jobId = query.jobId;
+  }
+
   return filter;
 };
 

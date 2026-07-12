@@ -27,9 +27,20 @@ const userZodSchema = z.object({
 
 const createUserZodSchema = userZodSchema;
 
-const updateUserZodSchema = userZodSchema
-  .omit({ password: true, email: true })
-  .partial()
+// No .default() here — partial() + defaults would inject emailVerified:false / skills:[] on every PATCH.
+const updateUserZodSchema = z
+  .object({
+    firstName: nonEmptyString('First name').max(50, 'First name cannot exceed 50 characters').optional(),
+    lastName: nonEmptyString('Last name').max(50, 'Last name cannot exceed 50 characters').optional(),
+    role: z.enum(ROLES, { message: 'Role must be client, freelancer, or admin' }).optional(),
+    phone: optionalE164PhoneSchema,
+    profileImage: urlSchema.optional().or(z.literal('')),
+    bio: z.string().trim().max(500, 'Bio cannot exceed 500 characters').optional(),
+    skills: z.array(z.string().trim().min(1)).optional(),
+    portfolioLink: urlSchema.optional().or(z.literal('')),
+    isActive: z.boolean().optional(),
+    emailVerified: z.boolean().optional(),
+  })
   .refine((data) => Object.keys(data).length > 0, {
     message: 'At least one field is required for update',
   });

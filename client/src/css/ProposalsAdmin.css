@@ -260,6 +260,36 @@ button.wn-proposals-overview__tile {
   margin-bottom: 20px;
 }
 
+.wn-proposals-job-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--color-brand-light-purple);
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+}
+
+.wn-proposals-job-filter strong {
+  color: var(--color-text-main);
+}
+
+.wn-proposals-job-filter__clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: var(--color-primary-main);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .wn-proposals-filters {
   display: flex;
   flex-wrap: wrap;

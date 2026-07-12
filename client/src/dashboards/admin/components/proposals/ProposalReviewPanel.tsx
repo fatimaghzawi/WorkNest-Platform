@@ -1,4 +1,3 @@
-import Button from '../../../../components/common/Button';
 import StatusBadge from '../../../../components/jobs/StatusBadge';
 import UserAvatar from '../../../../components/users/UserAvatar';
 import type { Proposal } from '../../../../types/proposal';
@@ -6,19 +5,7 @@ import { formatCurrency, formatDateTime } from '../../../../utils/format';
 import { getProposalFreelancer, getProposalJobTitle } from '../../../../utils/proposal';
 import '../../../../css/ProposalsAdmin.css';
 
-export default function ProposalReviewPanel({
-  proposal,
-  busy,
-  onAccept,
-  onReject,
-  onSchedule,
-}: {
-  proposal: Proposal;
-  busy?: boolean;
-  onAccept: (id: string) => void;
-  onReject: (id: string) => void;
-  onSchedule: (proposal: Proposal) => void;
-}) {
+export default function ProposalReviewPanel({ proposal }: { proposal: Proposal }) {
   const freelancer = getProposalFreelancer(proposal);
 
   return (
@@ -71,29 +58,6 @@ export default function ProposalReviewPanel({
           <blockquote className="wn-proposal-review__letter">{proposal.coverLetter}</blockquote>
         </div>
       </div>
-
-      {(proposal.status === 'pending' || proposal.status === 'accepted') && (
-        <div className="wn-proposal-review__footer">
-          {proposal.status === 'pending' && (
-            <>
-              <Button disabled={busy} onClick={() => onAccept(proposal._id)}>
-                Accept proposal
-              </Button>
-              <Button variant="outline" disabled={busy} onClick={() => onReject(proposal._id)}>
-                Reject
-              </Button>
-              <Button variant="outline" disabled={busy} onClick={() => onSchedule(proposal)}>
-                Schedule interview
-              </Button>
-            </>
-          )}
-          {proposal.status === 'accepted' && (
-            <Button disabled={busy} onClick={() => onSchedule(proposal)}>
-              Schedule interview
-            </Button>
-          )}
-        </div>
-      )}
     </section>
   );
 }

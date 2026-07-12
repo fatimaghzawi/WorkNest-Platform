@@ -39,6 +39,7 @@ export interface Proposal {
 
 export interface ListProposalsParams {
   status?: ProposalStatus;
+  jobId?: string;
   page?: number;
   limit?: number;
 }
