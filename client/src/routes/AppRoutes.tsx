@@ -5,6 +5,7 @@ import Contact from '../pages/shared/Contact';
 import HelpCenter from '../pages/shared/HelpCenter';
 import PrivacyPolicy from '../pages/shared/PrivacyPolicy';
 import TermsOfService from '../pages/shared/TermsOfService';
+
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import ForgotPassword from '../pages/auth/ForgotPassword';
@@ -14,6 +15,7 @@ import MainLayout from '../layouts/MainLayout';
 import { adminDashboardRoutes } from '../dashboards/admin/routes';
 import { clientDashboardRoutes } from '../dashboards/client/routes';
 import { freelancerDashboardRoutes } from '../dashboards/freelancer/routes';
+import Freelancers from '../pages/shared/Freelancers';
 
 export default function AppRoutes() {
   return (
@@ -21,6 +23,7 @@ export default function AppRoutes() {
       <Route path="/" element={<Home />} />
 
       <Route element={<MainLayout />}>
+        <Route path="/freelancers" element={<Freelancers />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/help" element={<HelpCenter />} />

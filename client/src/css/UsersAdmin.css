@@ -570,6 +570,12 @@
   color: var(--color-text-secondary);
 }
 
+.wn-member-panel__email-hint {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
 .wn-member-panel__portfolio {
   display: inline-flex;
   align-items: center;

@@ -72,7 +72,7 @@ router.patch(
 router.patch(
   '/:id/status',
   authenticate,
-  authorize('client', 'admin'),
+  authorize('client'),
   validate(updateProposalStatusSchema),
   asyncHandler(proposalController.updateProposalStatus)
 );

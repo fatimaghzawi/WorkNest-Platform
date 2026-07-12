@@ -4,15 +4,14 @@ import "../css/TopFreelancers.css";
 export interface Freelancer {
   name: string;
   role: string;
-  rating: number;
   projects: number;
 }
 
 const DEFAULT_FREELANCERS: Freelancer[] = [
-  { name: "Sarah Johnson", role: "Full Stack Developer", rating: 4.9, projects: 32 },
-  { name: "James Smith", role: "UI/UX Designer", rating: 4.8, projects: 28 },
-  { name: "Emily Davis", role: "Content Writer", rating: 4.9, projects: 45 },
-  { name: "Michael Brown", role: "Mobile Developer", rating: 4.7, projects: 20 },
+  { name: "Sarah Johnson", role: "Full Stack Developer", projects: 32 },
+  { name: "James Smith", role: "UI/UX Designer", projects: 28 },
+  { name: "Emily Davis", role: "Content Writer", projects: 45 },
+  { name: "Michael Brown", role: "Mobile Developer", projects: 20 },
 ];
 
 function initials(name: string) {
@@ -27,8 +26,9 @@ export interface TopFreelancersProps {
 }
 
 /**
- * WorkNest Top Freelancers — grid of highly-rated freelancers. Avatars use
- * initials rather than stock photos to avoid depicting unrelated real people.
+ * WorkNest Top Freelancers — grid of top-performing freelancers, ranked by
+ * completed projects. Avatars use initials rather than stock photos to
+ * avoid depicting unrelated real people.
  */
 export default function TopFreelancers({
   id = "top-freelancers",
@@ -51,7 +51,6 @@ export default function TopFreelancers({
               <h3 className="wn-freelancer-card__name">{f.name}</h3>
               <p className="wn-freelancer-card__role">{f.role}</p>
               <div className="wn-freelancer-card__meta">
-                <span className="wn-freelancer-card__rating">★ {f.rating}</span>
                 <span>{f.projects} Projects</span>
               </div>
             </article>

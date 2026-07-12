@@ -47,6 +47,7 @@ const updateProposalStatusSchema = {
 const listProposalsSchema = {
   query: z.object({
     status: z.enum(['pending', 'accepted', 'rejected']).optional(),
+    jobId: objectIdSchema.optional(),
     page: z.coerce.number().int().min(1).optional(),
     limit: z.coerce.number().int().min(1).max(100).optional(),
   }),

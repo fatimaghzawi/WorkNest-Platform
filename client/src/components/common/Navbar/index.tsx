@@ -17,7 +17,7 @@ export interface NavbarUser {
 
 export const PUBLIC_NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
-  { label: "Find Talent", href: "/#top-freelancers" },
+  { label: "Find Talent", href: "/freelancers" },
   { label: "Find Work", href: "/#featured-jobs" },
   { label: "How It Works", href: "/#how-it-works" },
   { label: "Contact", href: "/contact" },
