@@ -5,6 +5,7 @@ const { parsePagination, buildPaginationMeta } = require('../utils/pagination');
 const jobRepository = require('../repositories/job.repository');
 const categoryService = require('../services/category.service');
 const projectRepository = require('../repositories/project.repository');
+const jobCleanupService = require('../services/jobCleanup.service');
 const mongoose = require('mongoose');
 const { NOT_DELETED_FILTER } = jobRepository;
 const SORT_MAP = {
@@ -118,29 +119,31 @@ const updateJob = async (id, userId, data, userRole = 'client') => {
     return updated;
 };
 const updateJobStatus = async (id, userId, status, userRole = 'client') => {
+    if (userRole !== 'admin') {
+        throw new AppError('Only admins can change job status directly', 403);
+    }
     const job = await jobRepository.findById(id);
     if (!job) {
         throw new AppError('Job not found', 404);
     }
     assertNotArchived(job);
-    assertJobOwner(job, userId, userRole);
-    if (userRole !== 'admin') {
-        if (job.status === 'closed') {
-            throw new AppError('Cannot change status of a closed job', 400);
-        }
-        if (job.status === 'in_progress') {
-            throw new AppError('Cannot change status of a job that is in progress', 400);
-        }
-        const project = await projectRepository.findByJobId(id);
-        if (project?.status === 'completed') {
-            throw new AppError('Cannot change status of a job after the project has been completed', 400);
-        }
-    }
     const updated = await jobRepository.updateById(id, { status });
     if (!updated) {
         throw new AppError('Job not found', 404);
     }
     return updated;
+};
+const assertClientCanDeleteJob = async (job) => {
+    if (job.deletedAt) {
+        throw new AppError('Job is already deleted', 400);
+    }
+    if (job.status !== 'open') {
+        throw new AppError('Only open jobs can be deleted', 400);
+    }
+    const project = await projectRepository.findByJobId(job._id.toString());
+    if (project) {
+        throw new AppError('Cannot delete a job that already has a project', 400);
+    }
 };
 const assertJobArchivable = async (job) => {
     if (job.deletedAt) {
@@ -163,8 +166,14 @@ const deleteJob = async (id, userId, userRole = 'client') => {
         throw new AppError('Job not found', 404);
     }
     assertJobOwner(job, userId, userRole);
-    await assertJobArchivable(job);
-    await jobRepository.softDeleteById(id);
+    if (userRole === 'admin') {
+        await assertJobArchivable(job);
+        await jobRepository.softDeleteById(id);
+        return;
+    }
+    await assertClientCanDeleteJob(job);
+    await jobCleanupService.deleteOpenJobRelatedData(id);
+    await jobRepository.deleteById(id);
 };
 const getMyJobs = async (clientId, query = {}) => {
     return listJobs({ ...query, clientId }, { populate: false });

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.notificationZodSchemas = exports.Notification = exports.paymentZodSchemas = exports.PAYMENT_STATUSES = exports.Payment = exports.deliverableZodSchemas = exports.DELIVERABLE_STATUSES = exports.Deliverable = exports.milestoneZodSchemas = exports.MILESTONE_STATUSES = exports.Milestone = exports.taskZodSchemas = exports.TASK_PRIORITIES = exports.TASK_STATUSES = exports.Task = exports.projectZodSchemas = exports.PROJECT_STATUSES = exports.Project = exports.interviewZodSchemas = exports.INTERVIEW_STATUSES = exports.Interview = exports.proposalZodSchemas = exports.PROPOSAL_STATUSES = exports.Proposal = exports.jobZodSchemas = exports.JOB_STATUSES = exports.Job = exports.categoryZodSchemas = exports.slugify = exports.Category = exports.userZodSchemas = exports.ROLES = exports.User = void 0;
+exports.notificationZodSchemas = exports.Notification = exports.paymentZodSchemas = exports.PAYMENT_STATUSES = exports.Payment = exports.taskZodSchemas = exports.TASK_PRIORITIES = exports.TASK_STATUSES = exports.Task = exports.projectZodSchemas = exports.PROJECT_STATUSES = exports.Project = exports.interviewZodSchemas = exports.INTERVIEW_STATUSES = exports.Interview = exports.proposalZodSchemas = exports.PROPOSAL_STATUSES = exports.Proposal = exports.jobZodSchemas = exports.JOB_STATUSES = exports.Job = exports.categoryZodSchemas = exports.slugify = exports.Category = exports.userZodSchemas = exports.ROLES = exports.User = void 0;
 var User_1 = require("./User");
 Object.defineProperty(exports, "User", { enumerable: true, get: function () { return __importDefault(User_1).default; } });
 Object.defineProperty(exports, "ROLES", { enumerable: true, get: function () { return User_1.ROLES; } });
@@ -33,14 +33,6 @@ Object.defineProperty(exports, "Task", { enumerable: true, get: function () { re
 Object.defineProperty(exports, "TASK_STATUSES", { enumerable: true, get: function () { return Task_1.TASK_STATUSES; } });
 Object.defineProperty(exports, "TASK_PRIORITIES", { enumerable: true, get: function () { return Task_1.TASK_PRIORITIES; } });
 Object.defineProperty(exports, "taskZodSchemas", { enumerable: true, get: function () { return Task_1.taskZodSchemas; } });
-var Milestone_1 = require("./Milestone");
-Object.defineProperty(exports, "Milestone", { enumerable: true, get: function () { return __importDefault(Milestone_1).default; } });
-Object.defineProperty(exports, "MILESTONE_STATUSES", { enumerable: true, get: function () { return Milestone_1.MILESTONE_STATUSES; } });
-Object.defineProperty(exports, "milestoneZodSchemas", { enumerable: true, get: function () { return Milestone_1.milestoneZodSchemas; } });
-var Deliverable_1 = require("./Deliverable");
-Object.defineProperty(exports, "Deliverable", { enumerable: true, get: function () { return __importDefault(Deliverable_1).default; } });
-Object.defineProperty(exports, "DELIVERABLE_STATUSES", { enumerable: true, get: function () { return Deliverable_1.DELIVERABLE_STATUSES; } });
-Object.defineProperty(exports, "deliverableZodSchemas", { enumerable: true, get: function () { return Deliverable_1.deliverableZodSchemas; } });
 var Payment_1 = require("./Payment");
 Object.defineProperty(exports, "Payment", { enumerable: true, get: function () { return __importDefault(Payment_1).default; } });
 Object.defineProperty(exports, "PAYMENT_STATUSES", { enumerable: true, get: function () { return Payment_1.PAYMENT_STATUSES; } });

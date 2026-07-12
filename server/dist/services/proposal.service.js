@@ -21,6 +21,9 @@ const buildProposalFilter = (query = {}, baseFilter = {}) => {
     if (query.status) {
         filter.status = query.status;
     }
+    if (query.jobId) {
+        filter.jobId = query.jobId;
+    }
     return filter;
 };
 const listProposals = async (filter, query = {}) => {

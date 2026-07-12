@@ -43,7 +43,6 @@ const categoryMongooseSchema = new mongoose_1.default.Schema({
         trim: true,
         unique: true,
         maxlength: [100, 'Name cannot exceed 100 characters'],
-        index: true,
     },
     slug: {
         type: String,
@@ -53,7 +52,6 @@ const categoryMongooseSchema = new mongoose_1.default.Schema({
         lowercase: true,
         maxlength: [120, 'Slug cannot exceed 120 characters'],
         match: [/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase with hyphens only'],
-        index: true,
     },
     description: {
         type: String,
@@ -73,8 +71,6 @@ categoryMongooseSchema.pre('validate', function generateSlug() {
         this.slug = slugify(this.name);
     }
 });
-categoryMongooseSchema.index({ name: 1 }, { unique: true });
-categoryMongooseSchema.index({ slug: 1 }, { unique: true });
 categoryMongooseSchema.index({ isActive: 1, name: 1 });
 const Category = mongoose_1.default.model('Category', categoryMongooseSchema);
 exports.categoryZodSchemas = {

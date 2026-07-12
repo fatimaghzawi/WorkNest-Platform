@@ -58,7 +58,8 @@ const verifyEmail = async (req, res, next) => {
 const login = async (req, res) => {
     const { accessToken, user } = await authService.login(req.body);
     setAccessTokenCookie(res, accessToken);
-    return res.status(200).json({ success: true, user });
+    // Also return token for clients where cross-site cookies are blocked (common on mobile Safari).
+    return res.status(200).json({ success: true, user, accessToken });
 };
 const logout = async (req, res) => {
     clearAccessTokenCookie(res);

@@ -19,9 +19,6 @@ const envSchema = z
     JWT_REFRESH_SECRET: z.preprocess(emptyToUndefined, z.string().min(1).default('dev_refresh_secret_change_in_production')),
     JWT_REFRESH_EXPIRES_IN: z.preprocess(emptyToUndefined, z.string().default('30d')),
     JWT_COOKIE_EXPIRES_IN: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().default(7)),
-    CLOUDINARY_CLOUD_NAME: z.preprocess(emptyToUndefined, z.string().default('')),
-    CLOUDINARY_API_KEY: z.preprocess(emptyToUndefined, z.string().default('')),
-    CLOUDINARY_API_SECRET: z.preprocess(emptyToUndefined, z.string().default('')),
     EMAIL_HOST: z.preprocess(emptyToUndefined, z.string().default('smtp-relay.brevo.com')),
     EMAIL_PORT: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().default(587)),
     EMAIL_SECURE: z.preprocess(emptyToUndefined, z
@@ -126,11 +123,6 @@ const env = {
         refreshSecret: parsed.JWT_REFRESH_SECRET,
         refreshExpiresIn: parsed.JWT_REFRESH_EXPIRES_IN,
         cookieExpiresIn: parsed.JWT_COOKIE_EXPIRES_IN,
-    },
-    cloudinary: {
-        cloudName: parsed.CLOUDINARY_CLOUD_NAME,
-        apiKey: parsed.CLOUDINARY_API_KEY,
-        apiSecret: parsed.CLOUDINARY_API_SECRET,
     },
     email: {
         host: parsed.EMAIL_HOST,

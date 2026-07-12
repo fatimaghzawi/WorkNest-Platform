@@ -32,7 +32,13 @@ const initSocket = (httpServer) => {
     io.use((socket, next) => {
         try {
             const cookies = parseCookies(socket.handshake.headers.cookie);
-            const token = cookies[jwtConfig.cookie.name];
+            const authHeader = socket.handshake.headers.authorization;
+            const bearerToken = typeof authHeader === 'string' && authHeader.startsWith('Bearer ')
+                ? authHeader.slice(7).trim()
+                : null;
+            const token = cookies[jwtConfig.cookie.name] ||
+                socket.handshake.auth?.token ||
+                bearerToken;
             if (!token) {
                 return next(new Error('Authentication required'));
             }
