@@ -65,7 +65,6 @@ const interviewMongooseSchema = new mongoose_1.default.Schema({
     scheduledDate: {
         type: Date,
         required: [true, 'Scheduled date is required'],
-        index: true,
     },
     duration: {
         type: Number,

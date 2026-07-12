@@ -15,6 +15,6 @@ router.get('/my', authenticate, authorize('freelancer'), validate(listProposalsS
 router.get('/job/:jobId', authenticate, authorize('client'), validate({ ...jobIdParamSchema, query: listProposalsSchema.query }), asyncHandler(proposalController.getProposalsByJob));
 router.get('/:id', authenticate, validate(proposalIdSchema), asyncHandler(proposalController.getProposal));
 router.patch('/:id', authenticate, authorize('freelancer'), validate(updateProposalSchema), asyncHandler(proposalController.updateProposal));
-router.patch('/:id/status', authenticate, authorize('client', 'admin'), validate(updateProposalStatusSchema), asyncHandler(proposalController.updateProposalStatus));
+router.patch('/:id/status', authenticate, authorize('client'), validate(updateProposalStatusSchema), asyncHandler(proposalController.updateProposalStatus));
 router.delete('/:id', authenticate, authorize('freelancer'), validate(proposalIdSchema), asyncHandler(proposalController.withdrawProposal));
 module.exports = router;

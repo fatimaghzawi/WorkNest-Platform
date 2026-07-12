@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const jwtConfig = require('../config/jwt');
 const { verifyAccessToken } = require('../utils/jwt');
+const { extractAccessToken } = require('../utils/extractAccessToken');
 const AppError = require('../utils/AppError');
 const authRepository = require('../repositories/auth.repository');
 const authenticate = async (req, res, next) => {
     try {
-        const token = req.cookies?.[jwtConfig.cookie.name];
+        const token = extractAccessToken(req);
         if (!token) {
             return next(new AppError('Authentication required', 401));
         }

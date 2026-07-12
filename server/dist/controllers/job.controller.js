@@ -49,9 +49,8 @@ const updateJobStatus = async (req, res) => {
 };
 const deleteJob = async (req, res) => {
     await jobService.deleteJob(req.params.id, req.user.id, req.user.role);
-    return sendSuccess(res, {
-        message: 'Job archived successfully',
-    });
+    const message = req.user.role === 'admin' ? 'Job archived successfully' : 'Job deleted successfully';
+    return sendSuccess(res, { message });
 };
 const getJobStats = async (req, res) => {
     const stats = await jobService.getJobStats();
