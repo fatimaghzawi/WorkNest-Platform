@@ -110,7 +110,53 @@ export default function Hero({
 
         <p className="wn-hero__subtitle">{subtitle}</p>
 
-       
+        <form className="wn-hero__search" onSubmit={handleSubmit}>
+          <label className="wn-hero__field">
+            <span className="wn-hero__field-label">Category</span>
+            <select
+              className="wn-hero__select"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              aria-label="Job category"
+            >
+              {categories.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="wn-hero__field wn-hero__field--grow">
+            <span className="wn-hero__field-label">Keyword</span>
+            <input
+              className="wn-hero__input"
+              type="search"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              placeholder={keywordPlaceholder}
+              aria-label="Search keyword"
+            />
+          </label>
+
+          <label className="wn-hero__field">
+            <span className="wn-hero__field-label">Location</span>
+            <input
+              className="wn-hero__input"
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder={locationPlaceholder}
+              aria-label="Location"
+            />
+          </label>
+
+          <button type="submit" className="wn-hero__submit">
+            {searchLabel}
+          </button>
+        </form>
+
+        {trustText && <p className="wn-hero__trust">{trustText}</p>}
       </div>
     </section>
   );

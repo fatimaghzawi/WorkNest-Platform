@@ -276,6 +276,55 @@ class EmailService {
       text,
     });
   }
+
+  async sendEventNotificationEmail({
+    to,
+    firstName,
+    title,
+    message,
+    actionUrl,
+    actionLabel = 'Open dashboard',
+  }: {
+    to: string;
+    firstName: string;
+    title: string;
+    message: string;
+    actionUrl?: string;
+    actionLabel?: string;
+  }) {
+    const year = new Date().getFullYear().toString();
+    const actionButtonHtml = actionUrl
+      ? `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                <tr>
+                  <td style="background:#49225B;border-radius:8px;">
+                    <a href="${actionUrl}" style="display:inline-block;padding:14px 32px;color:#ffffff;text-decoration:none;font-size:15px;font-weight:700;">
+                      ${actionLabel}
+                    </a>
+                  </td>
+                </tr>
+              </table>`
+      : '';
+
+    const html = renderTemplate('event-notification.html', {
+      firstName,
+      title,
+      message,
+      appName: env.appName,
+      year,
+      actionButtonHtml,
+    });
+
+    const text = [`Hi ${firstName},`, '', message, '', actionUrl ? `${actionLabel}: ${actionUrl}` : '', '']
+      .filter(Boolean)
+      .join('\n');
+
+    return this.send({
+      to,
+      subject: `${title} — ${env.appName}`,
+      html,
+      text,
+    });
+  }
 }
 
 module.exports = new EmailService();

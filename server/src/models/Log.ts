@@ -72,6 +72,7 @@ const logMongooseSchema = new mongoose.Schema(
 
 logMongooseSchema.index({ createdAt: -1 });
 logMongooseSchema.index({ level: 1, createdAt: -1 });
+logMongooseSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 90 });
 
 const Log = mongoose.model('Log', logMongooseSchema);
 

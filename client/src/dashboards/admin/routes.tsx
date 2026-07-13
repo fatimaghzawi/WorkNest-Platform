@@ -15,6 +15,7 @@ import Reports from './pages/Reports';
 import Statistics from './pages/Statistics';
 import Logs from './pages/Logs';
 import Profile from './pages/Profile';
+import Wallet from './pages/Wallet';
 
 export const adminDashboardRoutes = (
   <Route element={<AdminRoute />}>
@@ -27,6 +28,7 @@ export const adminDashboardRoutes = (
       <Route path="/admin/proposals" element={<Proposals />} />
       <Route path="/admin/skills" element={<Skills />} />
       <Route path="/admin/projects" element={<Projects />} />
+      <Route path="/admin/wallet" element={<Wallet />} />
       <Route path="/admin/interviews" element={<Interviews />} />
       <Route path="/admin/workspace" element={<Workspace />} />
       <Route path="/admin/reports" element={<Reports />} />

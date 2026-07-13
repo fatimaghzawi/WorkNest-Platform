@@ -46,9 +46,24 @@ const verifyEmailSchema = {
   }),
 };
 
+const googleLoginSchema = {
+  body: z.object({
+    credential: z.string().min(1, 'Google credential is required'),
+    role: z.enum(['client', 'freelancer']).optional(),
+  }),
+};
+
+const githubStartSchema = {
+  query: z.object({
+    role: z.enum(['client', 'freelancer']).optional(),
+  }),
+};
+
 module.exports = {
   registerSchema,
   loginSchema,
+  googleLoginSchema,
+  githubStartSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
   verifyEmailSchema,

@@ -22,6 +22,10 @@ const paymentZodSchema = z.object({
   depositedAt: z.coerce.date().optional().nullable(),
   releasedAt: z.coerce.date().optional().nullable(),
   refundedAt: z.coerce.date().optional().nullable(),
+  platformFee: z.number().min(0).optional(),
+  freelancerPayout: z.number().min(0).optional(),
+  feeRate: z.number().min(0).max(1).optional(),
+  budgetRangeLabel: z.string().trim().max(40).optional(),
 });
 
 const createPaymentZodSchema = paymentZodSchema.omit({
@@ -118,6 +122,23 @@ const paymentMongooseSchema = new mongoose.Schema(
     },
     refundedAt: {
       type: Date,
+    },
+    platformFee: {
+      type: Number,
+      min: [0, 'Platform fee cannot be negative'],
+    },
+    freelancerPayout: {
+      type: Number,
+      min: [0, 'Freelancer payout cannot be negative'],
+    },
+    feeRate: {
+      type: Number,
+      min: [0, 'Fee rate cannot be negative'],
+      max: [1, 'Fee rate cannot exceed 100%'],
+    },
+    budgetRangeLabel: {
+      type: String,
+      trim: true,
     },
   },
   {

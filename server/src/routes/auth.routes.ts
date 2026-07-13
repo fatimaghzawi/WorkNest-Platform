@@ -10,6 +10,8 @@ const {
   forgotPasswordSchema,
   resetPasswordSchema,
   verifyEmailSchema,
+  googleLoginSchema,
+  githubStartSchema,
 } = require('../validators/auth.validator');
 
 const router = Router();
@@ -34,6 +36,20 @@ router.get(
   asyncHandler(authController.verifyEmail)
 );
 router.post('/login', authLimiter, validate(loginSchema), asyncHandler(authController.login));
+router.post(
+  '/google',
+  authLimiter,
+  validate(googleLoginSchema),
+  asyncHandler(authController.googleLogin)
+);
+router.get(
+  '/github',
+  authLimiter,
+  validate(githubStartSchema),
+  asyncHandler(authController.startGithubAuth)
+);
+router.get('/github/callback', authLimiter, asyncHandler(authController.githubCallback));
+router.post('/refresh', authLimiter, asyncHandler(authController.refresh));
 router.post('/logout', asyncHandler(authController.logout));
 router.post(
   '/forgot-password',

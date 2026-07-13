@@ -8,7 +8,7 @@
   type ReactNode,
 } from 'react';
 import { authApi } from '../api/auth.api';
-import type { LoginPayload, RegisterPayload, User } from '../types/auth';
+import type { GoogleLoginPayload, LoginPayload, RegisterPayload, User } from '../types/auth';
 import { getApiErrorMessage } from '../utils/apiError';
 import { clearAccessToken, setAccessToken } from '../utils/authToken';
 
@@ -17,6 +17,7 @@ interface AuthContextValue {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (payload: LoginPayload) => Promise<User>;
+  googleLogin: (payload: GoogleLoginPayload) => Promise<User>;
   register: (payload: RegisterPayload) => Promise<string>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -32,7 +33,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { data } = await authApi.getMe();
       setUser(data.user);
+      return;
     } catch {
+      // Access token may have expired — try refresh cookie before signing out.
+    }
+
+    try {
+      const { data } = await authApi.refresh();
+      if (data.accessToken) {
+        setAccessToken(data.accessToken);
+      }
+      setUser(data.user);
+    } catch {
+      clearAccessToken();
       setUser(null);
     }
   }, []);
@@ -43,6 +56,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (payload: LoginPayload) => {
     const { data } = await authApi.login(payload);
+    if (data.accessToken) {
+      setAccessToken(data.accessToken);
+    }
+    setUser(data.user);
+    return data.user;
+  }, []);
+
+  const googleLogin = useCallback(async (payload: GoogleLoginPayload) => {
+    const { data } = await authApi.googleLogin(payload);
     if (data.accessToken) {
       setAccessToken(data.accessToken);
     }
@@ -70,11 +92,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isLoading,
       isAuthenticated: Boolean(user),
       login,
+      googleLogin,
       register,
       logout,
       refreshUser,
     }),
-    [user, isLoading, login, register, logout, refreshUser]
+    [user, isLoading, login, googleLogin, register, logout, refreshUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

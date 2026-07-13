@@ -1,5 +1,5 @@
 ﻿import api from './axios';
-import type { LoginPayload, RegisterPayload, User } from '../types/auth';
+import type { GoogleLoginPayload, LoginPayload, RegisterPayload, User } from '../types/auth';
 
 export const authApi = {
   register: (payload: RegisterPayload) =>
@@ -7,6 +7,12 @@ export const authApi = {
 
   login: (payload: LoginPayload) =>
     api.post<{ success: boolean; user: User; accessToken: string }>('/api/auth/login', payload),
+
+  googleLogin: (payload: GoogleLoginPayload) =>
+    api.post<{ success: boolean; user: User; accessToken: string }>('/api/auth/google', payload),
+
+  refresh: () =>
+    api.post<{ success: boolean; user: User; accessToken: string }>('/api/auth/refresh'),
 
   logout: () => api.post<{ success: boolean; message: string }>('/api/auth/logout'),
 
