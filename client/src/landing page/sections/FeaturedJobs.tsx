@@ -1,34 +1,22 @@
 import { Link } from "react-router-dom";
+import type { LandingFeaturedJob } from "../../types/landing";
+import { formatCurrency, formatRelativeTime } from "../../utils/format";
 import "../css/FeaturedJobs.css";
-
-export interface Job {
-  title: string;
-  budget: string;
-  category: string;
-  tags: string[];
-  postedAgo: string;
-}
-
-const DEFAULT_JOBS: Job[] = [
-  { title: "E-commerce Website Development", budget: "$800 - $1,500", category: "Web Development", tags: ["React", "Node.js", "MongoDB"], postedAgo: "2 days ago" },
-  { title: "Mobile App UI/UX Design", budget: "$300 - $700", category: "UI/UX Design", tags: ["Figma", "UI Design", "Prototyping"], postedAgo: "1 day ago" },
-  { title: "Content Writing for Blog", budget: "$100 - $200", category: "Writing", tags: ["Article", "Blog", "SEO"], postedAgo: "3 days ago" },
-  { title: "WordPress Development", budget: "$200 - $500", category: "Web Development", tags: ["WordPress", "PHP", "Elementor"], postedAgo: "5 days ago" },
-];
 
 export interface FeaturedJobsProps {
   id?: string;
   title?: string;
   viewAllHref?: string;
-  jobs?: Job[];
+  jobs?: LandingFeaturedJob[];
+  loading?: boolean;
 }
-
 
 export default function FeaturedJobs({
   id = "featured-jobs",
   title = "Featured Jobs",
   viewAllHref = "/login",
-  jobs = DEFAULT_JOBS,
+  jobs = [],
+  loading = false,
 }: FeaturedJobsProps) {
   return (
     <section id={id} className="wn-jobs wn-landing-anchor">
@@ -38,23 +26,32 @@ export default function FeaturedJobs({
           <Link to={viewAllHref} className="wn-jobs__view-all">View All Jobs →</Link>
         </div>
 
-        <div className="wn-jobs__grid">
-          {jobs.map((job) => (
-            <article className="wn-job-card" key={job.title}>
-              <h3 className="wn-job-card__title">{job.title}</h3>
-              <span className="wn-job-card__budget">{job.budget}</span>
-              <span className="wn-job-card__category">{job.category}</span>
-              <div className="wn-job-card__tags">
-                {job.tags.map((tag) => (
-                  <span className="wn-job-card__tag" key={tag}>{tag}</span>
-                ))}
-              </div>
-              <div className="wn-job-card__footer">
-                <span className="wn-job-card__posted">{job.postedAgo}</span>
-              </div>
-            </article>
-          ))}
-        </div>
+        {loading ? (
+          <p className="wn-landing-section__message">Loading jobs…</p>
+        ) : jobs.length === 0 ? (
+          <div className="wn-empty">
+            <p className="wn-empty__title">No open jobs yet</p>
+            <p className="wn-empty__desc">Check back soon as clients post new opportunities.</p>
+          </div>
+        ) : (
+          <div className="wn-jobs__grid">
+            {jobs.map((job) => (
+              <article className="wn-job-card" key={job.id}>
+                <h3 className="wn-job-card__title">{job.title}</h3>
+                <span className="wn-job-card__budget">{formatCurrency(job.budget)}</span>
+                <span className="wn-job-card__category">{job.category}</span>
+                <div className="wn-job-card__tags">
+                  {job.skills.slice(0, 3).map((tag) => (
+                    <span className="wn-job-card__tag" key={tag}>{tag}</span>
+                  ))}
+                </div>
+                <div className="wn-job-card__footer">
+                  <span className="wn-job-card__posted">{formatRelativeTime(job.createdAt)}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

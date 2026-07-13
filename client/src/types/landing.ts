@@ -7,3 +7,12 @@ export interface LandingTopFreelancer {
   profileImage?: string;
   bio?: string;
 }
+
+export interface LandingFeaturedJob {
+  id: string;
+  title: string;
+  category: string;
+  budget: number;
+  skills: string[];
+  createdAt: string;
+}

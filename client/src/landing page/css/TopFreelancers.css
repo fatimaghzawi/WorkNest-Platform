@@ -128,3 +128,11 @@
   color: var(--color-status-warning);
   font-weight: 600;
 }
+
+.wn-landing-section__message {
+  margin: 0;
+  padding: var(--space-4) 0;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}

@@ -4,55 +4,49 @@ import Navbar from "../../components/common/Navbar";
 import ContactSection from "../../landing page/sections/ContactSection";
 import CTABanner from "../../landing page/sections/CTABanner";
 import FAQ from "../../landing page/sections/FAQ";
-import FeaturedJobs, { type Job as FeaturedJob } from "../../landing page/sections/FeaturedJobs";
+import FeaturedJobs from "../../landing page/sections/FeaturedJobs";
 import Hero from "../../landing page/sections/Hero";
 import HowItWorks from "../../landing page/sections/HowItWorks";
 import Stats from "../../landing page/sections/Stats";
-import TopFreelancers, { type Freelancer } from "../../landing page/sections/TopFreelancers";
-import { jobsApi } from "../../api/jobs.api";
+import TopFreelancers from "../../landing page/sections/TopFreelancers";
 import { landingApi } from "../../api/landing.api";
-import { formatCurrency, formatRelativeTime } from "../../utils/format";
+import type { LandingFeaturedJob, LandingTopFreelancer } from "../../types/landing";
 
 export default function Home() {
-  // undefined = still loading (section renders its own static defaults meanwhile)
-  const [featuredJobs, setFeaturedJobs] = useState<FeaturedJob[] | undefined>(undefined);
-  const [freelancers, setFreelancers] = useState<Freelancer[] | undefined>(undefined);
+  const [featuredJobs, setFeaturedJobs] = useState<LandingFeaturedJob[]>([]);
+  const [freelancers, setFreelancers] = useState<LandingTopFreelancer[]>([]);
+  const [jobsLoading, setJobsLoading] = useState(true);
+  const [freelancersLoading, setFreelancersLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
 
-    jobsApi
-      .list({ status: "open", sort: "newest", limit: 4 })
+    landingApi
+      .getFeaturedJobs()
       .then((res) => {
         if (cancelled) return;
-        const jobs = res.data.data.map((job) => ({
-          title: job.title,
-          budget: formatCurrency(job.budget),
-          category: job.category,
-          tags: job.skills.slice(0, 3),
-          postedAgo: formatRelativeTime(job.createdAt),
-        }));
-        setFeaturedJobs(jobs);
+        setFeaturedJobs(res.data.data);
       })
       .catch(() => {
-        // Keep the section's built-in defaults on failure.
+        if (cancelled) return;
+        setFeaturedJobs([]);
+      })
+      .finally(() => {
+        if (!cancelled) setJobsLoading(false);
       });
 
     landingApi
       .getTopFreelancers()
       .then((res) => {
         if (cancelled) return;
-        setFreelancers(
-          res.data.data.map((f) => ({
-            name: `${f.firstName} ${f.lastName}`,
-            role: f.skills?.[0] || "Freelancer",
-            projects: f.completedProjects,
-            
-          }))
-        );
+        setFreelancers(res.data.data);
       })
       .catch(() => {
-        // Keep the section's built-in defaults on failure.
+        if (cancelled) return;
+        setFreelancers([]);
+      })
+      .finally(() => {
+        if (!cancelled) setFreelancersLoading(false);
       });
 
     return () => {
@@ -66,8 +60,16 @@ export default function Home() {
       <Hero />
       <Stats />
       <HowItWorks />
-      <FeaturedJobs jobs={featuredJobs} viewAllHref="/freelancer/jobs" />
-      <TopFreelancers freelancers={freelancers} viewAllHref="/freelancers" />
+      <FeaturedJobs
+        jobs={featuredJobs}
+        loading={jobsLoading}
+        viewAllHref="/freelancer/jobs"
+      />
+      <TopFreelancers
+        freelancers={freelancers}
+        loading={freelancersLoading}
+        viewAllHref="/freelancers"
+      />
       <FAQ />
       <ContactSection />
       <CTABanner />
