@@ -7,9 +7,16 @@ export function getProposalFreelancer(proposal: Proposal): ProposalFreelancer | 
   return null;
 }
 
-export function getProposalJobTitle(proposal: Proposal): string {
+export function getProposalJobTitle(
+  proposal: Proposal,
+  jobLookup?: Map<string, { title?: string }>
+): string {
   const { jobId } = proposal;
   if (jobId && typeof jobId === 'object') return jobId.title || 'Job';
+  if (jobId && jobLookup) {
+    const job = jobLookup.get(String(jobId));
+    if (job?.title) return job.title;
+  }
   return 'Job';
 }
 

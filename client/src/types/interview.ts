@@ -15,8 +15,8 @@ export interface InterviewJob {
 export interface Interview {
   id: string;
   _id?: string;
-  jobId: string;
-  jobTitle: string;
+  jobId: string | InterviewJob;
+  jobTitle?: string;
   proposalId: string;
   clientId: string;
   freelancerId: string;

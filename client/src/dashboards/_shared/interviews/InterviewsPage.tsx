@@ -18,6 +18,7 @@ import {
   formatInterviewTime,
   isSameDay,
 } from './calendarUtils';
+import { getInterviewJobTitle, normalizeInterview } from '../../../utils/interview';
 import '../../../css/Interviews.css';
 import '../../../css/AdminAnalytics.css';
 import '../../../css/DesignSystem.css';
@@ -50,7 +51,7 @@ export default function InterviewsPage({
         year: viewYear,
         month: viewMonth,
       });
-      setInterviews(res.data.data);
+      setInterviews(res.data.data.map(normalizeInterview));
     } catch (error) {
       toast.error(getApiErrorMessage(error, 'Failed to load interviews.'));
     } finally {
@@ -141,10 +142,14 @@ export default function InterviewsPage({
   };
 
   const openInterviewDetail = async (interview: Interview) => {
-    setDetailInterview(interview);
+    const normalized = normalizeInterview(interview);
+    setDetailInterview(normalized);
+    const interviewId = normalized.id || normalized._id;
+    if (!interviewId) return;
+
     try {
-      const res = await interviewsApi.getById(interview.id);
-      setDetailInterview(res.data.data);
+      const res = await interviewsApi.getById(interviewId);
+      setDetailInterview(normalizeInterview(res.data.data));
     } catch (error) {
       toast.warning(getApiErrorMessage(error, 'Could not load full interview details.'));
     }
@@ -288,7 +293,7 @@ export default function InterviewsPage({
                           </span>
                           <span className="wn-interview-card__duration">{interview.duration}m</span>
                         </div>
-                        <p className="wn-interview-card__title">{interview.jobTitle}</p>
+                        <p className="wn-interview-card__title">{getInterviewJobTitle(interview)}</p>
                         <p className="wn-interview-card__meta">{participantLabel(interview)}</p>
 
                         {hasLink && (

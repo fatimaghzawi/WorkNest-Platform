@@ -17,18 +17,22 @@ const displayName = (user) => {
   return `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
 };
 
+const isPopulatedJob = (value) =>
+  Boolean(value && typeof value === 'object' && typeof value.title === 'string');
+
 const toClientInterview = (interview) => {
   const plain = interview.toObject ? interview.toObject() : interview;
-  const job = plain.jobId && typeof plain.jobId === 'object' ? plain.jobId : null;
+  const job = isPopulatedJob(plain.jobId) ? plain.jobId : null;
   const client = plain.clientId && typeof plain.clientId === 'object' ? plain.clientId : null;
   const freelancer =
     plain.freelancerId && typeof plain.freelancerId === 'object' ? plain.freelancerId : null;
+  const interviewId = plain.id || plain._id;
 
   return {
-    id: plain._id.toString(),
-    _id: plain._id.toString(),
+    id: getId(interviewId),
+    _id: getId(interviewId),
     jobId: getId(plain.jobId),
-    jobTitle: job?.title || 'Untitled job',
+    jobTitle: plain.jobTitle || job?.title || 'Untitled job',
     proposalId: getId(plain.proposalId),
     clientId: getId(plain.clientId),
     freelancerId: getId(plain.freelancerId),

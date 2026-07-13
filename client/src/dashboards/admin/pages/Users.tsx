@@ -143,7 +143,6 @@ export default function AdminUsers() {
 
   const handleToggleActive = async (active: boolean) => {
     if (!selectedUser) return;
-    // Only toggle isActive — never send emailVerified (deactivate must not unverify).
     await patchUser(selectedUser._id, { isActive: active });
   };
 

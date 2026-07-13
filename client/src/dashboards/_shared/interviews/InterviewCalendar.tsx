@@ -7,6 +7,7 @@ import {
   isSameDay,
   toDateKey,
 } from './calendarUtils';
+import { getInterviewJobTitle } from '../../../utils/interview';
 import '../../../css/Interviews.css';
 
 const MAX_CHIPS = 2;
@@ -114,18 +115,24 @@ export default function InterviewCalendar({
                   dayEvents.length > 0 ? 'wn-interview-calendar__dots--has-events' : ''
                 }`.trim()}
               >
-                {dayEvents.slice(0, MAX_CHIPS).map((event) => (
-                  <span
-                    key={event.id}
-                    className={`wn-interview-calendar__event-chip wn-interview-calendar__event-chip--${event.status}`}
-                  >
-                    {new Date(event.scheduledDate).toLocaleTimeString(undefined, {
-                      hour: 'numeric',
-                      minute: '2-digit',
-                    })}{' '}
-                    {event.jobTitle}
-                  </span>
-                ))}
+                {dayEvents.slice(0, MAX_CHIPS).map((event) => {
+                  const time = new Date(event.scheduledDate).toLocaleTimeString(undefined, {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                  });
+                  const jobTitle = getInterviewJobTitle(event);
+
+                  return (
+                    <span
+                      key={event.id}
+                      className={`wn-interview-calendar__event-chip wn-interview-calendar__event-chip--${event.status}`}
+                      title={`${time} · ${jobTitle}`}
+                    >
+                      <span className="wn-interview-calendar__event-time">{time}</span>
+                      <span className="wn-interview-calendar__event-title">{jobTitle}</span>
+                    </span>
+                  );
+                })}
                 {dayEvents.length > MAX_CHIPS && (
                   <span className="wn-interview-calendar__more">
                     +{dayEvents.length - MAX_CHIPS} more
