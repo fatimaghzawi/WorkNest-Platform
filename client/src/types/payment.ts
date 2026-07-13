@@ -19,16 +19,22 @@ export interface Payment {
   depositedAt?: string;
   releasedAt?: string;
   createdAt?: string;
+  platformFee?: number;
+  freelancerPayout?: number;
+  feeRate?: number;
+  budgetRangeLabel?: string;
 }
 
 export interface WalletSummary {
-  role: 'client' | 'freelancer';
+  role: 'client' | 'freelancer' | 'admin';
   pendingDeposit?: number;
   inEscrow?: number;
   completedPayouts?: number;
   availableBalance?: number;
   pendingPayouts?: number;
   totalEarned?: number;
+  totalProfit?: number;
+  profitThisMonth?: number;
 }
 
 export interface CheckoutSessionResponse {

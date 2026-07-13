@@ -84,6 +84,11 @@ const envSchema = z
       z.coerce.number().int().positive().default(5 * 1024 * 1024)
     ),
     UPLOAD_PATH: z.preprocess(emptyToUndefined, z.string().default('uploads')),
+
+    GOOGLE_CLIENT_ID: z.preprocess(emptyToUndefined, z.string().default('')),
+
+    GITHUB_CLIENT_ID: z.preprocess(emptyToUndefined, z.string().default('')),
+    GITHUB_CLIENT_SECRET: z.preprocess(emptyToUndefined, z.string().default('')),
   })
   .superRefine((data, ctx) => { //production only rules runs after the validation and add custom rules
     if (data.NODE_ENV !== 'production') return;
@@ -220,6 +225,17 @@ const env = {  //export the environment variables and make them available in the
   upload: {
     maxFileSize: parsed.MAX_FILE_SIZE,
     path: parsed.UPLOAD_PATH,
+  },
+
+  google: {
+    clientId: parsed.GOOGLE_CLIENT_ID,
+    isConfigured: Boolean(parsed.GOOGLE_CLIENT_ID),
+  },
+
+  github: {
+    clientId: parsed.GITHUB_CLIENT_ID,
+    clientSecret: parsed.GITHUB_CLIENT_SECRET,
+    isConfigured: Boolean(parsed.GITHUB_CLIENT_ID && parsed.GITHUB_CLIENT_SECRET),
   },
 };
 

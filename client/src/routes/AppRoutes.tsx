@@ -10,6 +10,7 @@ import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import ForgotPassword from '../pages/auth/ForgotPassword';
 import ResetPassword from '../pages/auth/ResetPassword';
+import OAuthCallback from '../pages/auth/OAuthCallback';
 import AuthLayout from '../layouts/AuthLayout';
 import MainLayout from '../layouts/MainLayout';
 import { adminDashboardRoutes } from '../dashboards/admin/routes';
@@ -42,6 +43,8 @@ export default function AppRoutes() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Route>
+
+      <Route path="/auth/oauth/callback" element={<OAuthCallback />} />
 
       {adminDashboardRoutes}
       {clientDashboardRoutes}

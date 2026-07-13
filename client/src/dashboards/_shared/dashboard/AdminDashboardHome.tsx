@@ -72,7 +72,7 @@ const emptyOverview: DashboardOverview = {
     thisMonth: 0,
   },
   interviews: { total: 0, upcoming: 0 },
-  financial: { totalBudget: 0, openBudget: 0, inProgressBudget: 0, closedBudget: 0 },
+  financial: { totalBudget: 0, openBudget: 0, inProgressBudget: 0, closedBudget: 0, platformRevenue: 0, platformRevenueThisMonth: 0 },
   categories: 0,
   period: '1 Month',
 };
@@ -192,12 +192,12 @@ export default function AdminDashboardHome() {
 
             <div className="wn-finance-stack">
               <div className="wn-finance-tile wn-finance-tile--purple">
-                <span>Open listings</span>
-                <strong>{formatCurrency(overview.financial.openBudget)}</strong>
+                <span>Platform profit</span>
+                <strong>{formatCurrency(overview.financial.platformRevenue || 0)}</strong>
               </div>
               <div className="wn-finance-tile wn-finance-tile--orange">
-                <span>Accepted proposals</span>
-                <strong>{overview.proposals.accepted}</strong>
+                <span>Profit this month</span>
+                <strong>{formatCurrency(overview.financial.platformRevenueThisMonth || 0)}</strong>
               </div>
               <div className="wn-finance-tile wn-finance-tile--teal">
                 <span>In-progress budget</span>

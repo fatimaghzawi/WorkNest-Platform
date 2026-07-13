@@ -7,6 +7,7 @@ export const ADMIN_NAV_LINKS: DashboardNavLink[] = [
   { label: 'Categories', href: '/admin/categories' },
   { label: 'Proposals', href: '/admin/proposals' },
   { label: 'Projects', href: '/admin/projects' },
+  { label: 'Platform Wallet', href: '/admin/wallet' },
   { label: 'Interviews', href: '/admin/interviews' },
   { label: 'Reports', href: '/admin/reports' },
   { label: 'Statistics', href: '/admin/statistics' },

@@ -43,6 +43,8 @@ export interface DashboardOverview {
     openBudget: number;
     inProgressBudget: number;
     closedBudget: number;
+    platformRevenue?: number;
+    platformRevenueThisMonth?: number;
   };
   categories: number;
   period: string;

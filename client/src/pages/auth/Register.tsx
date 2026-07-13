@@ -1,8 +1,9 @@
 ﻿import { FormEvent, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import AuthSuccessPanel from '../../components/auth/AuthSuccessPanel';
+import SocialAuthButtons, { hasSocialAuth } from '../../components/auth/SocialAuthButtons';
 import PasswordStrength from '../../components/auth/PasswordStrength';
 import {
   IconBriefcase,
@@ -13,13 +14,16 @@ import {
   IconPen,
   IconUser,
 } from '../../components/auth/AuthIcons';
-import { useAuth } from '../../hooks/useAuth';
+import { getDashboardPath, useAuth } from '../../hooks/useAuth';
+import { useToast } from '../../hooks/useToast';
 import { getApiErrorMessage } from '../../utils/apiError';
 
 type Role = 'client' | 'freelancer';
 
 export default function Register() {
+  const navigate = useNavigate();
   const { register, isAuthenticated } = useAuth();
+  const toast = useToast();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -78,8 +82,9 @@ export default function Register() {
           <Link to="/login">sign in</Link> to get started.
         </AuthSuccessPanel>
       ) : (
-        <form className="wn-auth-form" onSubmit={handleSubmit} noValidate>
-          <div className="wn-auth-form__row">
+        <>
+          <form className="wn-auth-form" onSubmit={handleSubmit} noValidate>
+            <div className="wn-auth-form__row">
             <Input
               label="First name"
               name="firstName"
@@ -161,17 +166,30 @@ export default function Register() {
             </div>
           </div>
 
-          <Button
-            type="submit"
-            variant="primary"
-            fullWidth
-            size="lg"
-            loading={loading}
-            loadingText="Creating account..."
-          >
-            Create account
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              variant="primary"
+              fullWidth
+              size="lg"
+              loading={loading}
+              loadingText="Creating account..."
+            >
+              Create account
+            </Button>
+          </form>
+
+          {hasSocialAuth && (
+            <SocialAuthButtons
+              role={role}
+              disabled={loading}
+              dividerLabel="or continue with"
+              onSuccess={(user) => {
+                toast.success(`Welcome to WorkNest, ${user.firstName}!`);
+                navigate(getDashboardPath(user.role), { replace: true });
+              }}
+            />
+          )}
+        </>
       )}
 
       <p className="wn-auth-footer-text">

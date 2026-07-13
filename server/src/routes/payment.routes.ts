@@ -13,15 +13,18 @@ const {
 
 const router = Router();
 
-router.use(authenticate, authorize('client', 'freelancer'));
+router.use(authenticate);
 
-router.get('/wallet', asyncHandler(paymentController.getWalletSummary));
-router.get('/', validate(listPaymentsSchema), asyncHandler(paymentController.listPayments));
+router.get('/wallet', authorize('client', 'freelancer', 'admin'), asyncHandler(paymentController.getWalletSummary));
+router.get('/', authorize('client', 'freelancer', 'admin'), validate(listPaymentsSchema), asyncHandler(paymentController.listPayments));
 router.get(
   '/project/:projectId',
+  authorize('client', 'freelancer', 'admin'),
   validate(projectIdSchema),
   asyncHandler(paymentController.getPaymentByProject)
 );
+
+router.use(authorize('client', 'freelancer'));
 router.post(
   '/project/:projectId/checkout-session',
   authorize('client'),

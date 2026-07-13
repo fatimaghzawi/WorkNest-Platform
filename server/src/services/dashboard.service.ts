@@ -1,4 +1,5 @@
 ﻿const dashboardRepository = require('../repositories/dashboard.repository');
+const paymentRepository = require('../repositories/payment.repository');
 
 const pctChange = (current: number, previous: number) => {
   if (previous <= 0) return current > 0 ? 100 : 0;
@@ -40,6 +41,8 @@ const getOverview = async () => {
     jobsPrevMonth,
     proposalsThisMonth,
     projectsThisMonth,
+    platformRevenue,
+    platformRevenueThisMonth,
   ] = await Promise.all([
     dashboardRepository.countUsers({}),
     dashboardRepository.countUsers({ isActive: true }),
@@ -76,6 +79,8 @@ const getOverview = async () => {
     }),
     dashboardRepository.countProposals({ createdAt: { $gte: startOfMonth } }),
     dashboardRepository.countProjects({ createdAt: { $gte: startOfMonth } }),
+    paymentRepository.sumPlatformFees('released'),
+    paymentRepository.sumPlatformFees('released', startOfMonth),
   ]);
 
   const completionRate =
@@ -125,6 +130,8 @@ const getOverview = async () => {
       openBudget,
       inProgressBudget,
       closedBudget: Math.max(totalBudget - openBudget - inProgressBudget, 0),
+      platformRevenue,
+      platformRevenueThisMonth,
     },
     categories,
     period: '1 Month',

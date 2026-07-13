@@ -15,7 +15,7 @@ const TILES = [
   { key: 'jobs', icon: Briefcase, label: 'Jobs', tone: 'violet' },
   { key: 'proposals', icon: FileText, label: 'Proposals', tone: 'orange' },
   { key: 'projects', icon: FolderKanban, label: 'Projects', tone: 'teal' },
-  { key: 'budget', icon: DollarSign, label: 'Budget', tone: 'blue' },
+  { key: 'budget', icon: DollarSign, label: 'Platform profit', tone: 'blue' },
   { key: 'interviews', icon: Video, label: 'Interviews', tone: 'pink' },
 ] as const;
 
@@ -44,8 +44,8 @@ export default function StatisticsOverview({
       hint: `${overview.projects.completionRate}% completed`,
     },
     budget: {
-      main: formatCurrency(overview.financial.totalBudget),
-      hint: `${formatCurrency(overview.financial.openBudget)} open`,
+      main: formatCurrency(overview.financial.platformRevenue || 0),
+      hint: `${formatCurrency(overview.financial.platformRevenueThisMonth || 0)} this month · ${formatCurrency(overview.financial.totalBudget)} total job budget`,
     },
     interviews: {
       main: overview.interviews.total.toLocaleString(),

@@ -3,6 +3,7 @@ const jwtConfig = require('../config/jwt');
 const env = require('../config/env');
 const { sendSuccess } = require('../utils/response');
 const { renderEmailVerificationResultPage } = require('../views/auth.view');
+const { extractRefreshToken } = require('../utils/extractRefreshToken');
 
 const setAccessTokenCookie = (res, token: string) => {
   res.cookie(jwtConfig.cookie.name, token, {
@@ -13,12 +14,41 @@ const setAccessTokenCookie = (res, token: string) => {
   });
 };
 
+const setRefreshTokenCookie = (res, token: string) => {
+  res.cookie(jwtConfig.refreshCookie.name, token, {
+    httpOnly: jwtConfig.refreshCookie.httpOnly,
+    secure: jwtConfig.refreshCookie.secure,
+    sameSite: jwtConfig.refreshCookie.sameSite,
+    maxAge: jwtConfig.refreshCookie.maxAge,
+    path: jwtConfig.refreshCookie.path,
+  });
+};
+
 const clearAccessTokenCookie = (res) => {
   res.clearCookie(jwtConfig.cookie.name, {
     httpOnly: jwtConfig.cookie.httpOnly,
     secure: jwtConfig.cookie.secure,
     sameSite: jwtConfig.cookie.sameSite,
   });
+};
+
+const clearRefreshTokenCookie = (res) => {
+  res.clearCookie(jwtConfig.refreshCookie.name, {
+    httpOnly: jwtConfig.refreshCookie.httpOnly,
+    secure: jwtConfig.refreshCookie.secure,
+    sameSite: jwtConfig.refreshCookie.sameSite,
+    path: jwtConfig.refreshCookie.path,
+  });
+};
+
+const setAuthCookies = (res, accessToken: string, refreshToken: string) => {
+  setAccessTokenCookie(res, accessToken);
+  setRefreshTokenCookie(res, refreshToken);
+};
+
+const clearAuthCookies = (res) => {
+  clearAccessTokenCookie(res);
+  clearRefreshTokenCookie(res);
 };
 
 const register = async (req, res) => {
@@ -66,14 +96,47 @@ const verifyEmail = async (req, res, next) => {
 };
 
 const login = async (req, res) => {
-  const { accessToken, user } = await authService.login(req.body);
-  setAccessTokenCookie(res, accessToken);
-  // Also return token for clients where cross-site cookies are blocked (common on mobile Safari).
+  const { accessToken, refreshToken, user } = await authService.login(req.body);
+  setAuthCookies(res, accessToken, refreshToken);
+  return res.status(200).json({ success: true, user, accessToken });
+};
+
+const googleLogin = async (req, res) => {
+  const { accessToken, refreshToken, user } = await authService.googleLogin(req.body);
+  setAuthCookies(res, accessToken, refreshToken);
+  return res.status(200).json({ success: true, user, accessToken });
+};
+
+const startGithubAuth = async (req, res) => {
+  const role = typeof req.query.role === 'string' ? req.query.role : undefined;
+  const url = authService.getGithubAuthorizationUrl(role);
+  return res.redirect(url);
+};
+
+const githubCallback = async (req, res) => {
+  try {
+    const { accessToken, refreshToken } = await authService.completeGithubOAuth(
+      req.query.code,
+      req.query.state
+    );
+    setAuthCookies(res, accessToken, refreshToken);
+    return res.redirect(302, `${env.clientUrl}/auth/oauth/callback?provider=github`);
+  } catch (error) {
+    const message = encodeURIComponent(error.message || 'GitHub sign-in failed');
+    return res.redirect(302, `${env.clientUrl}/login?oauthError=${message}`);
+  }
+};
+
+const refresh = async (req, res) => {
+  const rawRefreshToken = extractRefreshToken(req);
+  const { accessToken, refreshToken, user } = await authService.refreshSession(rawRefreshToken);
+  setAuthCookies(res, accessToken, refreshToken);
   return res.status(200).json({ success: true, user, accessToken });
 };
 
 const logout = async (req, res) => {
-  clearAccessTokenCookie(res);
+  await authService.revokeRefreshToken(extractRefreshToken(req));
+  clearAuthCookies(res);
   return sendSuccess(res, { message: 'Logged out successfully' });
 };
 
@@ -101,6 +164,10 @@ module.exports = {
   register,
   verifyEmail,
   login,
+  googleLogin,
+  startGithubAuth,
+  githubCallback,
+  refresh,
   logout,
   forgotPassword,
   resetPassword,

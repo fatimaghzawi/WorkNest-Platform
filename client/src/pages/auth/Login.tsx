@@ -1,8 +1,9 @@
-﻿import { FormEvent, useState } from 'react';
+﻿import { FormEvent, useState, useEffect } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { IconEye, IconEyeOff, IconLock, IconMail } from '../../components/auth/AuthIcons';
+import SocialAuthButtons, { hasSocialAuth } from '../../components/auth/SocialAuthButtons';
 import { getDashboardPath, useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../hooks/useToast';
 import { getApiErrorMessage } from '../../utils/apiError';
@@ -18,9 +19,26 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthError = params.get('oauthError');
+    if (oauthError) {
+      setError(decodeURIComponent(oauthError));
+      window.history.replaceState({}, '', '/login');
+    }
+  }, []);
+
   if (!authLoading && isAuthenticated && user) {
     return <Navigate to={getDashboardPath(user.role)} replace />;
   }
+
+  const completeSignIn = (loggedInUser: { firstName: string; role: Parameters<typeof getDashboardPath>[0] }) => {
+    toast.success(`Welcome back, ${loggedInUser.firstName}!`);
+    const redirectTo =
+      (location.state as { from?: string } | null)?.from ||
+      getDashboardPath(loggedInUser.role);
+    navigate(redirectTo, { replace: true });
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -29,11 +47,7 @@ export default function Login() {
 
     try {
       const loggedInUser = await login({ email: email.trim(), password });
-      toast.success(`Welcome back, ${loggedInUser.firstName}!`);
-      const redirectTo =
-        (location.state as { from?: string } | null)?.from ||
-        getDashboardPath(loggedInUser.role);
-      navigate(redirectTo, { replace: true });
+      completeSignIn(loggedInUser);
     } catch (err) {
       setError(getApiErrorMessage(err, 'Login failed. Please try again.'));
     } finally {
@@ -95,6 +109,14 @@ export default function Login() {
           Sign in
         </Button>
       </form>
+
+      {hasSocialAuth && (
+        <SocialAuthButtons
+          onSuccess={completeSignIn}
+          disabled={loading}
+          dividerLabel="or continue with"
+        />
+      )}
 
       <p className="wn-auth-footer-text">
         New here? <Link to="/signup">Create an account</Link>

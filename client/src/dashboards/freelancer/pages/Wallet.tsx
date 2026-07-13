@@ -143,7 +143,9 @@ export default function FreelancerWallet() {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   <Badge variant="success">released</Badge>
-                  <span className="wn-payment-tx__amount">{formatCurrency(payment.amount)}</span>
+                  <span className="wn-payment-tx__amount">
+                    {formatCurrency(payment.freelancerPayout ?? payment.amount)}
+                  </span>
                 </div>
               </div>
               ))}

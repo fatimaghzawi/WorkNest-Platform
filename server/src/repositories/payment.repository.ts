@@ -47,13 +47,45 @@ const sumForUser = async (userId: string, role: string, status: string) => {
   if (role === 'client') match.clientId = toObjectId(userId);
   else if (role === 'freelancer') match.freelancerId = toObjectId(userId);
 
+  const amountField =
+    role === 'freelancer' && status === 'released'
+      ? { $ifNull: ['$freelancerPayout', '$amount'] }
+      : '$amount';
+
   const rows = await Payment.aggregate([
     { $match: match },
-    { $group: { _id: null, total: { $sum: '$amount' } } },
+    { $group: { _id: null, total: { $sum: amountField } } },
   ]);
 
   return rows[0]?.total || 0;
 };
+
+const sumPlatformFees = async (status = 'released', since?: Date) => {
+  const match: Record<string, unknown> = { status };
+  if (since) match.releasedAt = { $gte: since };
+
+  const rows = await Payment.aggregate([
+    { $match: match },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: { $ifNull: ['$platformFee', 0] } },
+      },
+    },
+  ]);
+
+  return rows[0]?.total || 0;
+};
+
+const findReleasedWithFees = ({ skip, limit }) =>
+  Payment.find({ status: 'released', platformFee: { $gt: 0 } })
+    .sort({ releasedAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+const countReleasedWithFees = () =>
+  Payment.countDocuments({ status: 'released', platformFee: { $gt: 0 } });
 
 module.exports = {
   create,
@@ -67,4 +99,7 @@ module.exports = {
   findForUser,
   countForUser,
   sumForUser,
+  sumPlatformFees,
+  findReleasedWithFees,
+  countReleasedWithFees,
 };

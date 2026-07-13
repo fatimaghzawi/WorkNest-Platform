@@ -1,4 +1,5 @@
 const notificationService = require('./notification.service');
+const eventEmailService = require('./email/eventEmail.service');
 const proposalRepository = require('../repositories/proposal.repository');
 const projectRepository = require('../repositories/project.repository');
 const jobRepository = require('../repositories/job.repository');
@@ -17,13 +18,18 @@ const displayName = (user) => {
 
 const notify = (data) => notificationService.notifySafe(() => notificationService.createAndNotify(data));
 
+const dispatch = async (data) => {
+  await notify(data);
+  void eventEmailService.sendSafe(data);
+};
+
 const proposalSubmitted = async (proposal) => {
   const job = proposal.jobId;
   const freelancer = proposal.freelancerId;
   const clientId = getId(job?.clientId);
   if (!clientId) return;
 
-  await notify({
+  await dispatch({
     recipientId: clientId,
     type: 'proposal.submitted',
     title: 'New proposal received',
@@ -39,7 +45,7 @@ const proposalUpdated = async (proposal) => {
   const clientId = getId(job?.clientId);
   if (!clientId) return;
 
-  await notify({
+  await dispatch({
     recipientId: clientId,
     type: 'proposal.updated',
     title: 'Proposal updated',
@@ -55,7 +61,7 @@ const proposalWithdrawn = async (proposal) => {
   const clientId = getId(job?.clientId);
   if (!clientId) return;
 
-  await notify({
+  await dispatch({
     recipientId: clientId,
     type: 'proposal.withdrawn',
     title: 'Proposal withdrawn',
@@ -70,7 +76,7 @@ const proposalAccepted = async (proposal, job, project) => {
   const jobTitle = job?.title || 'the job';
   const projectId = getId(project?._id);
 
-  await notify({
+  await dispatch({
     recipientId: freelancerId,
     type: 'proposal.accepted',
     title: 'Proposal accepted',
@@ -82,7 +88,7 @@ const proposalAccepted = async (proposal, job, project) => {
 
   const clientId = getId(job?.clientId);
   if (clientId) {
-    await notify({
+    await dispatch({
       recipientId: clientId,
       type: 'project.started',
       title: 'Project started',
@@ -96,7 +102,7 @@ const proposalAccepted = async (proposal, job, project) => {
 
 const proposalRejected = async (proposal) => {
   const job = proposal.jobId;
-  await notify({
+  await dispatch({
     recipientId: getId(proposal.freelancerId),
     type: 'proposal.rejected',
     title: 'Proposal not selected',
@@ -110,7 +116,7 @@ const notifyOtherProposalsRejected = async (jobId: string, exceptProposalId: str
   const pending = await proposalRepository.findPendingByJobExcept(jobId, exceptProposalId);
   await Promise.all(
     pending.map((row) =>
-      notify({
+      dispatch({
         recipientId: getId(row.freelancerId),
         type: 'proposal.rejected',
         title: 'Proposal not selected',
@@ -124,7 +130,7 @@ const notifyOtherProposalsRejected = async (jobId: string, exceptProposalId: str
 
 const projectSubmittedForReview = async (project) => {
   const jobTitle = project.jobId?.title || project.title || 'your project';
-  await notify({
+  await dispatch({
     recipientId: getId(project.clientId),
     type: 'project.submitted_for_review',
     title: 'Delivery submitted for review',
@@ -136,7 +142,7 @@ const projectSubmittedForReview = async (project) => {
 
 const projectAccepted = async (project) => {
   const jobTitle = project.jobId?.title || project.title || 'the project';
-  await notify({
+  await dispatch({
     recipientId: getId(project.freelancerId),
     type: 'project.accepted',
     title: 'Project completed',
@@ -149,7 +155,7 @@ const projectAccepted = async (project) => {
 const projectRevisionRequested = async (project, reviewNotes?: string) => {
   const jobTitle = project.jobId?.title || project.title || 'the project';
   const suffix = reviewNotes ? ` Notes: ${reviewNotes}` : '';
-  await notify({
+  await dispatch({
     recipientId: getId(project.freelancerId),
     type: 'project.revision_requested',
     title: 'Revisions requested',
@@ -163,7 +169,7 @@ const projectCancelled = async (project, reason?: string) => {
   const jobTitle = project.jobId?.title || project.title || 'the project';
   const suffix = reason ? ` Reason: ${reason}` : '';
   await Promise.all([
-    notify({
+    dispatch({
       recipientId: getId(project.freelancerId),
       type: 'project.cancelled',
       title: 'Project cancelled',
@@ -171,7 +177,7 @@ const projectCancelled = async (project, reason?: string) => {
       relatedJobId: getId(project.jobId),
       relatedProjectId: getId(project._id),
     }),
-    notify({
+    dispatch({
       recipientId: getId(project.clientId),
       type: 'project.cancelled',
       title: 'Project cancelled',
@@ -214,7 +220,7 @@ const notifyWorkspaceOtherParty = async (
 
   if (!recipientId || recipientId === actorId) return;
 
-  await notify({
+  await dispatch({
     recipientId,
     type,
     title,
@@ -255,7 +261,7 @@ const workspaceAttachmentUploaded = async (
   const parties = await getWorkspaceParties(jobId);
   if (!parties.clientId || parties.clientId === actorId) return;
 
-  await notify({
+  await dispatch({
     recipientId: parties.clientId,
     type: 'workspace.attachment_uploaded',
     title: 'New workspace file',
@@ -266,7 +272,7 @@ const workspaceAttachmentUploaded = async (
 };
 
 const interviewScheduled = async (interview) => {
-  await notify({
+  await dispatch({
     recipientId: getId(interview.freelancerId),
     type: 'interview.scheduled',
     title: 'Interview scheduled',
@@ -282,7 +288,7 @@ const interviewUpdated = async (interview, actorId: string) => {
       ? getId(interview.freelancerId)
       : getId(interview.clientId);
 
-  await notify({
+  await dispatch({
     recipientId,
     type: 'interview.updated',
     title: 'Interview updated',
@@ -320,7 +326,7 @@ const interviewStatusChanged = async (interview, status: string, actorId: string
   const copy = labels[status];
   if (!copy) return;
 
-  await notify({
+  await dispatch({
     recipientId,
     type: `interview.${status}`,
     title: copy.title,
@@ -332,7 +338,7 @@ const interviewStatusChanged = async (interview, status: string, actorId: string
 
 const paymentDeposited = async (payment, project) => {
   const title = project?.title || 'your project';
-  await notify({
+  await dispatch({
     recipientId: getId(payment.freelancerId),
     type: 'payment.deposited',
     title: 'Escrow funded',
@@ -345,17 +351,23 @@ const paymentDeposited = async (payment, project) => {
 
 const paymentReleased = async (payment, project) => {
   const title = project?.title || 'the project';
+  const freelancerAmount = payment.freelancerPayout ?? payment.amount;
+  const platformFee = payment.platformFee ?? 0;
+
+  const User = require('../models/User').default;
+  const admins = await User.find({ role: 'admin', isActive: true }).select('_id').lean();
+
   await Promise.all([
-    notify({
+    dispatch({
       recipientId: getId(payment.freelancerId),
       type: 'payment.released',
       title: 'Payout released',
-      message: `$${payment.amount} was released to your wallet for "${title}".`,
+      message: `$${freelancerAmount} was released to your wallet for "${title}".`,
       relatedJobId: getId(payment.jobId),
       relatedProjectId: getId(payment.projectId),
       relatedPaymentId: getId(payment._id),
     }),
-    notify({
+    dispatch({
       recipientId: getId(payment.clientId),
       type: 'payment.completed',
       title: 'Escrow released',
@@ -364,12 +376,23 @@ const paymentReleased = async (payment, project) => {
       relatedProjectId: getId(payment.projectId),
       relatedPaymentId: getId(payment._id),
     }),
+    ...admins.map((admin) =>
+      dispatch({
+        recipientId: getId(admin._id),
+        type: 'payment.platform_fee',
+        title: 'Platform profit earned',
+        message: `$${platformFee} platform fee (${payment.budgetRangeLabel || 'commission'}) was credited from "${title}".`,
+        relatedJobId: getId(payment.jobId),
+        relatedProjectId: getId(payment.projectId),
+        relatedPaymentId: getId(payment._id),
+      })
+    ),
   ]);
 };
 
 const paymentRefunded = async (payment, project) => {
   const title = project?.title || 'your project';
-  await notify({
+  await dispatch({
     recipientId: getId(payment.clientId),
     type: 'payment.refunded',
     title: 'Escrow refunded',

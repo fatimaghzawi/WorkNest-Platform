@@ -14,7 +14,11 @@ const userZodSchema = z.object({
   email: z.string().trim().email('Invalid email address').toLowerCase(),
   password: z
     .string()
-    .min(8, 'Password must be at least 8 characters'),
+    .min(8, 'Password must be at least 8 characters')
+    .optional(),
+  authProvider: z.enum(['local', 'google', 'github']).optional().default('local'),
+  googleId: z.string().trim().min(1).optional(),
+  githubId: z.string().trim().min(1).optional(),
   role: z.enum(ROLES, { message: 'Role must be client, freelancer, or admin' }),
   phone: optionalE164PhoneSchema,
   profileImage: urlSchema.optional().or(z.literal('')),
@@ -68,9 +72,31 @@ const userMongooseSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
       minlength: [8, 'Password must be at least 8 characters'],
       select: false,
+    },
+    authProvider: {
+      type: String,
+      enum: {
+        values: ['local', 'google', 'github'],
+        message: 'Auth provider must be local, google, or github',
+      },
+      default: 'local',
+      index: true,
+    },
+    googleId: {
+      type: String,
+      trim: true,
+      sparse: true,
+      unique: true,
+      index: true,
+    },
+    githubId: {
+      type: String,
+      trim: true,
+      sparse: true,
+      unique: true,
+      index: true,
     },
     role: {
       type: String,
@@ -138,6 +164,16 @@ const userMongooseSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+userMongooseSchema.pre('validate', function validatePassword() {
+  if (this.authProvider === 'google' || this.authProvider === 'github') {
+    return;
+  }
+
+  if (!this.password) {
+    this.invalidate('password', 'Password is required');
+  }
+});
 
 const User = mongoose.model('User', userMongooseSchema);
 

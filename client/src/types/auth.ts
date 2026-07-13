@@ -8,9 +8,15 @@ export interface User {
   role: UserRole;
   emailVerified: boolean;
   isActive: boolean;
+  authProvider?: 'local' | 'google' | 'github';
   profileImage?: string;
   bio?: string;
   skills?: string[];
+}
+
+export interface GoogleLoginPayload {
+  credential: string;
+  role?: 'client' | 'freelancer';
 }
 
 export interface RegisterPayload {

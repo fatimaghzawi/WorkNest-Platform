@@ -1,13 +1,15 @@
 import { BrowserRouter } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { ToastProvider } from './context/ToastContext';
 import { ConfirmProvider } from './context/ConfirmContext';
 import AppRoutes from './routes/AppRoutes';
 import ScrollToTop from './routes/ScrollToTop';
+import { googleClientId } from './components/auth/GoogleSignInButton';
 
 const App = () => {
-  return (
+  const content = (
     <BrowserRouter>
       <ScrollToTop />
       <ToastProvider>
@@ -21,6 +23,12 @@ const App = () => {
       </ToastProvider>
     </BrowserRouter>
   );
+
+  if (!googleClientId) {
+    return content;
+  }
+
+  return <GoogleOAuthProvider clientId={googleClientId}>{content}</GoogleOAuthProvider>;
 };
 
 export default App;
