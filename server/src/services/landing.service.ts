@@ -1,6 +1,8 @@
 const landingRepository = require('../repositories/landing.repository');
+const jobService = require('./job.service');
 
 const TOP_FREELANCERS_LIMIT = 4;
+const FEATURED_JOBS_LIMIT = 4;
 
 const getTopFreelancers = async () => {
   const ranked = await landingRepository.findTopFreelancersByCompletedProjects(TOP_FREELANCERS_LIMIT);
@@ -51,7 +53,24 @@ const listFreelancers = async ({ page = 1, limit = FREELANCERS_PAGE_SIZE } = {})
   };
 };
 
+const getFeaturedJobs = async () => {
+  const { jobs } = await jobService.listJobs(
+    { status: 'open', sort: 'newest', limit: FEATURED_JOBS_LIMIT, page: 1 },
+    { populate: false }
+  );
+
+  return jobs.map((job) => ({
+    id: job._id,
+    title: job.title,
+    category: job.category,
+    budget: job.budget,
+    skills: job.skills,
+    createdAt: job.createdAt,
+  }));
+};
+
 module.exports = {
   getTopFreelancers,
   listFreelancers,
+  getFeaturedJobs,
 };

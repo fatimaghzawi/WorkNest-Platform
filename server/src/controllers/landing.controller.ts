@@ -22,7 +22,17 @@ const listFreelancers = async (req, res) => {
   });
 };
 
+const getFeaturedJobs = async (req, res) => {
+  const featuredJobs = await landingService.getFeaturedJobs();
+
+  return sendSuccess(res, {
+    message: 'Featured jobs retrieved successfully',
+    data: featuredJobs,
+  });
+};
+
 module.exports = {
   getTopFreelancers,
   listFreelancers,
+  getFeaturedJobs,
 };
