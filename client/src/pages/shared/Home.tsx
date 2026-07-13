@@ -63,7 +63,7 @@ export default function Home() {
       <FeaturedJobs
         jobs={featuredJobs}
         loading={jobsLoading}
-        viewAllHref="/freelancer/jobs"
+        viewAllHref="/jobs"
       />
       <TopFreelancers
         freelancers={freelancers}
