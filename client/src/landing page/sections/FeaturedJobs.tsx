@@ -14,7 +14,7 @@ export interface FeaturedJobsProps {
 export default function FeaturedJobs({
   id = "featured-jobs",
   title = "Featured Jobs",
-  viewAllHref = "/login",
+  viewAllHref = "/jobs",
   jobs = [],
   loading = false,
 }: FeaturedJobsProps) {

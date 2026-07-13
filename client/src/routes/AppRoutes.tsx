@@ -16,6 +16,8 @@ import { adminDashboardRoutes } from '../dashboards/admin/routes';
 import { clientDashboardRoutes } from '../dashboards/client/routes';
 import { freelancerDashboardRoutes } from '../dashboards/freelancer/routes';
 import Freelancers from '../pages/shared/Freelancers';
+import Jobs from '../pages/shared/Jobs';
+import JobDetails from '../pages/shared/JobDetails';
 
 export default function AppRoutes() {
   return (
@@ -24,6 +26,8 @@ export default function AppRoutes() {
 
       <Route element={<MainLayout />}>
         <Route path="/freelancers" element={<Freelancers />} />
+        <Route path="/jobs" element={<Jobs />} />
+        <Route path="/jobs/:id" element={<JobDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/help" element={<HelpCenter />} />
