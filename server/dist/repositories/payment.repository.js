@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose = require('mongoose');
 const Payment = require('../models/Payment').default;
+const toObjectId = (id) => new mongoose.Types.ObjectId(String(id));
 const create = (data) => Payment.create(data);
 const findById = (id) => Payment.findById(id).lean();
 const findByProjectId = (projectId) => Payment.findOne({ projectId }).lean();
@@ -35,9 +37,9 @@ const countForUser = (userId, role, status) => {
 const sumForUser = async (userId, role, status) => {
     const match = { status };
     if (role === 'client')
-        match.clientId = userId;
+        match.clientId = toObjectId(userId);
     else if (role === 'freelancer')
-        match.freelancerId = userId;
+        match.freelancerId = toObjectId(userId);
     const rows = await Payment.aggregate([
         { $match: match },
         { $group: { _id: null, total: { $sum: '$amount' } } },

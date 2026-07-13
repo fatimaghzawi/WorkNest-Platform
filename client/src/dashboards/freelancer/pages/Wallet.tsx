@@ -103,6 +103,9 @@ export default function FreelancerWallet() {
                 key={payment.id}
                 amount={payment.amount}
                 status="held"
+                cardBrand={payment.cardBrand}
+                cardLast4={payment.cardLast4}
+                cardholderName={payment.cardholderName}
                 projectTitle={payment.projectTitle}
               />
             ))}

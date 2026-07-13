@@ -1,4 +1,7 @@
-﻿const Payment = require('../models/Payment').default;
+﻿const mongoose = require('mongoose');
+const Payment = require('../models/Payment').default;
+
+const toObjectId = (id: string) => new mongoose.Types.ObjectId(String(id));
 
 const create = (data) => Payment.create(data);
 
@@ -41,8 +44,8 @@ const countForUser = (userId: string, role: string, status?: string) => {
 
 const sumForUser = async (userId: string, role: string, status: string) => {
   const match: Record<string, unknown> = { status };
-  if (role === 'client') match.clientId = userId;
-  else if (role === 'freelancer') match.freelancerId = userId;
+  if (role === 'client') match.clientId = toObjectId(userId);
+  else if (role === 'freelancer') match.freelancerId = toObjectId(userId);
 
   const rows = await Payment.aggregate([
     { $match: match },
