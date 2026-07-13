@@ -8,6 +8,7 @@ import type { Job } from '../../../types/job';
 import type { Proposal } from '../../../types/proposal';
 import type { CreateInterviewPayload } from '../../../types/interview';
 import { getApiErrorMessage } from '../../../utils/apiError';
+import { getProposalJobTitle, getProposalFreelancerName } from '../../../utils/proposal';
 import { useToast } from '../../../hooks/useToast';
 
 type ProposalOption = {
@@ -108,24 +109,11 @@ export default function ScheduleInterviewModal({
 
           const merged = [...pendingRes.data.data, ...acceptedRes.data.data];
           setOptions(
-            merged.map((proposal) => {
-              const job =
-                typeof proposal.jobId === 'object'
-                  ? proposal.jobId
-                  : jobMap.get(String(proposal.jobId));
-              const jobTitle =
-                typeof proposal.jobId === 'object'
-                  ? proposal.jobId.title
-                  : job?.title || 'Job';
-              return {
-                proposal,
-                jobTitle,
-                freelancerName:
-                  typeof proposal.freelancerId === 'object'
-                    ? `${proposal.freelancerId.firstName} ${proposal.freelancerId.lastName}`
-                    : 'Freelancer',
-              };
-            })
+            merged.map((proposal) => ({
+              proposal,
+              jobTitle: getProposalJobTitle(proposal, jobMap),
+              freelancerName: getProposalFreelancerName(proposal),
+            }))
           );
           return;
         }

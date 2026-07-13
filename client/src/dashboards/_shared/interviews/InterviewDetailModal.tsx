@@ -5,6 +5,7 @@ import Modal from '../../../components/common/Modal';
 import InterviewStatusBadge from './InterviewStatusBadge';
 import type { Interview } from '../../../types/interview';
 import { formatAgendaDate, formatInterviewTime } from './calendarUtils';
+import { getInterviewJobTitle } from '../../../utils/interview';
 import { useToast } from '../../../hooks/useToast';
 
 export default function InterviewDetailModal({
@@ -107,7 +108,7 @@ export default function InterviewDetailModal({
         </div>
 
         <div>
-          <h3 className="wn-interview-detail__job">{interview.jobTitle}</h3>
+          <h3 className="wn-interview-detail__job">{getInterviewJobTitle(interview)}</h3>
           <p className="wn-interview-detail__date">
             {formatAgendaDate(new Date(interview.scheduledDate))}
           </p>

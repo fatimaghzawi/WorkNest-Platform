@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2800 2000" font-family="Segoe UI, Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#3B7DD8"/>
+    </marker>
+    <marker id="crowMany" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 M4,0 L12,6 L4,12" fill="none" stroke="#555" stroke-width="1.5"/>
+    </marker>
+    <filter id="shadow" x="-2%" y="-2%" width="104%" height="104%">
+      <feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="2800" height="2000" fill="#FAFBFC"/>
+
+  <!-- Title -->
+  <text x="1400" y="58" text-anchor="middle" font-size="34" font-weight="700" fill="#1A2332">WorkNest Database ERD (MongoDB + Mongoose)</text>
+  <text x="1400" y="88" text-anchor="middle" font-size="15" fill="#6B7A8D">ObjectId references with Mongoose ref  not SQL foreign keys</text>
+
+  <!-- ===== RELATIONSHIP LINES (behind boxes) ===== -->
+
+  <!-- User -> Job (posts) blue -->
+  <path d="M 430 310 L 430 200 L 820 200 L 820 248" fill="none" stroke="#3B7DD8" stroke-width="2.5"/>
+  <text x="620" y="192" text-anchor="middle" font-size="13" fill="#3B7DD8" font-weight="600">posts</text>
+  <text x="430" y="300" font-size="14" fill="#555">1</text>
+  <text x="820" y="240" font-size="14" fill="#555">N</text>
+
+  <!-- User -> Proposal (submits) blue -->
+  <path d="M 430 310 L 430 170 L 1280 170 L 1280 248" fill="none" stroke="#3B7DD8" stroke-width="2.5"/>
+  <text x="850" y="162" text-anchor="middle" font-size="13" fill="#3B7DD8" font-weight="600">submits</text>
+
+  <!-- Job -> Proposal (receives) green -->
+  <path d="M 1020 248 L 1020 170 L 1280 170" fill="none" stroke="#2E9E5B" stroke-width="2.5"/>
+  <text x="1150" y="162" text-anchor="middle" font-size="13" fill="#2E9E5B" font-weight="600">receives</text>
+
+  <!-- Job -> Project (becomes 1:1) green -->
+  <path d="M 910 530 L 910 600 L 1050 600 L 1050 648" fill="none" stroke="#2E9E5B" stroke-width="2.5"/>
+  <text x="980" y="592" text-anchor="middle" font-size="13" fill="#2E9E5B" font-weight="600">becomes</text>
+  <text x="900" y="540" font-size="14" fill="#555">1</text>
+  <text x="1040" y="642" font-size="14" fill="#555">1</text>
+
+  <!-- Project -> Payment (has escrow 1:1) orange -->
+  <path d="M 1200 780 L 1480 780 L 1480 648" fill="none" stroke="#E8943A" stroke-width="2.5"/>
+  <text x="1340" y="772" text-anchor="middle" font-size="13" fill="#E8943A" font-weight="600">has escrow</text>
+  <text x="1190" y="788" font-size="14" fill="#555">1</text>
+  <text x="1490" y="642" font-size="14" fill="#555">1</text>
+
+  <!-- Proposal -> Project (accepted) orange -->
+  <path d="M 1380 530 L 1380 600 L 1200 600 L 1200 648" fill="none" stroke="#E8943A" stroke-width="2.5"/>
+  <text x="1290" y="592" text-anchor="middle" font-size="13" fill="#E8943A" font-weight="600">accepted</text>
+
+  <!-- Job -> Interview green -->
+  <path d="M 820 310 L 820 400 L 430 400 L 430 648" fill="none" stroke="#2E9E5B" stroke-width="2.5"/>
+  <text x="620" y="392" text-anchor="middle" font-size="13" fill="#2E9E5B" font-weight="600">has interviews</text>
+
+  <!-- Proposal -> Interview orange -->
+  <path d="M 1380 530 L 1380 420 L 580 420 L 580 648" fill="none" stroke="#E8943A" stroke-width="2" stroke-dasharray="none"/>
+  <text x="980" y="412" text-anchor="middle" font-size="13" fill="#E8943A" font-weight="600">linked to</text>
+
+  <!-- User -> Interview (client/freelancer) blue -->
+  <path d="M 280 310 L 200 310 L 200 720 L 380 720 L 380 648" fill="none" stroke="#3B7DD8" stroke-width="2"/>
+  <text x="188" y="500" text-anchor="middle" font-size="12" fill="#3B7DD8" font-weight="600" transform="rotate(-90 188 500)">client / freelancer</text>
+
+  <!-- User -> Project blue -->
+  <path d="M 430 310 L 500 310 L 500 700 L 900 700 L 900 780" fill="none" stroke="#3B7DD8" stroke-width="2"/>
+  <text x="700" y="692" text-anchor="middle" font-size="13" fill="#3B7DD8" font-weight="600">owns / works on</text>
+
+  <!-- Job -> Task green -->
+  <path d="M 820 530 L 820 900 L 380 900 L 380 948" fill="none" stroke="#2E9E5B" stroke-width="2.5"/>
+  <text x="600" y="892" text-anchor="middle" font-size="13" fill="#2E9E5B" font-weight="600">workspace tasks</text>
+
+  <!-- Job -> WorkspaceAttachment green -->
+  <path d="M 910 530 L 910 900 L 820 900 L 820 948" fill="none" stroke="#2E9E5B" stroke-width="2.5"/>
+  <text x="865" y="920" text-anchor="middle" font-size="12" fill="#2E9E5B" font-weight="600">files</text>
+
+  <!-- User -> Task (createdBy) blue -->
+  <path d="M 280 310 L 120 310 L 120 1000 L 280 1000 L 280 948" fill="none" stroke="#3B7DD8" stroke-width="2"/>
+  <text x="108" y="650" text-anchor="middle" font-size="12" fill="#3B7DD8" transform="rotate(-90 108 650)">creates</text>
+
+  <!-- User -> WorkspaceAttachment blue -->
+  <path d="M 280 310 L 80 310 L 80 1100 L 700 1100 L 700 948" fill="none" stroke="#3B7DD8" stroke-width="2"/>
+
+  <!-- User -> Notification blue -->
+  <path d="M 580 310 L 2400 310 L 2400 580" fill="none" stroke="#3B7DD8" stroke-width="2.5"/>
+  <text x="1500" y="302" text-anchor="middle" font-size="13" fill="#3B7DD8" font-weight="600">receives</text>
+
+  <!-- User -> Log blue -->
+  <path d="M 430 310 L 430 280 L 2400 280 L 2400 1280" fill="none" stroke="#3B7DD8" stroke-width="2"/>
+  <text x="1400" y="272" text-anchor="middle" font-size="13" fill="#3B7DD8" font-weight="600">logged</text>
+
+  <!-- Category -> Job (dotted string) gray -->
+  <path d="M 620 248 L 620 140 L 900 140 L 900 248" fill="none" stroke="#78909C" stroke-width="2" stroke-dasharray="8,5"/>
+  <text x="760" y="132" text-anchor="middle" font-size="12" fill="#78909C" font-weight="600">category string (NOT ObjectId)</text>
+
+  <!-- Notification context refs (dashed purple) -->
+  <path d="M 2280 780 L 2100 780 L 2100 400 L 1380 400" fill="none" stroke="#8E5BB8" stroke-width="1.8" stroke-dasharray="6,4"/>
+  <path d="M 2280 800 L 2120 800 L 2120 500 L 1200 500 L 1200 648" fill="none" stroke="#8E5BB8" stroke-width="1.8" stroke-dasharray="6,4"/>
+  <path d="M 2280 820 L 2140 820 L 2140 700 L 1200 700 L 1200 780" fill="none" stroke="#8E5BB8" stroke-width="1.8" stroke-dasharray="6,4"/>
+  <path d="M 2280 840 L 2160 840 L 2160 780 L 1580 780" fill="none" stroke="#8E5BB8" stroke-width="1.8" stroke-dasharray="6,4"/>
+  <text x="2180" y="760" font-size="11" fill="#8E5BB8">context refs</text>
+
+  <!-- ===== ENTITY BOXES ===== -->
+
+  <!-- Helper: entity box function via groups -->
+
+  <!-- 1. USERS (Blue) -->
+  <g filter="url(#shadow)">
+    <rect x="180" y="248" width="300" height="62" rx="6" fill="#3B7DD8"/>
+    <text x="330" y="286" text-anchor="middle" font-size="18" font-weight="700" fill="white">1. USERS</text>
+    <rect x="180" y="310" width="300" height="338" rx="6" fill="white" stroke="#3B7DD8" stroke-width="2"/>
+    <text x="195" y="338" font-size="13" fill="#333">_id</text><text x="460" y="338" text-anchor="end" font-size="12" fill="#888">ObjectId PK</text>
+    <text x="195" y="360" font-size="13" fill="#333">firstName</text><text x="460" y="360" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="195" y="382" font-size="13" fill="#333">lastName</text><text x="460" y="382" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="195" y="404" font-size="13" fill="#333">email</text><text x="460" y="404" text-anchor="end" font-size="12" fill="#E8943A">unique</text>
+    <text x="195" y="426" font-size="13" fill="#333">password</text><text x="460" y="426" text-anchor="end" font-size="12" fill="#888">hashed, select:false</text>
+    <text x="195" y="448" font-size="13" fill="#333">role</text><text x="460" y="448" text-anchor="end" font-size="11" fill="#888">client|freelancer|admin</text>
+    <text x="195" y="470" font-size="13" fill="#333">phone</text><text x="460" y="470" text-anchor="end" font-size="12" fill="#888">E.164</text>
+    <text x="195" y="492" font-size="13" fill="#333">profileImage</text><text x="460" y="492" text-anchor="end" font-size="12" fill="#888">URL</text>
+    <text x="195" y="514" font-size="13" fill="#333">bio</text><text x="460" y="514" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="195" y="536" font-size="13" fill="#333">skills[]</text><text x="460" y="536" text-anchor="end" font-size="12" fill="#888">String[]</text>
+    <text x="195" y="558" font-size="13" fill="#333">portfolioLink</text><text x="460" y="558" text-anchor="end" font-size="12" fill="#888">URL</text>
+    <text x="195" y="580" font-size="13" fill="#333">isActive</text><text x="460" y="580" text-anchor="end" font-size="12" fill="#888">default true</text>
+    <text x="195" y="602" font-size="13" fill="#333">emailVerified</text><text x="460" y="602" text-anchor="end" font-size="12" fill="#888">Boolean</text>
+    <text x="195" y="624" font-size="13" fill="#333">passwordChangedAt</text><text x="460" y="624" text-anchor="end" font-size="12" fill="#888">Date</text>
+    <text x="195" y="646" font-size="13" fill="#333">createdAt / updatedAt</text><text x="460" y="646" text-anchor="end" font-size="12" fill="#888">Date</text>
+  </g>
+
+  <!-- 2. CATEGORY (Gray lookup) -->
+  <g filter="url(#shadow)">
+    <rect x="520" y="108" width="200" height="50" rx="6" fill="#78909C"/>
+    <text x="620" y="140" text-anchor="middle" font-size="16" font-weight="700" fill="white">2. CATEGORY</text>
+    <rect x="520" y="158" width="200" height="90" rx="6" fill="white" stroke="#78909C" stroke-width="2" stroke-dasharray="6,3"/>
+    <text x="535" y="182" font-size="12" fill="#333">_id</text><text x="705" y="182" text-anchor="end" font-size="11" fill="#888">ObjectId PK</text>
+    <text x="535" y="202" font-size="12" fill="#333">name</text><text x="705" y="202" text-anchor="end" font-size="11" fill="#E8943A">unique</text>
+    <text x="535" y="222" font-size="12" fill="#333">slug</text><text x="705" y="222" text-anchor="end" font-size="11" fill="#E8943A">unique</text>
+    <text x="535" y="242" font-size="12" fill="#333">description, isActive</text>
+  </g>
+
+  <!-- 3. JOBS (Green) -->
+  <g filter="url(#shadow)">
+    <rect x="720" y="248" width="300" height="62" rx="6" fill="#2E9E5B"/>
+    <text x="870" y="286" text-anchor="middle" font-size="18" font-weight="700" fill="white">3. JOBS</text>
+    <rect x="720" y="310" width="300" height="220" rx="6" fill="white" stroke="#2E9E5B" stroke-width="2"/>
+    <text x="735" y="338" font-size="13" fill="#333">_id</text><text x="1000" y="338" text-anchor="end" font-size="12" fill="#888">ObjectId PK</text>
+    <text x="735" y="360" font-size="13" fill="#333">clientId</text><text x="1000" y="360" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="735" y="382" font-size="13" fill="#333">title</text><text x="1000" y="382" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="735" y="404" font-size="13" fill="#333">description</text><text x="1000" y="404" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="735" y="426" font-size="13" fill="#333">category</text><text x="1000" y="426" text-anchor="end" font-size="12" fill="#78909C">String (not FK)</text>
+    <text x="735" y="448" font-size="13" fill="#333">budget</text><text x="1000" y="448" text-anchor="end" font-size="12" fill="#888">Number</text>
+    <text x="735" y="470" font-size="13" fill="#333">skills[]</text><text x="1000" y="470" text-anchor="end" font-size="12" fill="#888">String[]</text>
+    <text x="735" y="492" font-size="13" fill="#333">deadline</text><text x="1000" y="492" text-anchor="end" font-size="12" fill="#888">Date</text>
+    <text x="735" y="514" font-size="13" fill="#333">status</text><text x="1000" y="514" text-anchor="end" font-size="11" fill="#888">open|in_progress|closed</text>
+    <text x="735" y="536" font-size="13" fill="#333">deletedAt</text><text x="1000" y="536" text-anchor="end" font-size="12" fill="#888">Date nullable</text>
+    <text x="735" y="558" font-size="13" fill="#333">createdAt</text><text x="1000" y="558" text-anchor="end" font-size="12" fill="#888">Date</text>
+  </g>
+
+  <!-- 4. PROPOSALS (Orange) -->
+  <g filter="url(#shadow)">
+    <rect x="1080" y="248" width="300" height="62" rx="6" fill="#E8943A"/>
+    <text x="1230" y="286" text-anchor="middle" font-size="18" font-weight="700" fill="white">4. PROPOSALS</text>
+    <rect x="1080" y="310" width="300" height="220" rx="6" fill="white" stroke="#E8943A" stroke-width="2"/>
+    <text x="1095" y="338" font-size="13" fill="#333">_id</text><text x="1360" y="338" text-anchor="end" font-size="12" fill="#888">ObjectId PK</text>
+    <text x="1095" y="360" font-size="13" fill="#333">jobId</text><text x="1360" y="360" text-anchor="end" font-size="12" fill="#2E9E5B">FK ’ Jobs</text>
+    <text x="1095" y="382" font-size="13" fill="#333">freelancerId</text><text x="1360" y="382" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="1095" y="404" font-size="13" fill="#333">coverLetter</text><text x="1360" y="404" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="1095" y="426" font-size="13" fill="#333">price</text><text x="1360" y="426" text-anchor="end" font-size="12" fill="#888">Number</text>
+    <text x="1095" y="448" font-size="13" fill="#333">timeline</text><text x="1360" y="448" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="1095" y="470" font-size="13" fill="#333">status</text><text x="1360" y="470" text-anchor="end" font-size="11" fill="#888">pending|accepted|rejected</text>
+    <text x="1095" y="492" font-size="13" fill="#333">createdAt</text><text x="1360" y="492" text-anchor="end" font-size="12" fill="#888">Date</text>
+    <rect x="1095" y="502" width="270" height="22" rx="4" fill="#FFF3E0" stroke="#E8943A" stroke-width="1"/>
+    <text x="1230" y="518" text-anchor="middle" font-size="11" fill="#C65D00" font-weight="600">¡ UNIQUE(jobId + freelancerId)</text>
+  </g>
+
+  <!-- 5. INTERVIEWS (Orange) -->
+  <g filter="url(#shadow)">
+    <rect x="180" y="648" width="300" height="62" rx="6" fill="#E8943A"/>
+    <text x="330" y="686" text-anchor="middle" font-size="18" font-weight="700" fill="white">5. INTERVIEWS</text>
+    <rect x="180" y="710" width="300" height="238" rx="6" fill="white" stroke="#E8943A" stroke-width="2"/>
+    <text x="195" y="738" font-size="13" fill="#333">_id</text><text x="460" y="738" text-anchor="end" font-size="12" fill="#888">ObjectId PK</text>
+    <text x="195" y="760" font-size="13" fill="#333">jobId</text><text x="460" y="760" text-anchor="end" font-size="12" fill="#2E9E5B">FK ’ Jobs</text>
+    <text x="195" y="782" font-size="13" fill="#333">proposalId</text><text x="460" y="782" text-anchor="end" font-size="12" fill="#E8943A">FK ’ Proposals</text>
+    <text x="195" y="804" font-size="13" fill="#333">clientId</text><text x="460" y="804" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="195" y="826" font-size="13" fill="#333">freelancerId</text><text x="460" y="826" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="195" y="848" font-size="13" fill="#333">scheduledDate</text><text x="460" y="848" text-anchor="end" font-size="12" fill="#888">Date</text>
+    <text x="195" y="870" font-size="13" fill="#333">duration</text><text x="460" y="870" text-anchor="end" font-size="12" fill="#888">Number (min)</text>
+    <text x="195" y="892" font-size="13" fill="#333">meetingLink</text><text x="460" y="892" text-anchor="end" font-size="12" fill="#888">URL</text>
+    <text x="195" y="914" font-size="13" fill="#333">meetingPassword</text><text x="460" y="914" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="195" y="936" font-size="13" fill="#333">notes</text><text x="460" y="936" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="195" y="958" font-size="13" fill="#333">status</text><text x="460" y="958" text-anchor="end" font-size="10" fill="#888">scheduled|confirmed|completed|cancelled|declined</text>
+  </g>
+
+  <!-- 6. PROJECTS (Green) -->
+  <g filter="url(#shadow)">
+    <rect x="900" y="648" width="300" height="62" rx="6" fill="#2E9E5B"/>
+    <text x="1050" y="686" text-anchor="middle" font-size="18" font-weight="700" fill="white">6. PROJECTS</text>
+    <rect x="900" y="710" width="300" height="268" rx="6" fill="white" stroke="#2E9E5B" stroke-width="2"/>
+    <text x="915" y="738" font-size="13" fill="#333">_id</text><text x="1180" y="738" text-anchor="end" font-size="12" fill="#888">ObjectId PK</text>
+    <text x="915" y="760" font-size="13" fill="#333">jobId</text><text x="1180" y="760" text-anchor="end" font-size="12" fill="#2E9E5B">FK ’ Jobs ¡unique</text>
+    <text x="915" y="782" font-size="13" fill="#333">clientId</text><text x="1180" y="782" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="915" y="804" font-size="13" fill="#333">freelancerId</text><text x="1180" y="804" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="915" y="826" font-size="13" fill="#333">title</text><text x="1180" y="826" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="915" y="848" font-size="13" fill="#333">status</text><text x="1180" y="848" text-anchor="end" font-size="10" fill="#888">active|pending_review|completed|cancelled</text>
+    <text x="915" y="870" font-size="13" fill="#333">progress</text><text x="1180" y="870" text-anchor="end" font-size="12" fill="#888">0100</text>
+    <text x="915" y="892" font-size="13" fill="#333">githubLink</text><text x="1180" y="892" text-anchor="end" font-size="12" fill="#888">URL</text>
+    <text x="915" y="914" font-size="13" fill="#333">deliveryNotes</text><text x="1180" y="914" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="915" y="936" font-size="13" fill="#333">reviewNotes</text><text x="1180" y="936" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="915" y="958" font-size="13" fill="#333">submittedAt</text><text x="1180" y="958" text-anchor="end" font-size="12" fill="#888">Date</text>
+    <text x="915" y="980" font-size="13" fill="#333">createdAt</text><text x="1180" y="980" text-anchor="end" font-size="12" fill="#888">Date</text>
+  </g>
+
+  <!-- 7. TASKS (Orange - Workspace) -->
+  <g filter="url(#shadow)">
+    <rect x="180" y="948" width="300" height="62" rx="6" fill="#E8943A"/>
+    <text x="330" y="986" text-anchor="middle" font-size="18" font-weight="700" fill="white">7. TASKS</text>
+    <rect x="180" y="1010" width="300" height="200" rx="6" fill="white" stroke="#E8943A" stroke-width="2"/>
+    <text x="195" y="1038" font-size="13" fill="#333">_id</text><text x="460" y="1038" text-anchor="end" font-size="12" fill="#888">ObjectId PK</text>
+    <text x="195" y="1060" font-size="13" fill="#333">jobId</text><text x="460" y="1060" text-anchor="end" font-size="12" fill="#2E9E5B">FK ’ Jobs</text>
+    <text x="195" y="1082" font-size="13" fill="#333">title</text><text x="460" y="1082" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="195" y="1104" font-size="13" fill="#333">description</text><text x="460" y="1104" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="195" y="1126" font-size="13" fill="#333">status</text><text x="460" y="1126" text-anchor="end" font-size="11" fill="#888">todo|in_progress|review|done</text>
+    <text x="195" y="1148" font-size="13" fill="#333">priority</text><text x="460" y="1148" text-anchor="end" font-size="11" fill="#888">low|medium|high</text>
+    <text x="195" y="1170" font-size="13" fill="#333">dueDate</text><text x="460" y="1170" text-anchor="end" font-size="12" fill="#888">Date</text>
+    <text x="195" y="1192" font-size="13" fill="#333">createdBy</text><text x="460" y="1192" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="195" y="1214" font-size="13" fill="#333">createdAt / updatedAt</text><text x="460" y="1214" text-anchor="end" font-size="12" fill="#888">Date</text>
+  </g>
+
+  <!-- 8. WORKSPACE ATTACHMENTS (Orange) -->
+  <g filter="url(#shadow)">
+    <rect x="540" y="948" width="320" height="62" rx="6" fill="#E8943A"/>
+    <text x="700" y="986" text-anchor="middle" font-size="17" font-weight="700" fill="white">8. WORKSPACE ATTACHMENTS</text>
+    <rect x="540" y="1010" width="320" height="200" rx="6" fill="white" stroke="#E8943A" stroke-width="2"/>
+    <text x="555" y="1038" font-size="13" fill="#333">_id</text><text x="840" y="1038" text-anchor="end" font-size="12" fill="#888">ObjectId PK</text>
+    <text x="555" y="1060" font-size="13" fill="#333">jobId</text><text x="840" y="1060" text-anchor="end" font-size="12" fill="#2E9E5B">FK ’ Jobs</text>
+    <text x="555" y="1082" font-size="13" fill="#333">uploadedBy</text><text x="840" y="1082" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="555" y="1104" font-size="13" fill="#333">fileName</text><text x="840" y="1104" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="555" y="1126" font-size="13" fill="#333">fileUrl</text><text x="840" y="1126" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="555" y="1148" font-size="13" fill="#333">mimeType</text><text x="840" y="1148" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="555" y="1170" font-size="13" fill="#333">fileSize</text><text x="840" y="1170" text-anchor="end" font-size="12" fill="#888">Number</text>
+    <text x="555" y="1192" font-size="13" fill="#333">caption</text><text x="840" y="1192" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="555" y="1214" font-size="13" fill="#333">createdAt</text><text x="840" y="1214" text-anchor="end" font-size="12" fill="#888">Date</text>
+  </g>
+
+  <!-- 9. PAYMENTS (Orange) -->
+  <g filter="url(#shadow)">
+    <rect x="1320" y="648" width="320" height="62" rx="6" fill="#E8943A"/>
+    <text x="1480" y="686" text-anchor="middle" font-size="18" font-weight="700" fill="white">9. PAYMENTS</text>
+    <rect x="1320" y="710" width="320" height="268" rx="6" fill="white" stroke="#E8943A" stroke-width="2"/>
+    <text x="1335" y="738" font-size="13" fill="#333">_id</text><text x="1620" y="738" text-anchor="end" font-size="12" fill="#888">ObjectId PK</text>
+    <text x="1335" y="760" font-size="13" fill="#333">projectId</text><text x="1620" y="760" text-anchor="end" font-size="12" fill="#2E9E5B">FK ’ Projects ¡unique</text>
+    <text x="1335" y="782" font-size="13" fill="#333">jobId</text><text x="1620" y="782" text-anchor="end" font-size="12" fill="#2E9E5B">FK ’ Jobs</text>
+    <text x="1335" y="804" font-size="13" fill="#333">proposalId</text><text x="1620" y="804" text-anchor="end" font-size="12" fill="#E8943A">FK ’ Proposals</text>
+    <text x="1335" y="826" font-size="13" fill="#333">clientId</text><text x="1620" y="826" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="1335" y="848" font-size="13" fill="#333">freelancerId</text><text x="1620" y="848" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="1335" y="870" font-size="13" fill="#333">amount</text><text x="1620" y="870" text-anchor="end" font-size="12" fill="#888">Number</text>
+    <text x="1335" y="892" font-size="13" fill="#333">currency</text><text x="1620" y="892" text-anchor="end" font-size="12" fill="#888">default USD</text>
+    <text x="1335" y="914" font-size="13" fill="#333">status</text><text x="1620" y="914" text-anchor="end" font-size="11" fill="#888">pending|held|released|refunded</text>
+    <text x="1335" y="936" font-size="13" fill="#333">stripeCheckoutSessionId</text><text x="1620" y="936" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="1335" y="958" font-size="13" fill="#333">stripePaymentIntentId</text><text x="1620" y="958" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="1335" y="980" font-size="13" fill="#333">paymentDate / releasedAt / refundedAt</text><text x="1620" y="980" text-anchor="end" font-size="12" fill="#888">Date</text>
+  </g>
+
+  <!-- 10. NOTIFICATIONS (Purple) -->
+  <g filter="url(#shadow)">
+    <rect x="2100" y="580" width="340" height="62" rx="6" fill="#8E5BB8"/>
+    <text x="2270" y="618" text-anchor="middle" font-size="18" font-weight="700" fill="white">10. NOTIFICATIONS</text>
+    <rect x="2100" y="642" width="340" height="248" rx="6" fill="white" stroke="#8E5BB8" stroke-width="2"/>
+    <text x="2115" y="670" font-size="13" fill="#333">_id</text><text x="2420" y="670" text-anchor="end" font-size="12" fill="#888">ObjectId PK</text>
+    <text x="2115" y="692" font-size="13" fill="#333">recipientId</text><text x="2420" y="692" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="2115" y="714" font-size="13" fill="#333">type</text><text x="2420" y="714" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="2115" y="736" font-size="13" fill="#333">title</text><text x="2420" y="736" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="2115" y="758" font-size="13" fill="#333">message</text><text x="2420" y="758" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="2115" y="780" font-size="13" fill="#333">isRead</text><text x="2420" y="780" text-anchor="end" font-size="12" fill="#888">default false</text>
+    <text x="2115" y="802" font-size="13" fill="#333">relatedJobId</text><text x="2420" y="802" text-anchor="end" font-size="12" fill="#8E5BB8">FK nullable</text>
+    <text x="2115" y="824" font-size="13" fill="#333">relatedProposalId</text><text x="2420" y="824" text-anchor="end" font-size="12" fill="#8E5BB8">FK nullable</text>
+    <text x="2115" y="846" font-size="13" fill="#333">relatedProjectId</text><text x="2420" y="846" text-anchor="end" font-size="12" fill="#8E5BB8">FK nullable</text>
+    <text x="2115" y="868" font-size="13" fill="#333">relatedPaymentId</text><text x="2420" y="868" text-anchor="end" font-size="12" fill="#8E5BB8">FK nullable</text>
+    <text x="2115" y="890" font-size="13" fill="#333">createdAt</text><text x="2420" y="890" text-anchor="end" font-size="12" fill="#C65D00">TTL 90 days</text>
+  </g>
+
+  <!-- 11. LOGS (Purple) -->
+  <g filter="url(#shadow)">
+    <rect x="2100" y="1280" width="340" height="62" rx="6" fill="#8E5BB8"/>
+    <text x="2270" y="1318" text-anchor="middle" font-size="18" font-weight="700" fill="white">11. LOGS</text>
+    <rect x="2100" y="1342" width="340" height="248" rx="6" fill="white" stroke="#8E5BB8" stroke-width="2"/>
+    <text x="2115" y="1370" font-size="13" fill="#333">_id</text><text x="2420" y="1370" text-anchor="end" font-size="12" fill="#888">ObjectId PK</text>
+    <text x="2115" y="1392" font-size="13" fill="#333">level</text><text x="2420" y="1392" text-anchor="end" font-size="11" fill="#888">info|warning|error</text>
+    <text x="2115" y="1414" font-size="13" fill="#333">message</text><text x="2420" y="1414" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="2115" y="1436" font-size="13" fill="#333">source</text><text x="2420" y="1436" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="2115" y="1458" font-size="13" fill="#333">category</text><text x="2420" y="1458" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="2115" y="1480" font-size="13" fill="#333">statusCode</text><text x="2420" y="1480" text-anchor="end" font-size="12" fill="#888">Number</text>
+    <text x="2115" y="1502" font-size="13" fill="#333">method / path</text><text x="2420" y="1502" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="2115" y="1524" font-size="13" fill="#333">userId</text><text x="2420" y="1524" text-anchor="end" font-size="12" fill="#3B7DD8">FK ’ Users</text>
+    <text x="2115" y="1546" font-size="13" fill="#333">actorEmail / ip</text><text x="2420" y="1546" text-anchor="end" font-size="12" fill="#888">String</text>
+    <text x="2115" y="1568" font-size="13" fill="#333">meta</text><text x="2420" y="1568" text-anchor="end" font-size="12" fill="#888">Mixed</text>
+    <text x="2115" y="1590" font-size="13" fill="#333">createdAt</text><text x="2420" y="1590" text-anchor="end" font-size="12" fill="#888">Date</text>
+  </g>
+
+  <!-- Workspace note box -->
+  <rect x="900" y="1010" width="380" height="80" rx="8" fill="#FFF8E7" stroke="#E8943A" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="1090" y="1040" text-anchor="middle" font-size="14" font-weight="600" fill="#C65D00">Workspace (no separate collection)</text>
+  <text x="1090" y="1064" text-anchor="middle" font-size="12" fill="#666">Tasks + WorkspaceAttachments scoped by jobId</text>
+  <text x="1090" y="1084" text-anchor="middle" font-size="12" fill="#666">Unlocked when proposal accepted ’ job in_progress</text>
+
+  <!-- LEGEND (bottom left) -->
+  <rect x="80" y="1680" width="520" height="260" rx="10" fill="white" stroke="#DDE3EA" stroke-width="1.5"/>
+  <text x="100" y="1715" font-size="18" font-weight="700" fill="#1A2332">LEGEND</text>
+  <line x1="100" y1="1740" x2="180" y2="1740" stroke="#3B7DD8" stroke-width="3"/><text x="195" y="1746" font-size="14" fill="#333">User Relationship</text>
+  <line x1="100" y1="1770" x2="180" y2="1770" stroke="#2E9E5B" stroke-width="3"/><text x="195" y="1776" font-size="14" fill="#333">Ownership / Creation</text>
+  <line x1="100" y1="1800" x2="180" y2="1800" stroke="#E8943A" stroke-width="3"/><text x="195" y="1806" font-size="14" fill="#333">Process Flow</text>
+  <line x1="100" y1="1830" x2="180" y2="1830" stroke="#8E5BB8" stroke-width="2" stroke-dasharray="6,4"/><text x="195" y="1836" font-size="14" fill="#333">Context Reference (optional)</text>
+  <line x1="100" y1="1860" x2="180" y2="1860" stroke="#78909C" stroke-width="2" stroke-dasharray="8,5"/><text x="195" y="1866" font-size="14" fill="#333">String Match (not ObjectId)</text>
+  <rect x="100" y="1885" width="16" height="16" fill="#3B7DD8" rx="2"/><text x="125" y="1898" font-size="13" fill="#333">Auth</text>
+  <rect x="200" y="1885" width="16" height="16" fill="#2E9E5B" rx="2"/><text x="225" y="1898" font-size="13" fill="#333">Marketplace</text>
+  <rect x="340" y="1885" width="16" height="16" fill="#E8943A" rx="2"/><text x="365" y="1898" font-size="13" fill="#333">Workspace / Process</text>
+  <rect x="100" y="1915" width="16" height="16" fill="#8E5BB8" rx="2"/><text x="125" y="1928" font-size="13" fill="#333">System</text>
+  <rect x="200" y="1915" width="16" height="16" fill="#78909C" rx="2" stroke="#78909C" stroke-dasharray="3,2"/><text x="225" y="1928" font-size="13" fill="#333">Lookup</text>
+
+  <!-- NOTES (bottom right) -->
+  <rect x="1680" y="1680" width="520" height="260" rx="10" fill="white" stroke="#DDE3EA" stroke-width="1.5"/>
+  <text x="1700" y="1715" font-size="18" font-weight="700" fill="#1A2332">NOTES</text>
+  <text x="1700" y="1750" font-size="14" fill="#444">" All dates stored as UTC (ISODate)</text>
+  <text x="1700" y="1780" font-size="14" fill="#444">" Passwords write-only (bcrypt hashed, select:false)</text>
+  <text x="1700" y="1810" font-size="14" fill="#444">" Indexes on all FK (ref) fields</text>
+  <text x="1700" y="1840" font-size="14" fill="#444">" Notifications.createdAt has TTL index (90 days)</text>
+  <text x="1700" y="1870" font-size="14" fill="#444">" All collections use _id ObjectId as PK</text>
+  <text x="1700" y="1900" font-size="14" fill="#444">" Job.category is a string  not ref to Category._id</text>
+  <text x="1700" y="1930" font-size="14" fill="#444">" Workspace = Tasks + Attachments keyed by jobId</text>
+</svg>
