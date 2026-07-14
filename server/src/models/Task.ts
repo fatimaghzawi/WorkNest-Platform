@@ -4,15 +4,24 @@ import { objectIdSchema, nonEmptyString } from './shared/zod';
 
 const TASK_STATUSES = ['todo', 'in_progress', 'review', 'done'] as const;
 const TASK_PRIORITIES = ['low', 'medium', 'high'] as const;
+const TASK_ORIGINS = ['client', 'freelancer'] as const;
 
 const taskZodSchema = z.object({
   jobId: objectIdSchema,
   title: nonEmptyString('Title').max(200, 'Title cannot exceed 200 characters'),
-  description: z.string().trim().max(2000, 'Description cannot exceed 2000 characters').optional().or(z.literal('')),
+  description: z
+    .string()
+    .trim()
+    .max(2000, 'Description cannot exceed 2000 characters')
+    .optional()
+    .or(z.literal('')),
   status: z.enum(TASK_STATUSES).optional().default('todo'),
   priority: z.enum(TASK_PRIORITIES).optional().default('medium'),
+  origin: z.enum(TASK_ORIGINS).optional(),
   dueDate: z.coerce.date().optional().nullable(),
   createdBy: objectIdSchema.optional(),
+  submissionNotes: z.string().trim().max(2000).optional().or(z.literal('')),
+  submittedAt: z.coerce.date().optional().nullable(),
 });
 
 const createTaskZodSchema = taskZodSchema.omit({ createdBy: true });
@@ -24,6 +33,7 @@ const updateTaskZodSchema = z
     status: z.enum(TASK_STATUSES).optional(),
     priority: z.enum(TASK_PRIORITIES).optional(),
     dueDate: z.coerce.date().nullable().optional(),
+    submissionNotes: z.string().trim().max(2000).optional().or(z.literal('')),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: 'At least one field is required for update',
@@ -64,8 +74,26 @@ const taskMongooseSchema = new mongoose.Schema(
         message: 'Priority must be low, medium, or high',
       },
       default: 'medium',
+      index: true,
+    },
+    origin: {
+      type: String,
+      enum: {
+        values: TASK_ORIGINS,
+        message: 'Origin must be client or freelancer',
+      },
+      index: true,
     },
     dueDate: {
+      type: Date,
+      index: true,
+    },
+    submissionNotes: {
+      type: String,
+      trim: true,
+      maxlength: [2000, 'Submission notes cannot exceed 2000 characters'],
+    },
+    submittedAt: {
       type: Date,
     },
     createdBy: {
@@ -81,10 +109,11 @@ const taskMongooseSchema = new mongoose.Schema(
 
 taskMongooseSchema.index({ jobId: 1, status: 1 });
 taskMongooseSchema.index({ jobId: 1, createdAt: -1 });
+taskMongooseSchema.index({ jobId: 1, origin: 1, createdAt: -1 });
 
 const Task = mongoose.model('Task', taskMongooseSchema);
 
-export { TASK_STATUSES, TASK_PRIORITIES };
+export { TASK_STATUSES, TASK_PRIORITIES, TASK_ORIGINS };
 
 export const taskZodSchemas = {
   schema: taskZodSchema,

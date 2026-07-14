@@ -77,6 +77,20 @@ const listAttachments = async (req, res) => {
   });
 };
 
+const listTaskDeliverables = async (req, res) => {
+  const { groups, meta } = await workspaceService.listTaskDeliverables(
+    req.params.jobId,
+    req.user.id,
+    req.user.role,
+    req.query
+  );
+  return sendSuccess(res, {
+    message: 'Task deliverables retrieved successfully',
+    data: groups,
+    meta,
+  });
+};
+
 const uploadAttachment = async (req, res) => {
   if (!req.file) {
     throw new AppError('No file uploaded', 400);
@@ -87,7 +101,7 @@ const uploadAttachment = async (req, res) => {
     req.user.id,
     req.user.role,
     req.file,
-    { caption: req.body?.caption }
+    { caption: req.body?.caption, taskId: req.body?.taskId }
   );
 
   return sendSuccess(res, {
@@ -116,6 +130,7 @@ module.exports = {
   deleteTask,
   getTeam,
   listAttachments,
+  listTaskDeliverables,
   uploadAttachment,
   deleteAttachment,
 };

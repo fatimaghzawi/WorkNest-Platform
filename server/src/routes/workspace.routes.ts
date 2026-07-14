@@ -33,6 +33,14 @@ router.get(
   asyncHandler(workspaceController.listAttachments)
 );
 
+router.get(
+  '/:jobId/deliverables',
+  authenticate,
+  authorize('client', 'freelancer', 'admin'),
+  validate(listWorkspaceQuerySchema),
+  asyncHandler(workspaceController.listTaskDeliverables)
+);
+
 router.post(
   '/:jobId/attachments',
   authenticate,

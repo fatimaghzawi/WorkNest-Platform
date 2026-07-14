@@ -4,6 +4,7 @@ import { objectIdSchema, nonEmptyString } from './shared/zod';
 
 const workspaceAttachmentZodSchema = z.object({
   jobId: objectIdSchema,
+  taskId: objectIdSchema.optional().nullable(),
   uploadedBy: objectIdSchema,
   fileName: nonEmptyString('File name'),
   fileUrl: nonEmptyString('File URL'),
@@ -18,6 +19,12 @@ const workspaceAttachmentMongooseSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Job',
       required: [true, 'Job ID is required'],
+      index: true,
+    },
+    taskId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Task',
+      default: null,
       index: true,
     },
     uploadedBy: {
@@ -58,6 +65,7 @@ const workspaceAttachmentMongooseSchema = new mongoose.Schema(
 );
 
 workspaceAttachmentMongooseSchema.index({ jobId: 1, createdAt: -1 });
+workspaceAttachmentMongooseSchema.index({ jobId: 1, taskId: 1, createdAt: -1 });
 
 const WorkspaceAttachment = mongoose.model('WorkspaceAttachment', workspaceAttachmentMongooseSchema);
 
