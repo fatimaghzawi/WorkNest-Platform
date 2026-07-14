@@ -20,15 +20,27 @@ import { getApiErrorMessage } from '../../utils/apiError';
 
 type Role = 'client' | 'freelancer';
 
+const ROLE_COPY: Record<Role, { title: string; desc: string }> = {
+  client: {
+    title: 'Hire talent',
+    desc: 'Post jobs and manage projects',
+  },
+  freelancer: {
+    title: 'Find work',
+    desc: 'Browse jobs and send proposals',
+  },
+};
+
 export default function Register() {
   const navigate = useNavigate();
   const { register, isAuthenticated } = useAuth();
   const toast = useToast();
+  const [step, setStep] = useState<'role' | 'details'>('role');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<Role>('client');
+  const [role, setRole] = useState<Role | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -38,10 +50,23 @@ export default function Register() {
     return <Navigate to="/" replace />;
   }
 
+  const selectRole = (next: Role) => {
+    setRole(next);
+    setError('');
+    setStep('details');
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    if (!role) {
+      setError('Choose whether you want to hire talent or find work.');
+      setStep('role');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -61,12 +86,16 @@ export default function Register() {
   };
 
   return (
-    <>
+    <div className="wn-auth-register">
       <header className="wn-auth-card__header">
         <span className="wn-auth-card__eyebrow">Register</span>
-        <h1 className="wn-auth-card__title">Create your account</h1>
+        <h1 className="wn-auth-card__title">
+          {step === 'role' ? 'How will you use WorkNest?' : 'Create your account'}
+        </h1>
         <p className="wn-auth-card__subtitle">
-          Join WorkNest as a client or freelancer.
+          {step === 'role'
+            ? 'Pick one path. You can finish signup with Google or email next.'
+            : 'Continue with Google or fill in a few details.'}
         </p>
       </header>
 
@@ -81,90 +110,127 @@ export default function Register() {
           {success} Open the verification link we sent, then{' '}
           <Link to="/login">sign in</Link> to get started.
         </AuthSuccessPanel>
+      ) : step === 'role' ? (
+        <div className="wn-auth-role-step">
+          <div className="wn-auth-role-picker" role="radiogroup" aria-label="Account role">
+            <button
+              type="button"
+              className="wn-auth-role-option"
+              onClick={() => selectRole('client')}
+            >
+              <span className="wn-auth-role-option__icon" aria-hidden="true">
+                <IconBriefcase />
+              </span>
+              <span className="wn-auth-role-option__title">{ROLE_COPY.client.title}</span>
+              <span className="wn-auth-role-option__desc">{ROLE_COPY.client.desc}</span>
+            </button>
+            <button
+              type="button"
+              className="wn-auth-role-option"
+              onClick={() => selectRole('freelancer')}
+            >
+              <span className="wn-auth-role-option__icon" aria-hidden="true">
+                <IconPen />
+              </span>
+              <span className="wn-auth-role-option__title">{ROLE_COPY.freelancer.title}</span>
+              <span className="wn-auth-role-option__desc">{ROLE_COPY.freelancer.desc}</span>
+            </button>
+          </div>
+        </div>
       ) : (
-        <>
-          <form className="wn-auth-form" onSubmit={handleSubmit} noValidate>
-            <div className="wn-auth-form__row">
-            <Input
-              label="First name"
-              name="firstName"
-              required
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              placeholder="John"
-              autoComplete="given-name"
-              leftIcon={<IconUser />}
-            />
-            <Input
-              label="Last name"
-              name="lastName"
-              required
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              placeholder="Doe"
-              autoComplete="family-name"
-            />
-          </div>
-
-          <Input
-            label="Email address"
-            type="email"
-            name="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            autoComplete="email"
-            leftIcon={<IconMail />}
-          />
-
-          <div>
-            <Input
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              required
-              minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="At least 8 characters"
-              autoComplete="new-password"
-              leftIcon={<IconLock />}
-              rightIcon={showPassword ? <IconEyeOff /> : <IconEye />}
-              onRightIconClick={() => setShowPassword((v) => !v)}
-            />
-            <PasswordStrength password={password} />
-          </div>
-
-          <div>
-            <span className="wn-auth-role-picker__label">I want to</span>
-            <div className="wn-auth-role-picker" role="radiogroup" aria-label="Account role">
+        <div className="wn-auth-details-step">
+          {role && (
+            <div className="wn-auth-role-chip">
+              <span className="wn-auth-role-chip__icon" aria-hidden="true">
+                {role === 'client' ? <IconBriefcase /> : <IconPen />}
+              </span>
+              <div className="wn-auth-role-chip__copy">
+                <strong>{ROLE_COPY[role].title}</strong>
+                <span>{ROLE_COPY[role].desc}</span>
+              </div>
               <button
                 type="button"
-                className={`wn-auth-role-option ${role === 'client' ? 'wn-auth-role-option--active' : ''}`}
-                onClick={() => setRole('client')}
-                aria-pressed={role === 'client'}
+                className="wn-auth-role-chip__change"
+                onClick={() => {
+                  setStep('role');
+                  setError('');
+                }}
               >
-                <span className="wn-auth-role-option__icon" aria-hidden="true">
-                  <IconBriefcase />
-                </span>
-                <span className="wn-auth-role-option__title">Hire talent</span>
-                <span className="wn-auth-role-option__desc">Post jobs and manage projects</span>
-              </button>
-              <button
-                type="button"
-                className={`wn-auth-role-option ${role === 'freelancer' ? 'wn-auth-role-option--active' : ''}`}
-                onClick={() => setRole('freelancer')}
-                aria-pressed={role === 'freelancer'}
-              >
-                <span className="wn-auth-role-option__icon" aria-hidden="true">
-                  <IconPen />
-                </span>
-                <span className="wn-auth-role-option__title">Find work</span>
-                <span className="wn-auth-role-option__desc">Browse jobs and send proposals</span>
+                Change
               </button>
             </div>
-          </div>
+          )}
+
+          {hasSocialAuth && role && (
+            <SocialAuthButtons
+              role={role}
+              disabled={loading}
+              dividerLabel="Continue with"
+              onSuccess={(user) => {
+                toast.success(`Welcome to WorkNest, ${user.firstName}!`);
+                navigate(getDashboardPath(user.role), { replace: true });
+              }}
+            />
+          )}
+
+          <form className="wn-auth-form wn-auth-form--compact" onSubmit={handleSubmit} noValidate>
+            {hasSocialAuth && (
+              <div className="wn-auth-divider">
+                <span>or use email</span>
+              </div>
+            )}
+
+            <div className="wn-auth-form__row">
+              <Input
+                label="First name"
+                name="firstName"
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="John"
+                autoComplete="given-name"
+                leftIcon={<IconUser />}
+              />
+              <Input
+                label="Last name"
+                name="lastName"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Doe"
+                autoComplete="family-name"
+              />
+            </div>
+
+            <Input
+              label="Email"
+              type="email"
+              name="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              leftIcon={<IconMail />}
+            />
+
+            <div>
+              <Input
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least 8 characters"
+                autoComplete="new-password"
+                leftIcon={<IconLock />}
+                rightIcon={showPassword ? <IconEyeOff /> : <IconEye />}
+                onRightIconClick={() => setShowPassword((v) => !v)}
+              />
+              <PasswordStrength password={password} />
+            </div>
 
             <Button
               type="submit"
@@ -177,24 +243,12 @@ export default function Register() {
               Create account
             </Button>
           </form>
-
-          {hasSocialAuth && (
-            <SocialAuthButtons
-              role={role}
-              disabled={loading}
-              dividerLabel="or continue with"
-              onSuccess={(user) => {
-                toast.success(`Welcome to WorkNest, ${user.firstName}!`);
-                navigate(getDashboardPath(user.role), { replace: true });
-              }}
-            />
-          )}
-        </>
+        </div>
       )}
 
       <p className="wn-auth-footer-text">
         Already have an account? <Link to="/login">Sign in</Link>
       </p>
-    </>
+    </div>
   );
 }

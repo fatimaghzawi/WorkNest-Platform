@@ -47,11 +47,23 @@ export default function InterviewsPage({
     if (!user?._id) return;
     setLoading(true);
     try {
-      const res = await interviewsApi.list({
-        year: viewYear,
-        month: viewMonth,
-      });
-      setInterviews(res.data.data.map(normalizeInterview));
+      const collected: Interview[] = [];
+      let page = 1;
+      let totalPages = 1;
+
+      do {
+        const res = await interviewsApi.list({
+          year: viewYear,
+          month: viewMonth,
+          page,
+          limit: 50,
+        });
+        collected.push(...res.data.data.map(normalizeInterview));
+        totalPages = res.data.meta?.totalPages || 1;
+        page += 1;
+      } while (page <= totalPages);
+
+      setInterviews(collected);
     } catch (error) {
       toast.error(getApiErrorMessage(error, 'Failed to load interviews.'));
     } finally {

@@ -60,7 +60,7 @@ export default function AdminProposals() {
     try {
       const response = await proposalsApi.list({
         page,
-        limit: 10,
+        limit: 12,
         status: statusFilter === 'all' ? undefined : statusFilter,
         jobId: jobIdFilter || undefined,
       });
@@ -230,6 +230,9 @@ export default function AdminProposals() {
               />
               {totalPages > 1 && (
                 <div className="wn-proposals-pagination">
+                  <span className="wn-wallet-section__meta">
+                    Page {page} of {totalPages}
+                  </span>
                   <Pagination totalPages={totalPages} currentPage={page} onPageChange={setPage} />
                 </div>
               )}

@@ -7,12 +7,16 @@ export default function CompleteProjectModal({
   open,
   projectTitle,
   loading,
+  canSubmit = true,
+  taskProgressLabel,
   onClose,
   onSubmit,
 }: {
   open: boolean;
   projectTitle: string;
   loading?: boolean;
+  canSubmit?: boolean;
+  taskProgressLabel?: string;
   onClose: () => void;
   onSubmit: (deliveryNotes: string) => Promise<void>;
 }) {
@@ -39,7 +43,7 @@ export default function CompleteProjectModal({
           <Button variant="ghost" onClick={handleClose} disabled={loading}>
             Cancel
           </Button>
-          <Button loading={loading} onClick={handleSubmit}>
+          <Button loading={loading} disabled={!canSubmit} onClick={handleSubmit}>
             Submit for client review
           </Button>
         </>
@@ -50,6 +54,11 @@ export default function CompleteProjectModal({
           Mark <strong>{projectTitle}</strong> as finished. Your client will be able to accept the
           delivery or request revisions.
         </p>
+        {!canSubmit && taskProgressLabel && (
+          <p className="wn-project-status-hint wn-project-status-hint--revision">
+            {taskProgressLabel}
+          </p>
+        )}
         <Input
           as="textarea"
           label="Delivery notes (optional)"

@@ -9,11 +9,16 @@ import Pagination from '../../../components/common/Pagination';
 import { StatGridSkeleton } from '../../../components/common/Skeleton';
 import DashboardPageHeader from '../DashboardPageHeader';
 import EmptyState from '../EmptyState';
+import CompleteProjectModal from '../projects/CompleteProjectModal';
+import RequestReviewModal from '../projects/RequestReviewModal';
 import KanbanBoard from './KanbanBoard';
 import TaskModal from './TaskModal';
+import SubmitTaskReviewModal from './SubmitTaskReviewModal';
+import TaskBoardFilters, { DEFAULT_TASK_FILTERS, type TaskBoardFilters as TaskFiltersState } from './TaskBoardFilters';
+import WorkspaceProjectActions from './WorkspaceProjectActions';
 import WorkspaceTeamPanel from './WorkspaceTeamPanel';
-import WorkspaceAttachmentsPanel from './WorkspaceAttachmentsPanel';
-import type { TaskStatus, WorkspaceTask, WorkspaceTeam } from './types';
+import WorkspaceFilesPanel from './WorkspaceFilesPanel';
+import type { TaskStatus, WorkspaceTask, WorkspaceTeam, WorkspacePermissions } from './types';
 import { formatCurrency, formatDate } from '../../../utils/format';
 import { getApiErrorMessage } from '../../../utils/apiError';
 import { useToast } from '../../../hooks/useToast';
@@ -24,10 +29,16 @@ import { projectStatusLabel } from '../projects/projectStatus';
 import '../../../css/Workspace.css';
 import '../../../css/DesignSystem.css';
 
-type WorkspaceProject = Job & { projectStatus: ProjectStatus; progress?: number };
+type WorkspaceProject = Job & { projectStatus: ProjectStatus; progress?: number; projectId: string };
 
 const TASKS_PAGE_SIZE = 30;
 const PROJECTS_PAGE_SIZE = 20;
+
+const DEFAULT_PERMISSIONS: WorkspacePermissions = {
+  canCreate: false,
+  canManageTasks: false,
+  canReviewTasks: false,
+};
 
 export default function WorkspacePage({
   role,
@@ -47,22 +58,87 @@ export default function WorkspacePage({
   const [tasksPage, setTasksPage] = useState(1);
   const [tasksTotalPages, setTasksTotalPages] = useState(1);
   const [tasksTotal, setTasksTotal] = useState(0);
+  const [taskFilters, setTaskFilters] = useState<TaskFiltersState>(DEFAULT_TASK_FILTERS);
   const [projectsPage, setProjectsPage] = useState(1);
   const [projectsTotalPages, setProjectsTotalPages] = useState(1);
   const [team, setTeam] = useState<WorkspaceTeam | null>(null);
   const [teamLoading, setTeamLoading] = useState(false);
-  const [readOnly, setReadOnly] = useState(role === 'client');
+  const [readOnly, setReadOnly] = useState(false);
+  const [permissions, setPermissions] = useState<WorkspacePermissions>(DEFAULT_PERMISSIONS);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<WorkspaceTask | null>(null);
+  const [submitTaskTarget, setSubmitTaskTarget] = useState<WorkspaceTask | null>(null);
+  const [submittingTaskId, setSubmittingTaskId] = useState<string | null>(null);
   const [defaultStatus, setDefaultStatus] = useState<TaskStatus>('todo');
+  const [progress, setProgress] = useState(0);
+  const [projectActing, setProjectActing] = useState(false);
+  const [completeProjectOpen, setCompleteProjectOpen] = useState(false);
+  const [revisionProjectOpen, setRevisionProjectOpen] = useState(false);
+  const [deliverablesRefreshKey, setDeliverablesRefreshKey] = useState(0);
+
+  const bumpDeliverables = useCallback(() => {
+    setDeliverablesRefreshKey((current) => current + 1);
+  }, []);
 
   const selectedProject = useMemo(
     () => projects.find((project) => project._id === selectedId) ?? null,
     [projects, selectedId]
   );
 
-  const isReadOnly = readOnly || role === 'client';
-  const canUploadAttachments = !isReadOnly && (role === 'freelancer' || role === 'admin');
+  const isFullyReadOnly = readOnly;
+  const canUploadAttachments = permissions.canManageTasks && !isFullyReadOnly;
+
+  const applyProjectPatch = useCallback((jobId: string, patch: Partial<WorkspaceProject>) => {
+    setProjects((current) => {
+      let changed = false;
+      const next = current.map((project) => {
+        if (project._id !== jobId) return project;
+        const updated = { ...project, ...patch };
+        const isSame = (Object.keys(patch) as (keyof WorkspaceProject)[]).every(
+          (key) => project[key] === updated[key]
+        );
+        if (isSame) return project;
+        changed = true;
+        return updated;
+      });
+      return changed ? next : current;
+    });
+  }, []);
+
+  const syncProgress = useCallback(
+    async (jobId: string) => {
+      try {
+        const response = await workspaceApi.listTasks(jobId, {
+          page: tasksPage,
+          limit: TASKS_PAGE_SIZE,
+        });
+        const nextProgress = response.data.meta?.progress ?? 0;
+        setProgress(nextProgress);
+        applyProjectPatch(jobId, { progress: nextProgress });
+      } catch {
+        // keep current progress on sync failure
+      }
+    },
+    [applyProjectPatch, tasksPage]
+  );
+
+  const refreshProjectFromApi = useCallback(
+    async (projectId: string, jobId: string) => {
+      try {
+        const response = await projectsApi.getById(projectId);
+        const project = response.data.data;
+        applyProjectPatch(jobId, {
+          projectStatus: project.status,
+          progress: project.progress,
+        });
+        setProgress(project.progress);
+        setReadOnly(project.status === 'pending_review' || project.status === 'completed');
+      } catch (error) {
+        toast.error(getApiErrorMessage(error, 'Failed to refresh project status.'));
+      }
+    },
+    [applyProjectPatch, toast]
+  );
 
   const pickSelection = (nextProjects: WorkspaceProject[], current: string) => {
     const allowed = new Set(nextProjects.map((project) => project._id));
@@ -84,7 +160,9 @@ export default function WorkspacePage({
         const nextProjects = response.data.data.map(
           (job): WorkspaceProject => ({
             ...job,
+            projectId: job._id,
             projectStatus: 'active',
+            progress: 0,
           })
         );
         setProjects(nextProjects);
@@ -100,6 +178,7 @@ export default function WorkspacePage({
           .map(
             (project): WorkspaceProject => ({
               _id: project.jobId,
+              projectId: project.id,
               title: project.jobTitle || project.title,
               description: '',
               category: '',
@@ -130,21 +209,32 @@ export default function WorkspacePage({
     async (jobId: string, page = tasksPage) => {
       setTasksLoading(true);
       try {
-        const response = await workspaceApi.listTasks(jobId, { page, limit: TASKS_PAGE_SIZE });
+        const response = await workspaceApi.listTasks(jobId, {
+          page,
+          limit: TASKS_PAGE_SIZE,
+          origin: taskFilters.origin === 'all' ? undefined : taskFilters.origin,
+          priority: taskFilters.priority === 'all' ? undefined : taskFilters.priority,
+          sortBy: taskFilters.sortBy,
+          sortOrder: taskFilters.sortOrder,
+        });
         setTasks(response.data.data);
         setTasksTotalPages(response.data.meta?.totalPages || 1);
         setTasksTotal(response.data.meta?.total ?? response.data.data.length);
-        setReadOnly(Boolean(response.data.meta?.readOnly) || role === 'client');
+        setReadOnly(Boolean(response.data.meta?.readOnly));
+        setPermissions(response.data.meta?.permissions ?? DEFAULT_PERMISSIONS);
+        setProgress(response.data.meta?.progress ?? 0);
+        applyProjectPatch(jobId, { progress: response.data.meta?.progress ?? 0 });
       } catch (error) {
         toast.error(getApiErrorMessage(error, 'Failed to load workspace tasks.'));
         setTasks([]);
         setTasksTotal(0);
-        setReadOnly(role === 'client');
+        setReadOnly(true);
+        setPermissions(DEFAULT_PERMISSIONS);
       } finally {
         setTasksLoading(false);
       }
     },
-    [toast, role, tasksPage]
+    [toast, tasksPage, applyProjectPatch, taskFilters]
   );
 
   const loadTeam = useCallback(
@@ -168,47 +258,170 @@ export default function WorkspacePage({
   }, [loadProjects]);
 
   useEffect(() => {
-    if (!selectedProject) {
+    if (!selectedId) return;
+    const cached = projects.find((project) => project._id === selectedId)?.progress;
+    if (cached != null) setProgress(cached);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only sync cached progress when switching projects
+  }, [selectedId]);
+
+  useEffect(() => {
+    if (!selectedId) {
       setTasks([]);
       setTasksPage(1);
       setTeam(null);
+      setProgress(0);
+      setTaskFilters(DEFAULT_TASK_FILTERS);
       return;
     }
     setTasksPage(1);
-  }, [selectedProject?._id]);
+  }, [selectedId]);
 
   useEffect(() => {
-    if (!selectedProject) return;
-    loadTasks(selectedProject._id, tasksPage);
+    if (!selectedId) return;
+    setTasksPage(1);
+  }, [selectedId, taskFilters]);
+
+  useEffect(() => {
+    if (!selectedId) return;
+    void loadTasks(selectedId, tasksPage);
     if (tasksPage === 1) {
-      loadTeam(selectedProject._id);
+      void loadTeam(selectedId);
     }
-  }, [selectedProject, tasksPage, loadTasks, loadTeam]);
+  }, [selectedId, tasksPage, loadTasks, loadTeam]);
+
+  const handleOpenTaskFromLibrary = useCallback(
+    (task: { id: string; title: string; status: TaskStatus; submissionNotes?: string; submittedAt?: string }) => {
+      const fromBoard = tasks.find((item) => item.id === task.id);
+      setEditingTask(
+        fromBoard ?? {
+          id: task.id,
+          title: task.title,
+          status: task.status,
+          priority: 'medium',
+          submissionNotes: task.submissionNotes,
+          submittedAt: task.submittedAt,
+        }
+      );
+      setModalOpen(true);
+    },
+    [tasks]
+  );
 
   const handleMoveTask = async (taskId: string, status: TaskStatus) => {
-    if (!selectedProject || isReadOnly) return;
+    if (!selectedProject || isFullyReadOnly) return;
     const previous = tasks;
     setTasks((current) =>
       current.map((task) => (task.id === taskId ? { ...task, status } : task))
     );
 
     try {
-      await workspaceApi.updateTask(selectedProject._id, taskId, { status });
+      const response = await workspaceApi.updateTask(selectedProject._id, taskId, { status });
+      setTasks((current) =>
+        current.map((task) => (task.id === taskId ? response.data.data : task))
+      );
+      await syncProgress(selectedProject._id);
     } catch (error) {
       setTasks(previous);
       toast.error(getApiErrorMessage(error, 'Failed to move task.'));
     }
   };
 
+  const handleTaskAction = handleMoveTask;
+
+  const handleSubmitTaskForReview = async ({ submissionNotes }: { submissionNotes: string }) => {
+    if (!selectedProject || !submitTaskTarget) return;
+
+    setSubmittingTaskId(submitTaskTarget.id);
+    try {
+      const response = await workspaceApi.updateTask(selectedProject._id, submitTaskTarget.id, {
+        status: 'review',
+        submissionNotes,
+      });
+      setTasks((current) =>
+        current.map((task) => (task.id === submitTaskTarget.id ? response.data.data : task))
+      );
+      await syncProgress(selectedProject._id);
+      bumpDeliverables();
+      toast.success('Task submitted for client review.');
+      setSubmitTaskTarget(null);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to submit task for review.'));
+      throw error;
+    } finally {
+      setSubmittingTaskId(null);
+    }
+  };
+
+  const handleCompleteProject = async (deliveryNotes: string) => {
+    if (!selectedProject?.projectId) return;
+
+    setProjectActing(true);
+    try {
+      await projectsApi.submitForReview(selectedProject.projectId, {
+        deliveryNotes: deliveryNotes || undefined,
+      });
+      toast.success('Project submitted for client review.');
+      setCompleteProjectOpen(false);
+      await refreshProjectFromApi(selectedProject.projectId, selectedProject._id);
+      await loadTasks(selectedProject._id, tasksPage);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to submit project.'));
+    } finally {
+      setProjectActing(false);
+    }
+  };
+
+  const handleAcceptDelivery = async () => {
+    if (!selectedProject?.projectId) return;
+
+    const approved = await confirm({
+      title: 'Accept delivery',
+      message: `Mark "${selectedProject.title}" as completed? The workspace will become read-only.`,
+      confirmLabel: 'Accept delivery',
+    });
+    if (!approved) return;
+
+    setProjectActing(true);
+    try {
+      await projectsApi.accept(selectedProject.projectId);
+      toast.success('Project marked as completed.');
+      await refreshProjectFromApi(selectedProject.projectId, selectedProject._id);
+      await loadTasks(selectedProject._id, tasksPage);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to accept project.'));
+    } finally {
+      setProjectActing(false);
+    }
+  };
+
+  const handleRequestRevision = async (reviewNotes: string) => {
+    if (!selectedProject?.projectId) return;
+
+    setProjectActing(true);
+    try {
+      await projectsApi.requestReview(selectedProject.projectId, { reviewNotes });
+      toast.success('Revision request sent to the freelancer.');
+      setRevisionProjectOpen(false);
+      await refreshProjectFromApi(selectedProject.projectId, selectedProject._id);
+      await loadTasks(selectedProject._id, tasksPage);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to request revisions.'));
+    } finally {
+      setProjectActing(false);
+    }
+  };
+
   const handleSaveTask = async (payload: Omit<WorkspaceTask, 'id'> & { id?: string }) => {
-    if (!selectedProject || isReadOnly) return;
+    if (!selectedProject) return;
+    const isCreate = !payload.id;
+    if (isCreate && !permissions.canCreate) return;
+    if (!isCreate && !permissions.canManageTasks) return;
 
     try {
       if (payload.id) {
         const response = await workspaceApi.updateTask(selectedProject._id, payload.id, {
           title: payload.title,
           description: payload.description,
-          status: payload.status,
           priority: payload.priority,
           dueDate: payload.dueDate ?? null,
         });
@@ -220,12 +433,13 @@ export default function WorkspacePage({
         const response = await workspaceApi.createTask(selectedProject._id, {
           title: payload.title,
           description: payload.description,
-          status: payload.status,
           priority: payload.priority,
           dueDate: payload.dueDate ?? null,
         });
         setTasks((current) => [response.data.data, ...current]);
+        setTasksTotal((count) => count + 1);
         toast.success('Task created.');
+        await syncProgress(selectedProject._id);
         if (tasksPage !== 1) {
           setTasksPage(1);
         } else {
@@ -239,7 +453,7 @@ export default function WorkspacePage({
   };
 
   const handleDeleteTask = async (id: string) => {
-    if (!selectedProject || isReadOnly) return;
+    if (!selectedProject || !permissions.canManageTasks) return;
 
     const confirmed = await confirm({
       title: 'Delete task',
@@ -253,6 +467,7 @@ export default function WorkspacePage({
       await workspaceApi.deleteTask(selectedProject._id, id);
       setTasks((current) => current.filter((task) => task.id !== id));
       setTasksTotal((count) => Math.max(0, count - 1));
+      await syncProgress(selectedProject._id);
       toast.success('Task removed.');
       setModalOpen(false);
       setEditingTask(null);
@@ -262,22 +477,18 @@ export default function WorkspacePage({
     }
   };
 
-  const pageProgress = useMemo(() => {
-    if (tasks.length === 0) return 0;
-    const done = tasks.filter((task) => task.status === 'done').length;
-    return Math.round((done / tasks.length) * 100);
-  }, [tasks]);
-
-  const progress = selectedProject?.progress ?? pageProgress;
-
   const readOnlyBannerMessage =
-    !isReadOnly || (role === 'client' && selectedProject?.projectStatus === 'active')
-      ? null
-      : selectedProject?.projectStatus === 'completed'
-        ? 'This project has been completed and is read-only.'
-        : selectedProject?.projectStatus === 'pending_review'
-          ? 'This workspace is locked while the project awaits your review.'
-          : 'This workspace is read-only.';
+    selectedProject?.projectStatus === 'completed'
+      ? 'This project has been completed and is read-only.'
+      : selectedProject?.projectStatus === 'pending_review'
+        ? role === 'client'
+          ? 'Review the final delivery below, then accept or request revisions.'
+          : 'This workspace is locked while the client reviews your final delivery.'
+        : isFullyReadOnly
+          ? 'This workspace is read-only.'
+          : role === 'client'
+            ? 'Add tasks in To do, then approve work in the In review column.'
+            : null;
 
   if (loading) {
     return (
@@ -335,11 +546,13 @@ export default function WorkspacePage({
         eyebrow="Workspace"
         title={selectedProject?.title ?? 'Project workspace'}
         subtitle={
-          isReadOnly
+          isFullyReadOnly
             ? role === 'client'
-              ? 'Monitor the freelancer’s kanban board.'
+              ? 'Review project delivery and track completed work.'
               : 'This project is locked — you can view tasks but not make changes.'
-            : 'Plan tasks, track progress, and keep deliverables organized in a colorful kanban view.'
+            : role === 'client'
+              ? 'Add tasks, approve deliverables in In review, and track progress.'
+              : 'Move tasks through the board, submit work for review, then complete the project.'
         }
       />
 
@@ -367,6 +580,18 @@ export default function WorkspacePage({
         </label>
         <Badge variant="info">{progress}% complete</Badge>
       </div>
+
+      {selectedProject && (role === 'client' || role === 'freelancer') && (
+        <WorkspaceProjectActions
+          role={role}
+          projectStatus={selectedProject.projectStatus}
+          progress={progress}
+          acting={projectActing}
+          onCompleteProject={() => setCompleteProjectOpen(true)}
+          onAcceptDelivery={handleAcceptDelivery}
+          onRequestRevision={() => setRevisionProjectOpen(true)}
+        />
+      )}
 
       {projectsTotalPages > 1 && (
         <div style={{ marginBottom: 16 }}>
@@ -407,19 +632,33 @@ export default function WorkspacePage({
 
       <div className="wn-workspace__layout">
         <div className="wn-workspace__board-wrap">
+          {selectedId && (
+            <TaskBoardFilters
+              filters={taskFilters}
+              disabled={tasksLoading}
+              onChange={(next) => {
+                setTaskFilters(next);
+              }}
+            />
+          )}
+
           {tasksLoading ? (
             <StatGridSkeleton count={4} />
           ) : (
             <KanbanBoard
               tasks={tasks}
-              readOnly={isReadOnly}
+              role={role}
+              permissions={permissions}
+              readOnly={isFullyReadOnly}
               onMoveTask={handleMoveTask}
+              onTaskAction={handleTaskAction}
+              onSubmitForReview={setSubmitTaskTarget}
               onTaskClick={(task) => {
                 setEditingTask(task);
                 setModalOpen(true);
               }}
               onAddTask={(status) => {
-                if (isReadOnly) return;
+                if (!permissions.canCreate) return;
                 setEditingTask(null);
                 setDefaultStatus(status);
                 setModalOpen(true);
@@ -447,9 +686,11 @@ export default function WorkspacePage({
           />
 
           {selectedProject && (
-            <WorkspaceAttachmentsPanel
+            <WorkspaceFilesPanel
               jobId={selectedProject._id}
-              canUpload={canUploadAttachments}
+              canUploadProjectFiles={canUploadAttachments}
+              deliverablesRefreshKey={deliverablesRefreshKey}
+              onOpenTask={handleOpenTaskFromLibrary}
             />
           )}
 
@@ -469,14 +710,56 @@ export default function WorkspacePage({
       <TaskModal
         open={modalOpen}
         task={editingTask}
-        readOnly={isReadOnly}
+        jobId={selectedProject?._id}
+        readOnly={
+          isFullyReadOnly ||
+          Boolean(
+            editingTask &&
+              ((role === 'client' && editingTask.status !== 'review') ||
+                (role === 'freelancer' && editingTask.status === 'done'))
+          )
+        }
+        canUploadDeliverables={permissions.canManageTasks && editingTask?.status === 'in_progress'}
+        canDelete={permissions.canManageTasks && editingTask?.status !== 'done'}
         defaultStatus={defaultStatus}
         onClose={() => {
           setModalOpen(false);
           setEditingTask(null);
         }}
         onSave={handleSaveTask}
-        onDelete={editingTask && !isReadOnly ? handleDeleteTask : undefined}
+        onDelete={editingTask && permissions.canManageTasks ? handleDeleteTask : undefined}
+        onDeliverablesChange={bumpDeliverables}
+      />
+
+      <SubmitTaskReviewModal
+        open={Boolean(submitTaskTarget)}
+        jobId={selectedProject?._id || ''}
+        task={submitTaskTarget}
+        loading={submittingTaskId === submitTaskTarget?.id}
+        onClose={() => setSubmitTaskTarget(null)}
+        onSubmit={handleSubmitTaskForReview}
+      />
+
+      <CompleteProjectModal
+        open={completeProjectOpen}
+        projectTitle={selectedProject?.title || 'Project'}
+        loading={projectActing}
+        canSubmit={progress >= 100}
+        taskProgressLabel={
+          progress < 100
+            ? `All tasks must be approved before you can submit the project (${progress}% complete).`
+            : undefined
+        }
+        onClose={() => setCompleteProjectOpen(false)}
+        onSubmit={handleCompleteProject}
+      />
+
+      <RequestReviewModal
+        open={revisionProjectOpen}
+        projectTitle={selectedProject?.title || 'Project'}
+        loading={projectActing}
+        onClose={() => setRevisionProjectOpen(false)}
+        onSubmit={handleRequestRevision}
       />
     </div>
   );

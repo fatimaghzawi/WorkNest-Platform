@@ -1,15 +1,8 @@
-import { useState, type FormEvent } from "react";
 import "../css/Hero.css";
 
 export interface HeroPhoto {
   src: string;
   alt: string;
-}
-
-export interface HeroSearchValues {
-  category: string;
-  keyword: string;
-  location: string;
 }
 
 export interface HeroProps {
@@ -21,25 +14,12 @@ export interface HeroProps {
   /** Plain text after the highlighted word, e.g. "Build Amazing Projects." */
   titleTail?: string;
   subtitle?: string;
-  categories?: string[];
-  keywordPlaceholder?: string;
-  locationPlaceholder?: string;
-  searchLabel?: string;
-  onSearch?: (values: HeroSearchValues) => void;
-  /** Trust line under the search bar, e.g. social proof stats. */
+  /** Trust line under the subtitle, e.g. social proof stats. */
   trustText?: string;
   /** Three circular photos scattered around the headline. Pass [] to hide. */
   photos?: [HeroPhoto?, HeroPhoto?, HeroPhoto?];
   className?: string;
 }
-
-const DEFAULT_CATEGORIES = [
-  "Web Development",
-  "Graphic Design",
-  "Digital Marketing",
-  "Writing & Content",
-  "Mobile Development",
-];
 
 const DEFAULT_PHOTOS: [HeroPhoto, HeroPhoto, HeroPhoto] = [
   { src: "https://i.pravatar.cc/200?img=47", alt: "Freelance designer smiling" },
@@ -47,31 +27,16 @@ const DEFAULT_PHOTOS: [HeroPhoto, HeroPhoto, HeroPhoto] = [
   { src: "https://i.pravatar.cc/200?img=32", alt: "Freelance writer smiling" },
 ];
 
-
 export default function Hero({
   eyebrow = "🔥 500+ Freelancers Ready to Work",
   titleLead = "Find the Right",
   titleAccent = "Freelancer",
   titleTail = "Build Amazing Projects.",
   subtitle = "WorkNest connects businesses with talented freelancers for secure and efficient project collaboration.",
-  categories = DEFAULT_CATEGORIES,
-  keywordPlaceholder = "e.g. Logo Design, WordPress Site",
-  locationPlaceholder = "Beirut, Lebanon",
-  searchLabel = "Search",
-  onSearch,
   trustText = "Trusted by 500+ freelancers · 200+ clients · 800+ projects delivered",
   photos = DEFAULT_PHOTOS,
   className = "",
 }: HeroProps) {
-  const [category, setCategory] = useState(categories[0] ?? "");
-  const [keyword, setKeyword] = useState("");
-  const [location, setLocation] = useState("");
-
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    onSearch?.({ category, keyword, location });
-  }
-
   const [photoA, photoB, photoC] = photos;
 
   return (
@@ -109,52 +74,6 @@ export default function Hero({
         </h1>
 
         <p className="wn-hero__subtitle">{subtitle}</p>
-
-        <form className="wn-hero__search" onSubmit={handleSubmit}>
-          <label className="wn-hero__field">
-            <span className="wn-hero__field-label">Category</span>
-            <select
-              className="wn-hero__select"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              aria-label="Job category"
-            >
-              {categories.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="wn-hero__field wn-hero__field--grow">
-            <span className="wn-hero__field-label">Keyword</span>
-            <input
-              className="wn-hero__input"
-              type="search"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              placeholder={keywordPlaceholder}
-              aria-label="Search keyword"
-            />
-          </label>
-
-          <label className="wn-hero__field">
-            <span className="wn-hero__field-label">Location</span>
-            <input
-              className="wn-hero__input"
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder={locationPlaceholder}
-              aria-label="Location"
-            />
-          </label>
-
-          <button type="submit" className="wn-hero__submit">
-            {searchLabel}
-          </button>
-        </form>
 
         {trustText && <p className="wn-hero__trust">{trustText}</p>}
       </div>

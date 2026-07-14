@@ -23,6 +23,9 @@ export interface Payment {
   freelancerPayout?: number;
   feeRate?: number;
   budgetRangeLabel?: string;
+  refundedAmount?: number;
+  cancellationProgress?: number;
+  refundedAt?: string;
 }
 
 export interface WalletSummary {

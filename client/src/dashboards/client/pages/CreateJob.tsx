@@ -2,15 +2,17 @@ import { useNavigate } from 'react-router-dom';
 import JobForm from '../../../components/jobs/JobForm';
 import { jobsApi } from '../../../api/jobs.api';
 import DashboardPageHeader from '../../_shared/DashboardPageHeader';
+import DashboardStudioShell from '../../_shared/studio/DashboardStudioShell';
 import { useToast } from '../../../hooks/useToast';
 import type { CreateJobPayload } from '../../../types/job';
+import '../../../css/FreelancerStudio.css';
 
 export default function CreateJob() {
   const navigate = useNavigate();
   const toast = useToast();
 
   return (
-    <div>
+    <DashboardStudioShell>
       <DashboardPageHeader
         hero
         eyebrow="Client"
@@ -26,6 +28,6 @@ export default function CreateJob() {
           navigate('/client/jobs');
         }}
       />
-    </div>
+    </DashboardStudioShell>
   );
 }

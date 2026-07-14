@@ -5,10 +5,12 @@ import JobForm from '../../../components/jobs/JobForm';
 import { jobsApi } from '../../../api/jobs.api';
 import DashboardPageHeader from '../../_shared/DashboardPageHeader';
 import EmptyState from '../../_shared/EmptyState';
+import DashboardStudioShell from '../../_shared/studio/DashboardStudioShell';
 import { useToast } from '../../../hooks/useToast';
 import type { Job, UpdateJobPayload } from '../../../types/job';
 import { getApiErrorMessage } from '../../../utils/apiError';
 import '../../../css/DashboardFeatures.css';
+import '../../../css/FreelancerStudio.css';
 
 export default function EditJob() {
   const { jobId } = useParams<{ jobId: string }>();
@@ -26,15 +28,24 @@ export default function EditJob() {
       .finally(() => setLoading(false));
   }, [jobId, toast]);
 
-  if (loading) return <BlockLoader label="Loading job..." />;
+  if (loading) {
+    return (
+      <DashboardStudioShell>
+        <BlockLoader label="Loading job..." />
+      </DashboardStudioShell>
+    );
+  }
+
   if (!job) {
     return (
-      <EmptyState
-        title="Job not found"
-        description="This job may have been removed or you do not have access."
-        actionLabel="Back to my jobs"
-        actionTo="/client/jobs"
-      />
+      <DashboardStudioShell>
+        <EmptyState
+          title="Job not found"
+          description="This job may have been removed or you do not have access."
+          actionLabel="Back to my jobs"
+          actionTo="/client/jobs"
+        />
+      </DashboardStudioShell>
     );
   }
 
@@ -42,7 +53,7 @@ export default function EditJob() {
 
   if (isLocked) {
     return (
-      <div>
+      <DashboardStudioShell>
         <DashboardPageHeader
           hero
           eyebrow="Client"
@@ -54,17 +65,17 @@ export default function EditJob() {
           description={
             job.status === 'closed'
               ? 'The project was completed and this listing is closed.'
-              : 'Work has started on this job. Manage delivery from My projects or the workspace.'
+              : 'Work has started on this job. Manage delivery from My projects.'
           }
           actionLabel="Back to my jobs"
           actionTo="/client/jobs"
         />
-      </div>
+      </DashboardStudioShell>
     );
   }
 
   return (
-    <div>
+    <DashboardStudioShell>
       <DashboardPageHeader
         hero
         eyebrow="Client"
@@ -81,6 +92,6 @@ export default function EditJob() {
           navigate('/client/jobs');
         }}
       />
-    </div>
+    </DashboardStudioShell>
   );
 }

@@ -28,12 +28,14 @@ import Button from '../../../components/common/Button';
 import { StatGridSkeleton } from '../../../components/common/Skeleton';
 import DashboardPageHeader from '../DashboardPageHeader';
 import DashboardInterviewMiniCalendar from './DashboardInterviewMiniCalendar';
+import DashboardStudioShell from '../studio/DashboardStudioShell';
 import { formatCurrency } from '../../../utils/format';
 import { useToast } from '../../../hooks/useToast';
 import { getApiErrorMessage } from '../../../utils/apiError';
 import '../../../css/DesignSystem.css';
 import '../../../css/AdminAnalytics.css';
 import '../../../css/Interviews.css';
+import '../../../css/FreelancerStudio.css';
 
 const PURPLE = '#49225B';
 const ORANGE = '#F97316';
@@ -150,7 +152,7 @@ export default function ClientDashboardHome() {
 
   if (loading) {
     return (
-      <div>
+      <DashboardStudioShell>
         <DashboardPageHeader
           hero
           eyebrow="Client workspace"
@@ -163,12 +165,12 @@ export default function ClientDashboardHome() {
           }
         />
         <StatGridSkeleton count={4} />
-      </div>
+      </DashboardStudioShell>
     );
   }
 
   return (
-    <div className="wn-analytics">
+    <DashboardStudioShell>
       <DashboardPageHeader
         hero
         eyebrow="Client workspace"
@@ -440,7 +442,7 @@ export default function ClientDashboardHome() {
 
             <div className="wn-campaign-promo">
               <p>Active projects are {overview.projects.avgProgress}% complete on average.</p>
-              <Link to="/client/workspace">Open workspace →</Link>
+              <Link to="/client/projects">Open projects →</Link>
             </div>
           </section>
 
@@ -469,6 +471,6 @@ export default function ClientDashboardHome() {
           </section>
         </aside>
       </div>
-    </div>
+    </DashboardStudioShell>
   );
 }

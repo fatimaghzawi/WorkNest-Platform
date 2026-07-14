@@ -1,8 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
+import {
+  CheckCircle2,
+  Clock3,
+  FileText,
+  XCircle,
+} from 'lucide-react';
 import Button from '../../../components/common/Button';
 import Pagination from '../../../components/common/Pagination';
 import StatusBadge from '../../../components/jobs/StatusBadge';
+import { BlockLoader } from '../../../components/common/Loader';
+import UserAvatar from '../../../components/users/UserAvatar';
 import { jobsApi } from '../../../api/jobs.api';
 import { proposalsApi } from '../../../api/proposals.api';
 import { projectsApi } from '../../../api/projects.api';
@@ -10,6 +18,9 @@ import { interviewsApi } from '../../../api/interviews.api';
 import DepositEscrowModal from '../../_shared/payments/DepositEscrowModal';
 import DashboardPageHeader from '../../_shared/DashboardPageHeader';
 import EmptyState from '../../_shared/EmptyState';
+import DashboardStudioShell from '../../_shared/studio/DashboardStudioShell';
+import DashboardOverview from '../../_shared/studio/DashboardOverview';
+import DashboardStudioPanel from '../../_shared/studio/DashboardStudioPanel';
 import ScheduleInterviewModal, {
   type PrefillProposal,
 } from '../../_shared/interviews/ScheduleInterviewModal';
@@ -20,8 +31,9 @@ import { getApiErrorMessage } from '../../../utils/apiError';
 import { useToast } from '../../../hooks/useToast';
 import { useConfirm } from '../../../context/ConfirmContext';
 import { useCheckoutReturn } from '../../../hooks/useCheckoutReturn';
-import { formatCurrency, formatDate, formatDateTime, getInitials } from '../../../utils/format';
-import '../../../css/DashboardFeatures.css';
+import { formatCurrency, formatDate, formatDateTime } from '../../../utils/format';
+import '../../../css/FreelancerStudio.css';
+import '../../../css/DesignSystem.css';
 
 const FILTERS: { label: string; value: ProposalStatus | '' }[] = [
   { label: 'All', value: '' },
@@ -30,6 +42,24 @@ const FILTERS: { label: string; value: ProposalStatus | '' }[] = [
   { label: 'Rejected', value: 'rejected' },
 ];
 
+const PROPOSALS_PAGE_SIZE = 9;
+
+async function fetchProposalCounts(jobId: string) {
+  const [allRes, pendingRes, acceptedRes, rejectedRes] = await Promise.all([
+    proposalsApi.getByJob(jobId, { page: 1, limit: 1 }),
+    proposalsApi.getByJob(jobId, { page: 1, limit: 1, status: 'pending' }),
+    proposalsApi.getByJob(jobId, { page: 1, limit: 1, status: 'accepted' }),
+    proposalsApi.getByJob(jobId, { page: 1, limit: 1, status: 'rejected' }),
+  ]);
+
+  return {
+    total: allRes.data.meta?.total ?? allRes.data.data.length,
+    pending: pendingRes.data.meta?.total ?? 0,
+    accepted: acceptedRes.data.meta?.total ?? 0,
+    rejected: rejectedRes.data.meta?.total ?? 0,
+  };
+}
+
 export default function JobProposals() {
   const toast = useToast();
   const confirm = useConfirm();
@@ -37,12 +67,7 @@ export default function JobProposals() {
   const { jobId } = useParams<{ jobId: string }>();
   const [job, setJob] = useState<Job | null>(null);
   const [proposals, setProposals] = useState<Proposal[]>([]);
-  const [counts, setCounts] = useState<{ total: number; pending: number; accepted: number; rejected: number }>({
-    total: 0,
-    pending: 0,
-    accepted: 0,
-    rejected: 0,
-  });
+  const [counts, setCounts] = useState({ total: 0, pending: 0, accepted: 0, rejected: 0 });
   const [status, setStatus] = useState<ProposalStatus | ''>('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -60,22 +85,19 @@ export default function JobProposals() {
     if (!jobId) return;
     setLoading(true);
     try {
-      const [jobRes, proposalsRes, allRes] = await Promise.all([
+      const [jobRes, proposalsRes, nextCounts] = await Promise.all([
         jobsApi.getById(jobId),
-        proposalsApi.getByJob(jobId, { page, limit: 9, status: status || undefined }),
-        proposalsApi.getByJob(jobId, { page: 1, limit: 100 }),
+        proposalsApi.getByJob(jobId, {
+          page,
+          limit: PROPOSALS_PAGE_SIZE,
+          status: status || undefined,
+        }),
+        fetchProposalCounts(jobId),
       ]);
       setJob(jobRes.data.data);
       setProposals(proposalsRes.data.data);
       setTotalPages(proposalsRes.data.meta?.totalPages || 1);
-
-      const all = allRes.data.data || [];
-      setCounts({
-        total: all.length,
-        pending: all.filter((p) => p.status === 'pending').length,
-        accepted: all.filter((p) => p.status === 'accepted').length,
-        rejected: all.filter((p) => p.status === 'rejected').length,
-      });
+      setCounts(nextCounts);
     } catch (err) {
       toast.error(getApiErrorMessage(err, 'Failed to load proposals.'));
     } finally {
@@ -113,7 +135,7 @@ export default function JobProposals() {
       await proposalsApi.updateStatus(proposalId, nextStatus);
       if (nextStatus === 'accepted') {
         toast.success('Proposal accepted. Deposit funds to escrow so the freelancer can start.');
-        const projectsRes = await projectsApi.list({ limit: 50 });
+        const projectsRes = await projectsApi.list({ page: 1, limit: 10 });
         const project = projectsRes.data.data.find((item) => item.jobId === jobId);
         if (project && project.escrowStatus === 'pending' && project.contractAmount) {
           setDepositProject({
@@ -164,8 +186,15 @@ export default function JobProposals() {
     toast.success('Interview scheduled. The freelancer can confirm from their calendar.');
   };
 
+  const countForFilter = (value: ProposalStatus | '') => {
+    if (value === '') return counts.total;
+    if (value === 'pending') return counts.pending;
+    if (value === 'accepted') return counts.accepted;
+    return counts.rejected;
+  };
+
   return (
-    <div>
+    <DashboardStudioShell>
       <DashboardPageHeader
         hero
         eyebrow="Client"
@@ -178,60 +207,77 @@ export default function JobProposals() {
         }
       />
 
-      {job && (
-        <div className="wn-job-detail__hero">
-          <div className="wn-job-detail__hero-top">
-            <div>
-              <div className="wn-job-detail__hero-eyebrow">{job.category}</div>
-              <h2 className="wn-job-detail__hero-title">{job.title}</h2>
-            </div>
-            <StatusBadge status={job.status} kind="job" />
-          </div>
-          <div className="wn-job-detail__hero-meta">
-            <div className="wn-job-detail__hero-meta-item">
-              <span className="wn-job-detail__hero-meta-label">Budget</span>
-              <span className="wn-job-detail__hero-meta-value">{formatCurrency(job.budget)}</span>
-            </div>
-            <div className="wn-job-detail__hero-meta-item">
-              <span className="wn-job-detail__hero-meta-label">Deadline</span>
-              <span className="wn-job-detail__hero-meta-value">{formatDate(job.deadline)}</span>
-            </div>
-            <div className="wn-job-detail__hero-meta-item">
-              <span className="wn-job-detail__hero-meta-label">Proposals</span>
-              <span className="wn-job-detail__hero-meta-value">{counts.total}</span>
-            </div>
-          </div>
+      <DashboardOverview
+        loading={loading && proposals.length === 0}
+        eyebrow={job?.category || 'Proposal inbox'}
+        total={counts.total}
+        headline={job?.title || 'Proposals'}
+        caption={`Budget ${job ? formatCurrency(job.budget) : '—'} · Due ${job ? formatDate(job.deadline) : '—'}`}
+        meterPct={
+          counts.total > 0 ? Math.round(((counts.accepted + counts.rejected) / counts.total) * 100) : 0
+        }
+        tiles={[
+          {
+            key: 'total',
+            value: counts.total,
+            label: 'Total',
+            hint: 'All submissions',
+            icon: FileText,
+            tone: 'upcoming',
+          },
+          {
+            key: 'pending',
+            value: counts.pending,
+            label: 'Pending',
+            hint: 'Awaiting decision',
+            icon: Clock3,
+            tone: 'pending',
+          },
+          {
+            key: 'accepted',
+            value: counts.accepted,
+            label: 'Accepted',
+            hint: 'Hired freelancers',
+            icon: CheckCircle2,
+            tone: 'confirmed',
+          },
+          {
+            key: 'rejected',
+            value: counts.rejected,
+            label: 'Rejected',
+            hint: 'Closed bids',
+            icon: XCircle,
+            tone: 'done',
+          },
+        ]}
+      />
+
+      <section className="wn-analytics-card wn-freelancer-studio__toolbar wn-glass-panel">
+        <div className="wn-freelancer-studio__pipeline">
+          {FILTERS.map((filter) => (
+            <button
+              key={filter.value || 'all'}
+              type="button"
+              className={`wn-freelancer-studio__chip${status === filter.value ? ' wn-freelancer-studio__chip--active' : ''}`}
+              onClick={() => {
+                setStatus(filter.value);
+                setPage(1);
+              }}
+            >
+              {filter.label}
+              <span className="wn-freelancer-studio__chip-count">{countForFilter(filter.value)}</span>
+            </button>
+          ))}
         </div>
-      )}
+        {job && <StatusBadge status={job.status} kind="job" />}
+      </section>
 
-      <div className="wn-proposal-filter-bar">
-        {FILTERS.map((filter) => (
-          <button
-            key={filter.value || 'all'}
-            type="button"
-            className={`wn-proposal-filter-tab${status === filter.value ? ' wn-proposal-filter-tab--active' : ''}`}
-            onClick={() => {
-              setStatus(filter.value);
-              setPage(1);
-            }}
-          >
-            {filter.label}
-            <span className="wn-proposal-filter-tab__count">
-              {filter.value === ''
-                ? counts.total
-                : filter.value === 'pending'
-                  ? counts.pending
-                  : filter.value === 'accepted'
-                    ? counts.accepted
-                    : counts.rejected}
-            </span>
-          </button>
-        ))}
-      </div>
-
-      <div className="wn-dash-page__card">
+      <DashboardStudioPanel
+        title="Incoming proposals"
+        meta={totalPages > 1 ? `Page ${page} of ${totalPages}` : undefined}
+      >
         {loading ? (
-          <p>Loading proposals...</p>
+          <BlockLoader label="Loading proposals..." />
         ) : proposals.length === 0 ? (
           <EmptyState
             title="No proposals yet"
@@ -239,7 +285,7 @@ export default function JobProposals() {
           />
         ) : (
           <>
-            <div className="wn-proposal-grid">
+            <div className="wn-freelancer-projects-grid">
               {proposals.map((proposal) => {
                 const freelancer =
                   typeof proposal.freelancerId === 'object' ? proposal.freelancerId : null;
@@ -254,23 +300,29 @@ export default function JobProposals() {
                 };
 
                 return (
-                  <article key={proposal._id} className="wn-proposal-card">
-                    <div className="wn-proposal-card__header">
-                      <div className="wn-proposal-card__identity">
-                        <span className="wn-avatar wn-avatar--lg">{getInitials(freelancerName)}</span>
+                  <article key={proposal._id} className="wn-freelancer-project-card wn-glass-card">
+                    <header className="wn-freelancer-project-card__header">
+                      <div className="wn-client-proposal-card__identity" style={{ display: 'flex', gap: 12 }}>
+                        <UserAvatar
+                          firstName={freelancer?.firstName || 'F'}
+                          lastName={freelancer?.lastName || 'L'}
+                          role="freelancer"
+                          image={freelancer?.profileImage}
+                          size="lg"
+                        />
                         <div>
-                          <h3 className="wn-proposal-card__name">{freelancerName}</h3>
-                          <p className="wn-proposal-card__submitted">
+                          <h3 className="wn-freelancer-project-card__title">{freelancerName}</h3>
+                          <p className="wn-freelancer-project-card__meta">
                             Submitted {formatDateTime(proposal.createdAt)}
                           </p>
                         </div>
                       </div>
                       <StatusBadge status={proposal.status} kind="proposal" />
-                    </div>
+                    </header>
 
                     {freelancer?.skills && freelancer.skills.length > 0 && (
-                      <div className="wn-dash-skills" style={{ marginBottom: 12 }}>
-                        {freelancer.skills.slice(0, 6).map((skill) => (
+                      <div className="wn-dash-skills">
+                        {freelancer.skills.slice(0, 5).map((skill) => (
                           <span key={skill} className="wn-dash-skill">
                             {skill}
                           </span>
@@ -278,28 +330,27 @@ export default function JobProposals() {
                       </div>
                     )}
 
-                    <p className="wn-proposal-card__cover">{proposal.coverLetter}</p>
+                    <p className="wn-freelancer-project-card__hint" style={{ WebkitLineClamp: 3, display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      {proposal.coverLetter}
+                    </p>
 
-                    <div className="wn-proposal-card__stats">
-                      <div className="wn-proposal-card__stat">
-                        <span className="wn-proposal-card__stat-label">Bid price</span>
-                        <span className="wn-proposal-card__stat-value">
-                          {formatCurrency(proposal.price)}
-                        </span>
+                    <div className="wn-duo-card__stats">
+                      <div className="wn-duo-card__stat">
+                        <div>
+                          <span>Bid</span>
+                          <strong>{formatCurrency(proposal.price)}</strong>
+                        </div>
                       </div>
-                      <div className="wn-proposal-card__stat">
-                        <span className="wn-proposal-card__stat-label">Timeline</span>
-                        <span className="wn-proposal-card__stat-value">{proposal.timeline}</span>
+                      <div className="wn-duo-card__stat">
+                        <div>
+                          <span>Timeline</span>
+                          <strong>{proposal.timeline}</strong>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="wn-dash-table__actions" style={{ marginTop: 16 }}>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        to={profilePath}
-                        state={profileState}
-                      >
+                    <div className="wn-freelancer-project-card__actions">
+                      <Button size="sm" variant="outline" to={profilePath} state={profileState}>
                         View profile
                       </Button>
                       {proposal.status === 'pending' && (
@@ -322,16 +373,16 @@ export default function JobProposals() {
                         </>
                       )}
                       {(proposal.status === 'pending' || proposal.status === 'accepted') && (
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          onClick={() => openSchedule(proposal)}
-                        >
+                        <Button size="sm" variant="secondary" onClick={() => openSchedule(proposal)}>
                           Schedule interview
                         </Button>
                       )}
                       {proposal.status === 'accepted' && (
-                        <Button size="sm" variant="outline" to={`/client/workspace?jobId=${job?._id}`}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          to={`/client/workspace?jobId=${job?._id}`}
+                        >
                           Open workspace
                         </Button>
                       )}
@@ -341,11 +392,13 @@ export default function JobProposals() {
               })}
             </div>
             {totalPages > 1 && (
-              <Pagination totalPages={totalPages} currentPage={page} onPageChange={setPage} />
+              <div className="wn-freelancer-studio__pagination">
+                <Pagination totalPages={totalPages} currentPage={page} onPageChange={setPage} />
+              </div>
             )}
           </>
         )}
-      </div>
+      </DashboardStudioPanel>
 
       <ScheduleInterviewModal
         open={scheduleOpen}
@@ -367,6 +420,6 @@ export default function JobProposals() {
           onClose={() => setDepositProject(null)}
         />
       )}
-    </div>
+    </DashboardStudioShell>
   );
 }

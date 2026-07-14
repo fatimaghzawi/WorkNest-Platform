@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ExternalLink, FileText, ImagePlus, Paperclip, Trash2 } from 'lucide-react';
+import { ImagePlus, Paperclip } from 'lucide-react';
 import Button from '../../../components/common/Button';
 import Pagination from '../../../components/common/Pagination';
 import { workspaceApi } from '../../../api/workspace.api';
@@ -7,29 +7,20 @@ import type { WorkspaceAttachment } from './types';
 import { getApiErrorMessage } from '../../../utils/apiError';
 import { useToast } from '../../../hooks/useToast';
 import { useConfirm } from '../../../context/ConfirmContext';
-import { formatDateTime } from '../../../utils/format';
-import { resolveMediaUrl } from '../../../utils/mediaUrl';
+import AttachmentListItem from './AttachmentListItem';
 import '../../../css/Workspace.css';
 
 const ACCEPTED_TYPES = 'image/jpeg,image/png,image/webp,application/pdf';
 const ATTACHMENTS_PAGE_SIZE = 12;
 
-function formatFileSize(bytes: number) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-function isImageAttachment(mimeType: string) {
-  return mimeType.startsWith('image/');
-}
-
 export default function WorkspaceAttachmentsPanel({
   jobId,
   canUpload,
+  embedded = false,
 }: {
   jobId: string;
   canUpload: boolean;
+  embedded?: boolean;
 }) {
   const toast = useToast();
   const confirm = useConfirm();
@@ -113,39 +104,63 @@ export default function WorkspaceAttachmentsPanel({
     }
   };
 
-  return (
-    <div className="wn-workspace-panel">
-      <div className="wn-workspace-panel__header wn-workspace-attachments__header">
-        <span>
-          <Paperclip size={16} style={{ display: 'inline', marginRight: 6, verticalAlign: -2 }} />
-          Attachments
-        </span>
-        {canUpload && (
-          <>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept={ACCEPTED_TYPES}
-              className="wn-sr-only"
-              onChange={handleFileChange}
-            />
-            <Button
-              size="sm"
-              variant="outline"
-              leftIcon={<ImagePlus size={14} />}
-              loading={uploading}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              Upload
-            </Button>
-          </>
-        )}
-      </div>
+  const content = (
+    <>
+      {!embedded && (
+        <div className="wn-workspace-panel__header wn-workspace-attachments__header">
+          <span>
+            <Paperclip size={16} style={{ display: 'inline', marginRight: 6, verticalAlign: -2 }} />
+            Attachments
+          </span>
+          {canUpload && (
+            <>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept={ACCEPTED_TYPES}
+                className="wn-sr-only"
+                onChange={handleFileChange}
+              />
+              <Button
+                size="sm"
+                variant="outline"
+                leftIcon={<ImagePlus size={14} />}
+                loading={uploading}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Upload
+              </Button>
+            </>
+          )}
+        </div>
+      )}
 
-      <div className="wn-workspace-panel__body">
+      {embedded && canUpload && (
+        <div className="wn-workspace-attachments__header wn-workspace-attachments__header--embedded">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept={ACCEPTED_TYPES}
+            className="wn-sr-only"
+            onChange={handleFileChange}
+          />
+          <Button
+            size="sm"
+            variant="outline"
+            leftIcon={<ImagePlus size={14} />}
+            loading={uploading}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Upload project file
+          </Button>
+        </div>
+      )}
+
+      <div className={embedded ? undefined : 'wn-workspace-panel__body'}>
         {canUpload && (
           <p className="wn-workspace-attachments__hint">
-            Share screenshots, mockups, or PDFs with your client (JPEG, PNG, WebP, PDF — max 5MB).
+            Share project-wide files here (briefs, brand assets). Task deliverables live in the
+            Task deliverables tab.
           </p>
         )}
 
@@ -154,70 +169,20 @@ export default function WorkspaceAttachmentsPanel({
         ) : attachments.length === 0 ? (
           <p className="wn-workspace-team__empty">
             {canUpload
-              ? 'No attachments yet. Upload work-in-progress screenshots here.'
-              : 'No attachments shared yet.'}
+              ? 'No project files yet. Upload briefs or brand assets here.'
+              : 'No project files shared yet.'}
           </p>
         ) : (
           <>
             <ul className="wn-workspace-attachments">
-              {attachments.map((attachment) => {
-                const isImage = isImageAttachment(attachment.mimeType);
-                const mediaUrl = resolveMediaUrl(attachment.fileUrl);
-                return (
-                  <li key={attachment.id} className="wn-workspace-attachments__item">
-                    <a
-                      href={mediaUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="wn-workspace-attachments__preview"
-                      aria-label={`Open ${attachment.fileName}`}
-                    >
-                      {isImage ? (
-                        <img src={mediaUrl} alt={attachment.fileName} loading="lazy" />
-                      ) : (
-                        <span className="wn-workspace-attachments__file-icon">
-                          <FileText size={28} />
-                        </span>
-                      )}
-                    </a>
-
-                    <div className="wn-workspace-attachments__meta">
-                      <a
-                        href={mediaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="wn-workspace-attachments__name"
-                      >
-                        {attachment.caption || attachment.fileName}
-                        <ExternalLink size={12} />
-                      </a>
-                      <span className="wn-workspace-attachments__details">
-                        {attachment.uploaderName}
-                        <span className="wn-dash-card-divider">•</span>
-                        {formatFileSize(attachment.fileSize)}
-                        {attachment.createdAt && (
-                          <>
-                            <span className="wn-dash-card-divider">•</span>
-                            {formatDateTime(attachment.createdAt)}
-                          </>
-                        )}
-                      </span>
-                    </div>
-
-                    {canUpload && (
-                      <button
-                        type="button"
-                        className="wn-workspace-attachments__delete"
-                        aria-label={`Delete ${attachment.fileName}`}
-                        disabled={deletingId === attachment.id}
-                        onClick={() => handleDelete(attachment)}
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    )}
-                  </li>
-                );
-              })}
+              {attachments.map((attachment) => (
+                <AttachmentListItem
+                  key={attachment.id}
+                  attachment={attachment}
+                  onDelete={canUpload ? handleDelete : undefined}
+                  deleting={deletingId === attachment.id}
+                />
+              ))}
             </ul>
             {totalPages > 1 && (
               <div className="wn-workspace-attachments__pagination">
@@ -227,6 +192,12 @@ export default function WorkspaceAttachmentsPanel({
           </>
         )}
       </div>
-    </div>
+    </>
   );
+
+  if (embedded) {
+    return content;
+  }
+
+  return <div className="wn-workspace-panel">{content}</div>;
 }

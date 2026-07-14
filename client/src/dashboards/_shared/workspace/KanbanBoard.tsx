@@ -1,7 +1,8 @@
 import { useState, type DragEvent } from 'react';
 import TaskCard from './TaskCard';
-import type { TaskStatus, WorkspaceTask } from './types';
+import type { TaskStatus, WorkspacePermissions, WorkspaceTask } from './types';
 import { KANBAN_COLUMNS } from './types';
+import { canTransitionTask } from './taskWorkflow';
 import '../../../css/Workspace.css';
 
 const dotClass: Record<TaskStatus, string> = {
@@ -13,25 +14,40 @@ const dotClass: Record<TaskStatus, string> = {
 
 export default function KanbanBoard({
   tasks,
+  role,
+  permissions,
   readOnly = false,
   onMoveTask,
   onTaskClick,
   onAddTask,
+  onTaskAction,
+  onSubmitForReview,
 }: {
   tasks: WorkspaceTask[];
+  role: 'client' | 'freelancer' | 'admin';
+  permissions: WorkspacePermissions;
   readOnly?: boolean;
   onMoveTask: (taskId: string, status: TaskStatus) => void;
   onTaskClick: (task: WorkspaceTask) => void;
   onAddTask: (status: TaskStatus) => void;
+  onTaskAction?: (taskId: string, status: TaskStatus) => void;
+  onSubmitForReview?: (task: WorkspaceTask) => void;
 }) {
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<TaskStatus | null>(null);
 
-  const handleDragStart = (event: DragEvent, taskId: string) => {
-    if (readOnly) return;
-    event.dataTransfer.setData('text/plain', taskId);
+  const canDragTask = (task: WorkspaceTask) => {
+    if (readOnly) return false;
+    if (permissions.canManageTasks) return task.status !== 'done';
+    if (permissions.canReviewTasks) return task.status === 'review';
+    return false;
+  };
+
+  const handleDragStart = (event: DragEvent, task: WorkspaceTask) => {
+    if (!canDragTask(task)) return;
+    event.dataTransfer.setData('text/plain', task.id);
     event.dataTransfer.effectAllowed = 'move';
-    setDraggingId(taskId);
+    setDraggingId(task.id);
   };
 
   const handleDragEnd = () => {
@@ -41,9 +57,11 @@ export default function KanbanBoard({
 
   const handleDrop = (event: DragEvent, status: TaskStatus) => {
     event.preventDefault();
-    if (readOnly) return;
     const taskId = event.dataTransfer.getData('text/plain');
-    if (taskId) onMoveTask(taskId, status);
+    const task = tasks.find((item) => item.id === taskId);
+    if (!task || !canDragTask(task)) return;
+    if (!canTransitionTask(role, task.status, status)) return;
+    onMoveTask(taskId, status);
     setDraggingId(null);
     setDragOverColumn(null);
   };
@@ -67,8 +85,10 @@ export default function KanbanBoard({
                 dragOverColumn === column.id ? 'wn-kanban__column-body--drag-over' : ''
               }`.trim()}
               onDragOver={(event) => {
-                if (readOnly) return;
                 event.preventDefault();
+                if (readOnly || !draggingId) return;
+                const task = tasks.find((item) => item.id === draggingId);
+                if (!task || !canTransitionTask(role, task.status, column.id)) return;
                 setDragOverColumn(column.id);
               }}
               onDragLeave={() => setDragOverColumn(null)}
@@ -77,20 +97,25 @@ export default function KanbanBoard({
               {columnTasks.map((task) => (
                 <div
                   key={task.id}
-                  draggable={!readOnly}
-                  onDragStart={(event) => handleDragStart(event, task.id)}
+                  draggable={canDragTask(task)}
+                  onDragStart={(event) => handleDragStart(event, task)}
                   onDragEnd={handleDragEnd}
                 >
                   <TaskCard
                     task={task}
                     dragging={draggingId === task.id}
+                    role={role}
+                    canManageTasks={permissions.canManageTasks}
+                    canReviewTasks={permissions.canReviewTasks}
                     onClick={() => onTaskClick(task)}
+                    onTaskAction={onTaskAction}
+                    onSubmitForReview={onSubmitForReview}
                   />
                 </div>
               ))}
             </div>
 
-            {!readOnly && (
+            {permissions.canCreate && column.id === 'todo' && !readOnly && (
               <button
                 type="button"
                 className="wn-workspace__add-task"

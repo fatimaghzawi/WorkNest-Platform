@@ -1,14 +1,27 @@
 ﻿import api from './axios';
 import type { ApiMessageResponse, ApiSuccessResponse, PaginationMeta } from '../types/api';
-import type { WorkspaceTask, WorkspaceTeam, WorkspaceAttachment } from '../dashboards/_shared/workspace/types';
+import type { WorkspaceTask, WorkspaceTeam, WorkspacePermissions, WorkspaceAttachment, TaskDeliverableGroup } from '../dashboards/_shared/workspace/types';
 
 export type WorkspaceTasksMeta = PaginationMeta & {
   readOnly?: boolean;
+  permissions?: WorkspacePermissions;
+  progress?: number;
 };
 
 export type ListWorkspaceParams = {
   page?: number;
   limit?: number;
+  taskId?: string;
+  previewLimit?: number;
+  origin?: 'client' | 'freelancer';
+  priority?: 'low' | 'medium' | 'high';
+  sortBy?: 'createdAt' | 'dueDate' | 'priority' | 'title';
+  sortOrder?: 'asc' | 'desc';
+};
+
+export type TaskDeliverablesMeta = PaginationMeta & {
+  totalAttachments?: number;
+  previewLimit?: number;
 };
 
 export type CreateTaskPayload = {
@@ -19,7 +32,9 @@ export type CreateTaskPayload = {
   dueDate?: string | null;
 };
 
-export type UpdateTaskPayload = Partial<CreateTaskPayload>;
+export type UpdateTaskPayload = Partial<CreateTaskPayload> & {
+  submissionNotes?: string;
+};
 
 export const workspaceApi = {
   getTeam: (jobId: string) =>
@@ -48,10 +63,17 @@ export const workspaceApi = {
       params,
     }),
 
-  uploadAttachment: (jobId: string, file: File, caption?: string) => {
+  listTaskDeliverables: (jobId: string, params?: ListWorkspaceParams) =>
+    api.get<ApiSuccessResponse<TaskDeliverableGroup[]> & { meta?: TaskDeliverablesMeta }>(
+      `/api/v1/workspaces/${jobId}/deliverables`,
+      { params }
+    ),
+
+  uploadAttachment: (jobId: string, file: File, options?: { caption?: string; taskId?: string }) => {
     const formData = new FormData();
     formData.append('file', file);
-    if (caption?.trim()) formData.append('caption', caption.trim());
+    if (options?.caption?.trim()) formData.append('caption', options.caption.trim());
+    if (options?.taskId) formData.append('taskId', options.taskId);
     return api.post<ApiSuccessResponse<WorkspaceAttachment>>(
       `/api/v1/workspaces/${jobId}/attachments`,
       formData,

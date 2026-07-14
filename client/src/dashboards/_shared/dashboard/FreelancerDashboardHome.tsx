@@ -31,9 +31,11 @@ import { formatCurrency } from '../../../utils/format';
 import { useToast } from '../../../hooks/useToast';
 import { getApiErrorMessage } from '../../../utils/apiError';
 import DashboardInterviewMiniCalendar from './DashboardInterviewMiniCalendar';
+import FreelancerStudioShell from '../../freelancer/components/FreelancerStudioShell';
 import '../../../css/DesignSystem.css';
 import '../../../css/AdminAnalytics.css';
 import '../../../css/Interviews.css';
+import '../../../css/FreelancerStudio.css';
 
 const PURPLE = '#49225B';
 const ORANGE = '#F97316';
@@ -150,7 +152,7 @@ export default function FreelancerDashboardHome() {
 
   if (loading) {
     return (
-      <div>
+      <FreelancerStudioShell>
         <DashboardPageHeader
           hero
           eyebrow="Freelancer workspace"
@@ -163,12 +165,12 @@ export default function FreelancerDashboardHome() {
           }
         />
         <StatGridSkeleton count={4} />
-      </div>
+      </FreelancerStudioShell>
     );
   }
 
   return (
-    <div className="wn-analytics">
+    <FreelancerStudioShell>
       <DashboardPageHeader
         hero
         eyebrow="Freelancer workspace"
@@ -469,6 +471,6 @@ export default function FreelancerDashboardHome() {
           </section>
         </aside>
       </div>
-    </div>
+    </FreelancerStudioShell>
   );
 }

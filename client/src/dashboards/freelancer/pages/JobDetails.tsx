@@ -3,14 +3,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/common/Button';
 import { BlockLoader } from '../../../components/common/Loader';
 import JobDetailsView from '../../../components/jobs/JobDetailsView';
+import SubmitProposalModal from '../components/proposals/SubmitProposalModal';
 import { jobsApi } from '../../../api/jobs.api';
+import { proposalsApi } from '../../../api/proposals.api';
 import DashboardPageHeader from '../../_shared/DashboardPageHeader';
 import EmptyState from '../../_shared/EmptyState';
 import Card, { CardBody } from '../../../components/common/Card';
 import { useToast } from '../../../hooks/useToast';
 import type { Job } from '../../../types/job';
+import type { Proposal } from '../../../types/proposal';
 import { getApiErrorMessage } from '../../../utils/apiError';
-import { Briefcase } from 'lucide-react';
+import { Briefcase, Send } from 'lucide-react';
 import '../../../css/DashboardFeatures.css';
 
 export default function JobDetails() {
@@ -19,14 +22,43 @@ export default function JobDetails() {
   const toast = useToast();
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
+  const [proposalOpen, setProposalOpen] = useState(false);
+  const [hasSubmittedProposal, setHasSubmittedProposal] = useState(false);
 
   useEffect(() => {
     if (!jobId) return;
-    jobsApi
-      .getById(jobId)
-      .then((res) => setJob(res.data.data))
-      .catch((err) => toast.error(getApiErrorMessage(err, 'Failed to load job.')))
-      .finally(() => setLoading(false));
+
+    let cancelled = false;
+
+    const load = async () => {
+      setLoading(true);
+      try {
+        const [jobResponse, proposalsResponse] = await Promise.all([
+          jobsApi.getById(jobId),
+          proposalsApi.getMy({ page: 1, limit: 100 }),
+        ]);
+
+        if (cancelled) return;
+
+        setJob(jobResponse.data.data);
+
+        const submitted = proposalsResponse.data.data.some((proposal: Proposal) => {
+          const id = typeof proposal.jobId === 'string' ? proposal.jobId : proposal.jobId._id;
+          return id === jobId;
+        });
+        setHasSubmittedProposal(submitted);
+      } catch (err) {
+        if (!cancelled) toast.error(getApiErrorMessage(err, 'Failed to load job.'));
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
   }, [jobId, toast]);
 
   if (loading) return <BlockLoader label="Loading job..." />;
@@ -43,6 +75,8 @@ export default function JobDetails() {
     );
   }
 
+  const canSubmitProposal = job.status === 'open' && !hasSubmittedProposal;
+
   return (
     <div>
       <DashboardPageHeader
@@ -51,9 +85,21 @@ export default function JobDetails() {
         title={job.title}
         subtitle="Review the full project description before sending your proposal."
         actions={
-          <Button variant="outline" onClick={() => navigate('/freelancer/jobs')}>
-            Back to browse jobs
-          </Button>
+          <>
+            {canSubmitProposal && (
+              <Button leftIcon={<Send size={16} />} onClick={() => setProposalOpen(true)}>
+                Submit proposal
+              </Button>
+            )}
+            {hasSubmittedProposal && (
+              <Button variant="outline" disabled>
+                Proposal submitted
+              </Button>
+            )}
+            <Button variant="outline" onClick={() => navigate('/freelancer/jobs')}>
+              Back to browse jobs
+            </Button>
+          </>
         }
       />
 
@@ -62,6 +108,16 @@ export default function JobDetails() {
           <JobDetailsView job={job} />
         </CardBody>
       </Card>
+
+      <SubmitProposalModal
+        job={job}
+        open={proposalOpen}
+        onClose={() => setProposalOpen(false)}
+        onSubmitted={() => {
+          setHasSubmittedProposal(true);
+          setProposalOpen(false);
+        }}
+      />
     </div>
   );
 }

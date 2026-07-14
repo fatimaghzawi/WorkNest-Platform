@@ -23,6 +23,7 @@ export interface ProposalJob {
     firstName: string;
     lastName: string;
     email?: string;
+    profileImage?: string;
   };
 }
 

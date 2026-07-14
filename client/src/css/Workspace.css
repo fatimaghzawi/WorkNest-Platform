@@ -14,6 +14,26 @@
   gap: var(--space-2);
 }
 
+.wn-workspace-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--color-brand-surface);
+  border: 1px solid var(--color-border-light);
+}
+
+.wn-workspace-actions--status-only {
+  justify-content: flex-start;
+}
+
+.wn-workspace-actions__hint {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
 .wn-workspace__project-select {
   min-width: min(100%, 320px);
   min-height: 44px;
@@ -67,9 +87,87 @@
 }
 
 .wn-workspace__board-wrap {
-  display: grid;
-  gap: var(--space-2);
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-x: auto;
+}
+
+.wn-task-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(73, 34, 91, 0.1);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+}
+
+.wn-task-filters__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 132px;
+  flex: 1;
+}
+
+.wn-task-filters__field span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.wn-task-filters__field select {
+  appearance: none;
+  width: 100%;
+  min-height: 36px;
+  padding: 0 28px 0 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(73, 34, 91, 0.14);
+  background:
+    linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%) calc(100% - 14px) / 5px 5px no-repeat,
+    linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%) calc(100% - 9px) / 5px 5px no-repeat,
+    rgba(255, 255, 255, 0.85);
+  color: var(--color-text-main);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.wn-task-filters__field select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.wn-task-card__origin {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.wn-task-card__origin--client {
+  background: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8;
+}
+
+.wn-task-card__origin--freelancer {
+  background: rgba(124, 58, 237, 0.12);
+  color: #6d28d9;
+}
+
+.wn-task-card__creator {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
 }
 
 .wn-workspace__tasks-pagination {
@@ -219,6 +317,61 @@
 .wn-task-card__due {
   font-size: 11px;
   color: var(--color-text-muted);
+}
+
+.wn-task-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.wn-workspace-task-hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.wn-task-card__files {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.wn-task-deliverables {
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  background: var(--color-brand-dashboard-background);
+}
+
+.wn-task-deliverables__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary-main);
+}
+
+.wn-task-deliverables__list {
+  margin-top: 8px;
+}
+
+.wn-task-submission-notes {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(165, 106, 189, 0.08);
+  border: 1px solid rgba(165, 106, 189, 0.18);
+}
+
+.wn-task-submission-notes p {
+  margin: 6px 0 0;
+  color: var(--color-text-main);
+  line-height: 1.55;
+  white-space: pre-wrap;
 }
 
 .wn-workspace__sidebar {
@@ -430,6 +583,137 @@
 .wn-workspace-attachments__delete:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.wn-workspace-files__tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 8px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.wn-workspace-files__tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.wn-workspace-files__tab:hover {
+  color: var(--color-primary-main);
+  background: rgba(165, 106, 189, 0.06);
+}
+
+.wn-workspace-files__tab--active {
+  color: var(--color-primary-main);
+  background: var(--color-brand-dashboard-background);
+  box-shadow: inset 0 -2px 0 var(--color-accent-main);
+}
+
+.wn-workspace-files__body {
+  padding-top: 12px;
+}
+
+.wn-workspace-attachments__header--embedded {
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.wn-deliverables-library__groups {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wn-deliverables-library__group {
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-brand-dashboard-background);
+}
+
+.wn-deliverables-library__group-toggle {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.wn-deliverables-library__group-toggle:hover {
+  background: rgba(165, 106, 189, 0.06);
+}
+
+.wn-deliverables-library__group-icon {
+  color: var(--color-text-muted);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.wn-deliverables-library__group-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wn-deliverables-library__group-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-main);
+  line-height: 1.35;
+}
+
+.wn-deliverables-library__group-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.wn-deliverables-library__group-body {
+  padding: 0 14px 14px 38px;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.wn-deliverables-library__notes {
+  margin: 12px 0;
+}
+
+.wn-deliverables-library__files {
+  margin-top: 8px;
+}
+
+.wn-deliverables-library__actions {
+  margin-top: 12px;
+}
+
+.wn-deliverables-library__pagination {
+  margin-top: 12px;
+}
+
+.wn-workspace-attachments__item--compact .wn-workspace-attachments__preview {
+  width: 48px;
+  height: 48px;
 }
 
 .wn-workspace__add-task {
