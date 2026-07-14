@@ -1,7 +1,9 @@
 import Badge from '../../../components/common/Badge';
 import Button from '../../../components/common/Button';
+import UserAvatar from '../../../components/users/UserAvatar';
 import { formatDate } from '../../../utils/format';
 import type { TaskStatus, WorkspaceTask } from './types';
+import { getTaskOrigin, isOwnTask } from './taskWorkflow';
 import '../../../css/Workspace.css';
 
 export default function TaskCard({
@@ -23,9 +25,29 @@ export default function TaskCard({
   onTaskAction?: (taskId: string, status: TaskStatus) => void;
   onSubmitForReview?: (task: WorkspaceTask) => void;
 }) {
+  const origin = getTaskOrigin(task);
+  const ownTask = role ? isOwnTask(role, task) : false;
+  const avatarRole = (task.createdByRole || origin || 'freelancer') as
+    | 'client'
+    | 'freelancer'
+    | 'admin';
+  const firstName = task.createdByFirstName || task.createdByName?.split(' ')[0] || 'User';
+  const lastName =
+    task.createdByLastName ||
+    task.createdByName?.split(' ').slice(1).join(' ') ||
+    '';
+
   const showSubmit =
-    canManageTasks && role === 'freelancer' && task.status === 'in_progress';
-  const showReviewActions = canReviewTasks && role === 'client' && task.status === 'review';
+    canManageTasks &&
+    role === 'freelancer' &&
+    ownTask &&
+    task.status === 'in_progress';
+
+  const showReviewActions =
+    canReviewTasks &&
+    role === 'client' &&
+    origin === 'freelancer' &&
+    task.status === 'review';
 
   return (
     <article
@@ -40,15 +62,23 @@ export default function TaskCard({
         }
       }}
     >
-      <h4 className="wn-task-card__title">{task.title}</h4>
+      <div className="wn-task-card__header">
+        <h4 className="wn-task-card__title">{task.title}</h4>
+        <span
+          className="wn-task-card__owner"
+          title={task.createdByName || (origin === 'client' ? 'Client task' : 'Freelancer task')}
+        >
+          <UserAvatar
+            firstName={firstName}
+            lastName={lastName}
+            role={avatarRole}
+            image={task.createdByProfileImage}
+            size="sm"
+          />
+        </span>
+      </div>
+
       <div className="wn-task-card__meta">
-        {(task.origin || task.createdByRole) && (
-          <span
-            className={`wn-task-card__origin wn-task-card__origin--${task.origin || task.createdByRole}`}
-          >
-            {(task.origin || task.createdByRole) === 'client' ? 'Client' : 'Freelancer'}
-          </span>
-        )}
         <span className={`wn-task-card__priority wn-task-card__priority--${task.priority}`}>
           {task.priority}
         </span>
@@ -56,14 +86,13 @@ export default function TaskCard({
           <span className="wn-task-card__due">Due {formatDate(task.dueDate)}</span>
         )}
         {task.status === 'done' && <Badge variant="success">Complete</Badge>}
-        {task.status === 'review' && <Badge variant="warning">Awaiting review</Badge>}
+        {task.status === 'review' && origin === 'freelancer' && (
+          <Badge variant="warning">Awaiting review</Badge>
+        )}
         {(task.attachmentCount ?? 0) > 0 && (
           <span className="wn-task-card__files">{task.attachmentCount} file(s)</span>
         )}
       </div>
-      {task.createdByName && (
-        <p className="wn-task-card__creator">Added by {task.createdByName}</p>
-      )}
 
       {(showSubmit || showReviewActions) && (
         <div

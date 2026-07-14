@@ -144,9 +144,17 @@ export default function TaskModal({
 
 
 
-  const showDeliverables = Boolean(task && jobId && (task.status === 'in_progress' || task.status === 'review' || task.status === 'done'));
-
-  const showSubmissionNotes = Boolean(task?.submissionNotes && (task.status === 'review' || task.status === 'done'));
+  const showDeliverables = Boolean(
+    task &&
+      jobId &&
+      (task.status === 'todo' ||
+        task.status === 'in_progress' ||
+        task.status === 'review' ||
+        task.status === 'done')
+  );
+  const showSubmissionNotes = Boolean(
+    task?.submissionNotes && (task.status === 'review' || task.status === 'done')
+  );
 
 
 
@@ -365,15 +373,10 @@ export default function TaskModal({
         {showDeliverables && jobId && task && (
 
           <TaskDeliverablesPanel
-
             jobId={jobId}
-
             taskId={task.id}
-
-            canUpload={canUploadDeliverables && task.status === 'in_progress'}
-
-            onChange={() => onDeliverablesChange?.()}
-
+            canUpload={Boolean(canUploadDeliverables)}
+            onMutated={onDeliverablesChange}
           />
 
         )}

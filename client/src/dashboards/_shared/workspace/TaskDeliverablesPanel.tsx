@@ -19,16 +19,22 @@ export default function TaskDeliverablesPanel({
   canUpload,
   compact = false,
   onChange,
+  onMutated,
 }: {
   jobId: string;
   taskId: string;
   canUpload: boolean;
   compact?: boolean;
   onChange?: (count: number) => void;
+  onMutated?: () => void;
 }) {
   const toast = useToast();
   const confirm = useConfirm();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const toastRef = useRef(toast);
+  const onChangeRef = useRef(onChange);
+  const onMutatedRef = useRef(onMutated);
+  const lastReportedCount = useRef<number | null>(null);
   const [attachments, setAttachments] = useState<WorkspaceAttachment[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -36,6 +42,16 @@ export default function TaskDeliverablesPanel({
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  toastRef.current = toast;
+  onChangeRef.current = onChange;
+  onMutatedRef.current = onMutated;
+
+  const reportCount = (total: number) => {
+    if (lastReportedCount.current === total) return;
+    lastReportedCount.current = total;
+    onChangeRef.current?.(total);
+  };
 
   const loadAttachments = useCallback(async () => {
     if (!jobId || !taskId) return;
@@ -51,24 +67,26 @@ export default function TaskDeliverablesPanel({
       setAttachments(items);
       setTotalPages(response.data.meta?.totalPages || 1);
       setTotalCount(total);
-      onChange?.(total);
+      reportCount(total);
     } catch (error) {
-      toast.error(getApiErrorMessage(error, 'Failed to load deliverables.'));
+      toastRef.current.error(getApiErrorMessage(error, 'Failed to load deliverables.'));
       setAttachments([]);
       setTotalCount(0);
-      onChange?.(0);
+      reportCount(0);
     } finally {
       setLoading(false);
     }
-  }, [jobId, taskId, page, toast, onChange]);
+  }, [jobId, taskId, page]);
 
   useEffect(() => {
     setPage(1);
+    lastReportedCount.current = null;
   }, [jobId, taskId]);
 
   useEffect(() => {
     void loadAttachments();
   }, [loadAttachments]);
+
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = '';
@@ -79,6 +97,7 @@ export default function TaskDeliverablesPanel({
       await workspaceApi.uploadAttachment(jobId, file, { taskId });
       toast.success('Deliverable uploaded.');
       await loadAttachments();
+      onMutatedRef.current?.();
     } catch (error) {
       toast.error(getApiErrorMessage(error, 'Failed to upload deliverable.'));
     } finally {
@@ -100,6 +119,7 @@ export default function TaskDeliverablesPanel({
       await workspaceApi.deleteAttachment(jobId, attachment.id);
       toast.success('Deliverable removed.');
       await loadAttachments();
+      onMutatedRef.current?.();
     } catch (error) {
       toast.error(getApiErrorMessage(error, 'Failed to delete deliverable.'));
     } finally {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronDown, ChevronRight, FolderOpen, MessageSquareText } from 'lucide-react';
 import Badge from '../../../components/common/Badge';
 import Button from '../../../components/common/Button';
@@ -41,6 +41,8 @@ export default function WorkspaceTaskDeliverablesLibrary({
   onOpenTask?: (task: TaskDeliverableGroup['task']) => void;
 }) {
   const toast = useToast();
+  const toastRef = useRef(toast);
+  toastRef.current = toast;
   const [groups, setGroups] = useState<TaskDeliverableGroup[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -58,17 +60,17 @@ export default function WorkspaceTaskDeliverablesLibrary({
         limit: GROUPS_PAGE_SIZE,
         previewLimit: 6,
       });
-      setGroups(response.data.data);
+      setGroups(response.data.data ?? []);
       setTotalPages(response.data.meta?.totalPages || 1);
       setTotalAttachments(response.data.meta?.totalAttachments ?? 0);
     } catch (error) {
-      toast.error(getApiErrorMessage(error, 'Failed to load task deliverables.'));
+      toastRef.current.error(getApiErrorMessage(error, 'Failed to load task deliverables.'));
       setGroups([]);
       setTotalAttachments(0);
     } finally {
       setLoading(false);
     }
-  }, [jobId, page, toast]);
+  }, [jobId, page]);
 
   useEffect(() => {
     setPage(1);
@@ -80,46 +82,43 @@ export default function WorkspaceTaskDeliverablesLibrary({
     void loadGroups();
   }, [loadGroups, refreshKey]);
 
-  const loadExpandedFiles = useCallback(
-    async (taskId: string, nextPage = 1) => {
+  const loadExpandedFiles = useCallback(async (taskId: string, nextPage = 1) => {
+    setExpanded((current) => ({
+      ...current,
+      [taskId]: {
+        attachments: current[taskId]?.attachments ?? [],
+        page: nextPage,
+        totalPages: current[taskId]?.totalPages ?? 1,
+        loading: true,
+      },
+    }));
+
+    try {
+      const response = await workspaceApi.listAttachments(jobId, {
+        taskId,
+        page: nextPage,
+        limit: EXPANDED_FILES_PAGE_SIZE,
+      });
       setExpanded((current) => ({
         ...current,
         [taskId]: {
-          attachments: current[taskId]?.attachments ?? [],
+          attachments: response.data.data,
           page: nextPage,
-          totalPages: current[taskId]?.totalPages ?? 1,
-          loading: true,
+          totalPages: response.data.meta?.totalPages || 1,
+          loading: false,
         },
       }));
-
-      try {
-        const response = await workspaceApi.listAttachments(jobId, {
-          taskId,
-          page: nextPage,
-          limit: EXPANDED_FILES_PAGE_SIZE,
-        });
-        setExpanded((current) => ({
-          ...current,
-          [taskId]: {
-            attachments: response.data.data,
-            page: nextPage,
-            totalPages: response.data.meta?.totalPages || 1,
-            loading: false,
-          },
-        }));
-      } catch (error) {
-        toast.error(getApiErrorMessage(error, 'Failed to load task files.'));
-        setExpanded((current) => ({
-          ...current,
-          [taskId]: {
-            ...(current[taskId] ?? { attachments: [], page: 1, totalPages: 1 }),
-            loading: false,
-          },
-        }));
-      }
-    },
-    [jobId, toast]
-  );
+    } catch (error) {
+      toastRef.current.error(getApiErrorMessage(error, 'Failed to load task files.'));
+      setExpanded((current) => ({
+        ...current,
+        [taskId]: {
+          ...(current[taskId] ?? { attachments: [], page: 1, totalPages: 1 }),
+          loading: false,
+        },
+      }));
+    }
+  }, [jobId]);
 
   const toggleGroup = (group: TaskDeliverableGroup) => {
     const taskId = group.task.id;

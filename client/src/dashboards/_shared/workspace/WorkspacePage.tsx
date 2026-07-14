@@ -19,6 +19,7 @@ import WorkspaceProjectActions from './WorkspaceProjectActions';
 import WorkspaceTeamPanel from './WorkspaceTeamPanel';
 import WorkspaceFilesPanel from './WorkspaceFilesPanel';
 import type { TaskStatus, WorkspaceTask, WorkspaceTeam, WorkspacePermissions } from './types';
+import { canDeleteTask, canEditTaskContent, isOwnTask } from './taskWorkflow';
 import { formatCurrency, formatDate } from '../../../utils/format';
 import { getApiErrorMessage } from '../../../utils/apiError';
 import { useToast } from '../../../hooks/useToast';
@@ -86,7 +87,10 @@ export default function WorkspacePage({
   );
 
   const isFullyReadOnly = readOnly;
-  const canUploadAttachments = permissions.canManageTasks && !isFullyReadOnly;
+  const canUploadAttachments =
+    (role === 'freelancer' || role === 'admin') &&
+    permissions.canManageTasks &&
+    !isFullyReadOnly;
 
   const applyProjectPatch = useCallback((jobId: string, patch: Partial<WorkspaceProject>) => {
     setProjects((current) => {
@@ -309,15 +313,37 @@ export default function WorkspacePage({
 
   const handleMoveTask = async (taskId: string, status: TaskStatus) => {
     if (!selectedProject || isFullyReadOnly) return;
+
+    const task = tasks.find((item) => item.id === taskId);
+    if (!task) return;
+
+    if (role === 'freelancer' && status === 'review') {
+      if (!isOwnTask(role, task)) {
+        toast.error('You can only submit your own tasks for review. Client tasks stay on the client side.');
+        return;
+      }
+      if (task.status !== 'in_progress') {
+        toast.error('Move the task to In progress first, then submit it for review.');
+        return;
+      }
+      setSubmitTaskTarget(task);
+      return;
+    }
+
+    if (role === 'freelancer' && !isOwnTask(role, task)) {
+      toast.error('You can only update your own tasks.');
+      return;
+    }
+
     const previous = tasks;
     setTasks((current) =>
-      current.map((task) => (task.id === taskId ? { ...task, status } : task))
+      current.map((item) => (item.id === taskId ? { ...item, status } : item))
     );
 
     try {
       const response = await workspaceApi.updateTask(selectedProject._id, taskId, { status });
       setTasks((current) =>
-        current.map((task) => (task.id === taskId ? response.data.data : task))
+        current.map((item) => (item.id === taskId ? response.data.data : item))
       );
       await syncProgress(selectedProject._id);
     } catch (error) {
@@ -415,7 +441,10 @@ export default function WorkspacePage({
     if (!selectedProject) return;
     const isCreate = !payload.id;
     if (isCreate && !permissions.canCreate) return;
-    if (!isCreate && !permissions.canManageTasks) return;
+    if (!isCreate) {
+      const existing = tasks.find((task) => task.id === payload.id);
+      if (!existing || !canEditTaskContent(role, existing, isFullyReadOnly)) return;
+    }
 
     try {
       if (payload.id) {
@@ -453,7 +482,9 @@ export default function WorkspacePage({
   };
 
   const handleDeleteTask = async (id: string) => {
-    if (!selectedProject || !permissions.canManageTasks) return;
+    if (!selectedProject) return;
+    const existing = tasks.find((task) => task.id === id);
+    if (!existing || !canDeleteTask(role, existing, isFullyReadOnly)) return;
 
     const confirmed = await confirm({
       title: 'Delete task',
@@ -487,7 +518,7 @@ export default function WorkspacePage({
         : isFullyReadOnly
           ? 'This workspace is read-only.'
           : role === 'client'
-            ? 'Add tasks in To do, then approve work in the In review column.'
+            ? 'Add and manage your own tasks. Approve or request changes on freelancer work in review.'
             : null;
 
   if (loading) {
@@ -713,21 +744,31 @@ export default function WorkspacePage({
         jobId={selectedProject?._id}
         readOnly={
           isFullyReadOnly ||
+          Boolean(editingTask && !canEditTaskContent(role, editingTask, isFullyReadOnly))
+        }
+        canUploadDeliverables={
+          permissions.canManageTasks &&
+          role === 'freelancer' &&
           Boolean(
             editingTask &&
-              ((role === 'client' && editingTask.status !== 'review') ||
-                (role === 'freelancer' && editingTask.status === 'done'))
+              isOwnTask(role, editingTask) &&
+              (editingTask.status === 'todo' || editingTask.status === 'in_progress')
           )
         }
-        canUploadDeliverables={permissions.canManageTasks && editingTask?.status === 'in_progress'}
-        canDelete={permissions.canManageTasks && editingTask?.status !== 'done'}
+        canDelete={Boolean(
+          editingTask && canDeleteTask(role, editingTask, isFullyReadOnly)
+        )}
         defaultStatus={defaultStatus}
         onClose={() => {
           setModalOpen(false);
           setEditingTask(null);
         }}
         onSave={handleSaveTask}
-        onDelete={editingTask && permissions.canManageTasks ? handleDeleteTask : undefined}
+        onDelete={
+          editingTask && canDeleteTask(role, editingTask, isFullyReadOnly)
+            ? handleDeleteTask
+            : undefined
+        }
         onDeliverablesChange={bumpDeliverables}
       />
 

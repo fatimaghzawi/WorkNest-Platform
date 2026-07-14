@@ -2,7 +2,7 @@ import { useState, type DragEvent } from 'react';
 import TaskCard from './TaskCard';
 import type { TaskStatus, WorkspacePermissions, WorkspaceTask } from './types';
 import { KANBAN_COLUMNS } from './types';
-import { canTransitionTask } from './taskWorkflow';
+import { canDragTask, canTransitionTask } from './taskWorkflow';
 import '../../../css/Workspace.css';
 
 const dotClass: Record<TaskStatus, string> = {
@@ -36,15 +36,8 @@ export default function KanbanBoard({
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<TaskStatus | null>(null);
 
-  const canDragTask = (task: WorkspaceTask) => {
-    if (readOnly) return false;
-    if (permissions.canManageTasks) return task.status !== 'done';
-    if (permissions.canReviewTasks) return task.status === 'review';
-    return false;
-  };
-
   const handleDragStart = (event: DragEvent, task: WorkspaceTask) => {
-    if (!canDragTask(task)) return;
+    if (!canDragTask(role, task, readOnly)) return;
     event.dataTransfer.setData('text/plain', task.id);
     event.dataTransfer.effectAllowed = 'move';
     setDraggingId(task.id);
@@ -59,8 +52,8 @@ export default function KanbanBoard({
     event.preventDefault();
     const taskId = event.dataTransfer.getData('text/plain');
     const task = tasks.find((item) => item.id === taskId);
-    if (!task || !canDragTask(task)) return;
-    if (!canTransitionTask(role, task.status, status)) return;
+    if (!task || !canDragTask(role, task, readOnly)) return;
+    if (!canTransitionTask(role, task.status, status, task)) return;
     onMoveTask(taskId, status);
     setDraggingId(null);
     setDragOverColumn(null);
@@ -88,7 +81,7 @@ export default function KanbanBoard({
                 event.preventDefault();
                 if (readOnly || !draggingId) return;
                 const task = tasks.find((item) => item.id === draggingId);
-                if (!task || !canTransitionTask(role, task.status, column.id)) return;
+                if (!task || !canTransitionTask(role, task.status, column.id, task)) return;
                 setDragOverColumn(column.id);
               }}
               onDragLeave={() => setDragOverColumn(null)}
@@ -97,7 +90,7 @@ export default function KanbanBoard({
               {columnTasks.map((task) => (
                 <div
                   key={task.id}
-                  draggable={canDragTask(task)}
+                  draggable={canDragTask(role, task, readOnly)}
                   onDragStart={(event) => handleDragStart(event, task)}
                   onDragEnd={handleDragEnd}
                 >

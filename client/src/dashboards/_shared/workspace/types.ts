@@ -17,6 +17,9 @@ export interface WorkspaceTask {
   attachmentCount?: number;
   createdBy?: string;
   createdByName?: string;
+  createdByFirstName?: string;
+  createdByLastName?: string;
+  createdByProfileImage?: string;
   createdByRole?: TaskOrigin;
   createdAt?: string;
   updatedAt?: string;
