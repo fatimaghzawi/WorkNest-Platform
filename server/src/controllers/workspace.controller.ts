@@ -3,7 +3,7 @@ const { sendSuccess } = require('../utils/response');
 const AppError = require('../utils/AppError');
 
 const listTasks = async (req, res) => {
-  const { tasks, readOnly, meta } = await workspaceService.listTasks(
+  const { tasks, readOnly, permissions, progress, meta } = await workspaceService.listTasks(
     req.params.jobId,
     req.user.id,
     req.user.role,
@@ -12,7 +12,7 @@ const listTasks = async (req, res) => {
   return sendSuccess(res, {
     message: 'Workspace tasks retrieved successfully',
     data: tasks,
-    meta: { readOnly, ...meta },
+    meta: { readOnly, permissions, progress, ...meta },
   });
 };
 
