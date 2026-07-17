@@ -24,7 +24,12 @@ app.use(helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 app.use(cors({
-    origin: env.clientUrl.replace(/\/$/, ''),
+    origin(origin, callback) {
+        if (!origin || env.allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
     credentials: true,
 }));
 app.use(compression());

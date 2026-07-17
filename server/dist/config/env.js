@@ -32,7 +32,7 @@ const envSchema = z
     ELASTICEMAIL_API_KEY: z.preprocess(emptyToUndefined, z.string().default('')),
     APP_URL: z.preprocess(emptyToUndefined, z.string().url().optional()),
     APP_NAME: z.preprocess(emptyToUndefined, z.string().default('WorkNest')),
-    CLIENT_URL: z.preprocess(emptyToUndefined, z.string().url().default('http://localhost:5173')),
+    CLIENT_URL: z.preprocess(emptyToUndefined, z.string().default('http://localhost:5173')),
     STRIPE_SECRET_KEY: z.preprocess(emptyToUndefined, z.string().default('')),
     STRIPE_WEBHOOK_SECRET: z.preprocess(emptyToUndefined, z.string().default('')),
     RATE_LIMIT_WINDOW_MS: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().default(15 * 60 * 1000)),
@@ -71,10 +71,15 @@ const envSchema = z
         },
         {
             field: 'CLIENT_URL',
-            valid: (value) => Boolean(value) &&
-                !value.includes('localhost') &&
-                !value.includes('127.0.0.1'),
-            message: 'CLIENT_URL must be your deployed frontend URL (e.g. https://worknest-web.onrender.com)',
+            valid: (value) => {
+                const primary = String(value || '')
+                    .split(',')[0]
+                    .trim();
+                return (Boolean(primary) &&
+                    !primary.includes('localhost') &&
+                    !primary.includes('127.0.0.1'));
+            },
+            message: 'CLIENT_URL must be your deployed frontend URL (e.g. https://work-nest-platform-nu.vercel.app)',
         },
         {
             field: 'SENDGRID_API_KEY',
@@ -115,6 +120,17 @@ const parseEnv = () => {
     return result.data;
 };
 const parsed = parseEnv();
+const normalizeOrigin = (value = '') => value.trim().replace(/\/$/, '');
+const configuredClientOrigins = String(parsed.CLIENT_URL)
+    .split(',')
+    .map(normalizeOrigin)
+    .filter(Boolean);
+// Always allow known frontend deploys so CORS does not break when CLIENT_URL is stale.
+const knownFrontendOrigins = [
+    'https://work-nest-platform-nu.vercel.app',
+    'https://work-nest-eight.vercel.app',
+];
+const allowedOrigins = Array.from(new Set([...configuredClientOrigins, ...knownFrontendOrigins]));
 const env = {
     nodeEnv: parsed.NODE_ENV,
     port: parsed.PORT,
@@ -147,7 +163,8 @@ const env = {
     },
     appUrl: parsed.APP_URL || `http://localhost:${parsed.PORT}`,
     appName: parsed.APP_NAME,
-    clientUrl: parsed.CLIENT_URL,
+    clientUrl: configuredClientOrigins[0] || 'http://localhost:5173',
+    allowedOrigins,
     stripe: {
         secretKey: parsed.STRIPE_SECRET_KEY,
         webhookSecret: parsed.STRIPE_WEBHOOK_SECRET,

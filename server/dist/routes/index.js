@@ -23,6 +23,8 @@ router.get('/health', (req, res) => {
         data: {
             timestamp: new Date().toISOString(),
             clientUrl: env.clientUrl,
+            allowedOrigins: env.allowedOrigins,
+            deployMarker: 'cors-multi-origin-2026-07-17',
         },
     });
 });
