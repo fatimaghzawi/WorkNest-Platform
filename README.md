@@ -3,7 +3,7 @@
 A full-stack freelance marketplace that connects clients with freelancers — from job posting and proposals through interviews, project workspaces, and escrow payments.
 
 **Live app:** [work-nest-eight.vercel.app](https://work-nest-eight.vercel.app)  
-**API:** [worknest-17xd.onrender.com](https://worknest-17xd.onrender.com)
+**API:** [worknest-platform.onrender.com](https://worknest-platform.onrender.com)
 
 ---
 

@@ -13,7 +13,7 @@ services:
       - key: APP_NAME
         value: WorkNest
       - key: APP_URL
-        value: https://worknest-17xd.onrender.com
+        value: https://worknest-platform.onrender.com
       - key: CLIENT_URL
         value: https://work-nest-platform-nu.vercel.app
       # Set in Render dashboard: MONGO_URI, JWT_SECRET, JWT_REFRESH_SECRET,

@@ -6,6 +6,6 @@
   "framework": "vite",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "env": {
-    "VITE_API_URL": "https://worknest-17xd.onrender.com"
+    "VITE_API_URL": "https://worknest-platform.onrender.com"
   }
 }
