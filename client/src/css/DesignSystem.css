@@ -302,6 +302,11 @@
   font-weight: 600;
 }
 
+.wn-badge--neutral {
+  background: rgba(107, 114, 128, 0.12);
+  color: #4b5563;
+}
+
 /* ── Modal ────────────────────────────────────────────────── */
 .wn-modal-overlay {
   position: fixed;

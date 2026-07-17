@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import '../../../css/DesignSystem.css';
 
-type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'outline';
+type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'outline' | 'neutral';
 
 export default function Badge({
   children,
