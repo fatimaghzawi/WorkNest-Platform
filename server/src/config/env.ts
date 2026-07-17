@@ -113,7 +113,7 @@ const envSchema = z
           !value.includes('localhost') &&
           !value.includes('127.0.0.1'),
         message:
-          'APP_URL must be your public URL (e.g. https://worknest-17xd.onrender.com)',
+          'APP_URL must be your public URL (e.g. https://worknest-platform.onrender.com)',
       },
       {
         field: 'CLIENT_URL',

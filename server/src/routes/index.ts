@@ -23,6 +23,7 @@ router.get('/health', (req, res) => {
     message: 'WorkNest API is running',
     data: {
       timestamp: new Date().toISOString(),
+      appUrl: env.appUrl,
       clientUrl: env.clientUrl,
       allowedOrigins: env.allowedOrigins,
       deployMarker: 'cors-multi-origin-2026-07-17',
