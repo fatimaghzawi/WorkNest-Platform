@@ -7,6 +7,7 @@ const env = require('../../config/env');
 const { createTransporter } = require('../../config/transporter');
 const { renderTemplate } = require('./template.service');
 const { withTimeout } = require('../../utils/promise.util');
+const { appPath, clientPath } = require('../../utils/appUrls');
 const EMAIL_SEND_TIMEOUT_MS = 30000;
 const parseFromAddress = (from) => {
     const match = from.match(/^(.+?)\s*<(.+?)>$/);
@@ -148,7 +149,7 @@ class EmailService {
         return this.sendViaSmtp({ to, subject, html, text });
     }
     async sendVerificationEmail({ to, firstName, token, }) {
-        const verificationUrl = `${env.appUrl}/api/auth/verify-email/${token}`;
+        const verificationUrl = appPath(`/api/auth/verify-email/${token}`);
         const year = new Date().getFullYear().toString();
         const html = renderTemplate('verification.html', {
             firstName,
@@ -163,7 +164,8 @@ class EmailService {
         });
     }
     async sendPasswordResetEmail({ to, firstName, token, }) {
-        const resetUrl = `${env.appUrl}/api/auth/reset-password/${token}`;
+        // Deep-link straight to the SPA so mobile email clients open the app, not the API.
+        const resetUrl = clientPath(`/reset-password/${encodeURIComponent(token)}`);
         const year = new Date().getFullYear().toString();
         const html = renderTemplate('password-reset.html', {
             firstName,
@@ -190,15 +192,19 @@ class EmailService {
     async sendEventNotificationEmail({ to, firstName, title, message, actionUrl, actionLabel = 'Open dashboard', }) {
         const year = new Date().getFullYear().toString();
         const actionButtonHtml = actionUrl
-            ? `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+            ? `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:0 auto;">
                 <tr>
-                  <td style="background:#49225B;border-radius:8px;">
-                    <a href="${actionUrl}" style="display:inline-block;padding:14px 32px;color:#ffffff;text-decoration:none;font-size:15px;font-weight:700;">
+                  <td align="center" style="background:#49225B;border-radius:8px;">
+                    <a href="${actionUrl}" style="display:inline-block;width:100%;box-sizing:border-box;padding:14px 24px;color:#ffffff;text-decoration:none;font-size:15px;font-weight:700;text-align:center;">
                       ${actionLabel}
                     </a>
                   </td>
                 </tr>
-              </table>`
+              </table>
+              <p style="margin:16px 0 0;color:#94a3b8;font-size:12px;line-height:1.6;word-break:break-all;text-align:center;">
+                Or open this link:<br />
+                <a href="${actionUrl}" style="color:#49225B;">${actionUrl}</a>
+              </p>`
             : '';
         const html = renderTemplate('event-notification.html', {
             firstName,
@@ -207,6 +213,7 @@ class EmailService {
             appName: env.appName,
             year,
             actionButtonHtml,
+            appHomeUrl: clientPath('/'),
         });
         const text = [`Hi ${firstName},`, '', message, '', actionUrl ? `${actionLabel}: ${actionUrl}` : '', '']
             .filter(Boolean)

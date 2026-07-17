@@ -47,7 +47,11 @@ export default function ForgotPassword() {
       )}
 
       {success ? (
-        <AuthSuccessPanel title="Email on the way">
+        <AuthSuccessPanel
+          title="Email on the way"
+          actionTo="/login"
+          actionLabel="Back to sign in"
+        >
           {success} Check your inbox, junk folder, and Outlook/Hotmail spam tab. The link
           expires in <strong>15 minutes</strong>.
         </AuthSuccessPanel>

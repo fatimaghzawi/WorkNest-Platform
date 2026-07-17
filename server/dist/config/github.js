@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const env = require('./env');
+const { appPath } = require('../utils/appUrls');
 const githubConfig = {
     clientId: env.github.clientId,
     clientSecret: env.github.clientSecret,
-    callbackUrl: `${env.appUrl}/api/auth/github/callback`,
+    callbackUrl: appPath('/api/auth/github/callback'),
     isConfigured: Boolean(env.github.clientId && env.github.clientSecret),
 };
 module.exports = githubConfig;

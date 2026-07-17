@@ -22,11 +22,25 @@ export default function Login() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const oauthError = params.get('oauthError');
+    const verified = params.get('verified');
+    const verifyError = params.get('error');
+
     if (oauthError) {
       setError(decodeURIComponent(oauthError));
+    } else if (verified === '1') {
+      toast.success('Email verified! You can sign in now.');
+    } else if (verified === '0') {
+      setError(
+        verifyError
+          ? decodeURIComponent(verifyError)
+          : 'Email verification failed. Request a new link or try signing in.'
+      );
+    }
+
+    if (oauthError || verified !== null) {
       window.history.replaceState({}, '', '/login');
     }
-  }, []);
+  }, [toast]);
 
   if (!authLoading && isAuthenticated && user) {
     return <Navigate to={getDashboardPath(user.role)} replace />;

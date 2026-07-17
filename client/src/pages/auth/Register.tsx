@@ -106,9 +106,12 @@ export default function Register() {
       )}
 
       {success ? (
-        <AuthSuccessPanel title="Check your inbox">
-          {success} Open the verification link we sent, then{' '}
-          <Link to="/login">sign in</Link> to get started.
+        <AuthSuccessPanel
+          title="Check your inbox"
+          actionTo="/login"
+          actionLabel="Go to sign in"
+        >
+          {success} Open the verification link we emailed you, then sign in to get started.
         </AuthSuccessPanel>
       ) : step === 'role' ? (
         <div className="wn-auth-role-step">

@@ -70,8 +70,12 @@ export default function ResetPassword() {
       )}
 
       {success ? (
-        <AuthSuccessPanel title="Password updated">
-          {success} Redirecting you to sign in...
+        <AuthSuccessPanel
+          title="Password updated"
+          actionTo="/login"
+          actionLabel="Sign in now"
+        >
+          {success} You can sign in with your new password.
         </AuthSuccessPanel>
       ) : (
         <form className="wn-auth-form" onSubmit={handleSubmit} noValidate>

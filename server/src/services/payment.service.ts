@@ -7,6 +7,7 @@ const projectRepository = require('../repositories/project.repository');
 const jobRepository = require('../repositories/job.repository');
 const notificationTriggers = require('./notificationTriggers');
 const { calculatePlatformFee } = require('../config/platformFee');
+const { clientPath } = require('../utils/appUrls');
 
 const getId = (value) => {
   if (!value) return '';
@@ -174,8 +175,8 @@ const createCheckoutSession = async (
       paymentId: getId(payment._id),
       clientId,
     },
-    success_url: `${env.clientUrl}${safeReturnPath}${separator}checkout=success&projectId=${projectId}&session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${env.clientUrl}${safeReturnPath}${separator}checkout=cancelled&projectId=${projectId}`,
+    success_url: `${clientPath(safeReturnPath)}${separator}checkout=success&projectId=${projectId}&session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${clientPath(safeReturnPath)}${separator}checkout=cancelled&projectId=${projectId}`,
   });
 
   if (!session.url) {

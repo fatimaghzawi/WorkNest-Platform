@@ -1,9 +1,8 @@
 ﻿const authService = require('../services/auth.service');
 const jwtConfig = require('../config/jwt');
-const env = require('../config/env');
 const { sendSuccess } = require('../utils/response');
-const { renderEmailVerificationResultPage } = require('../views/auth.view');
 const { extractRefreshToken } = require('../utils/extractRefreshToken');
+const { clientPath } = require('../utils/appUrls');
 
 const setAccessTokenCookie = (res, token: string) => {
   res.cookie(jwtConfig.cookie.name, token, {
@@ -61,34 +60,21 @@ const register = async (req, res) => {
 
 const verifyEmail = async (req, res, next) => {
   const wantsHtml = req.accepts(['html', 'json']) === 'html';
+  const loginUrl = clientPath('/login');
 
   try {
     const result = await authService.verifyEmail(req.params.token);
 
+    // Phone/email clients open this as HTML — send them to the app login screen.
     if (wantsHtml) {
-      return res
-        .status(200)
-        .send(
-          renderEmailVerificationResultPage({
-            success: true,
-            title: 'Email verified!',
-            message: `Your ${env.appName} account is ready. You can close this page and log in.`,
-          })
-        );
+      return res.redirect(302, `${loginUrl}?verified=1`);
     }
 
     return sendSuccess(res, { message: result.message });
   } catch (error) {
     if (wantsHtml && error.statusCode) {
-      return res
-        .status(error.statusCode)
-        .send(
-          renderEmailVerificationResultPage({
-            success: false,
-            title: 'Verification failed',
-            message: error.message || 'Invalid or expired verification link.',
-          })
-        );
+      const message = encodeURIComponent(error.message || 'Invalid or expired verification link.');
+      return res.redirect(302, `${loginUrl}?verified=0&error=${message}`);
     }
 
     return next(error);
@@ -120,10 +106,10 @@ const githubCallback = async (req, res) => {
       req.query.state
     );
     setAuthCookies(res, accessToken, refreshToken);
-    return res.redirect(302, `${env.clientUrl}/auth/oauth/callback?provider=github`);
+    return res.redirect(302, clientPath('/auth/oauth/callback?provider=github'));
   } catch (error) {
     const message = encodeURIComponent(error.message || 'GitHub sign-in failed');
-    return res.redirect(302, `${env.clientUrl}/login?oauthError=${message}`);
+    return res.redirect(302, clientPath(`/login?oauthError=${message}`));
   }
 };
 
@@ -152,7 +138,7 @@ const resetPassword = async (req, res) => {
 
 const openResetPassword = async (req, res) => {
   const token = encodeURIComponent(req.params.token);
-  return res.redirect(302, `${env.clientUrl}/reset-password/${token}`);
+  return res.redirect(302, clientPath(`/reset-password/${token}`));
 };
 
 const getMe = async (req, res) => {

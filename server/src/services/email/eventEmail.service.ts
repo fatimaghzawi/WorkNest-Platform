@@ -1,6 +1,7 @@
 const env = require('../../config/env');
 const userRepository = require('../../repositories/user.repository');
 const emailService = require('./email.service');
+const { clientPath } = require('../../utils/appUrls');
 
 const getId = (value) => {
   if (!value) return '';
@@ -36,12 +37,16 @@ const ACTION_LABELS: Record<string, string> = {
   'workspace.attachment_uploaded': 'Open workspace',
 };
 
-const dashboardBase = (role: string) => {
-  if (role === 'admin') return `${env.clientUrl}/admin`;
-  if (role === 'freelancer') return `${env.clientUrl}/freelancer`;
-  return `${env.clientUrl}/client`;
+const rolePrefix = (role: string) => {
+  if (role === 'admin') return '/admin';
+  if (role === 'freelancer') return '/freelancer';
+  return '/client';
 };
 
+/**
+ * Keep email deep-links aligned with client/src/utils/notificationLinks.ts
+ * so in-app notifications and emails open the same screens.
+ */
 const buildActionUrl = (
   type: string,
   role: string,
@@ -55,37 +60,42 @@ const buildActionUrl = (
     relatedProposalId?: string;
   } = {}
 ) => {
-  const base = dashboardBase(role);
-
-  if (type.startsWith('payment.')) {
-    if (type === 'payment.platform_fee') return `${base}/wallet`;
-    if (role === 'freelancer') return `${base}/wallet`;
-    return `${base}/payments`;
-  }
-
-  if (type.startsWith('interview.')) return `${base}/interviews`;
+  const prefix = rolePrefix(role);
+  const jobId = relatedJobId || '';
 
   if (type.startsWith('proposal.')) {
-    if (role === 'client' && relatedJobId) return `${base}/jobs/${relatedJobId}/proposals`;
-    if (role === 'freelancer') return `${base}/proposals`;
-    return `${base}/proposals`;
+    if (type === 'proposal.accepted' && jobId) {
+      return clientPath(`${prefix}/workspace?jobId=${jobId}`);
+    }
+    if (type === 'proposal.rejected' && role === 'freelancer') {
+      return clientPath(`${prefix}/jobs`);
+    }
+    if (role === 'client' && jobId) {
+      return clientPath(`${prefix}/jobs/${jobId}/proposals`);
+    }
+    return clientPath(`${prefix}/proposals`);
   }
 
-  if (type === 'proposal.accepted' || type === 'project.started') {
-    if (relatedJobId) return `${base}/workspace?jobId=${relatedJobId}`;
-    return `${base}/projects`;
+  if (type.startsWith('project.') || type.startsWith('workspace.')) {
+    if (jobId) return clientPath(`${prefix}/workspace?jobId=${jobId}`);
+    if (type.startsWith('project.') && role !== 'admin') {
+      return clientPath(`${prefix}/projects`);
+    }
+    return clientPath(`${prefix}/workspace`);
   }
 
-  if (type.startsWith('project.')) {
-    if (role === 'admin') return `${base}/projects`;
-    return `${base}/projects`;
+  if (type.startsWith('interview.')) {
+    return clientPath(`${prefix}/interviews`);
   }
 
-  if (type.startsWith('workspace.')) {
-    return relatedJobId ? `${base}/workspace?jobId=${relatedJobId}` : `${base}/workspace`;
+  if (type.startsWith('payment.')) {
+    if (type === 'payment.platform_fee') return clientPath('/admin/wallet');
+    if (role === 'client') return clientPath('/client/payments');
+    if (role === 'freelancer') return clientPath('/freelancer/wallet');
+    return clientPath('/admin/wallet');
   }
 
-  return `${base}/dashboard`;
+  return clientPath(`${prefix}/dashboard`);
 };
 
 const sendSafe = async (data: {
