@@ -19,10 +19,10 @@ export default function JobDetailsView({ job }: { job: Job }) {
   const elapsedPct = Math.min(100, Math.max(0, Math.round((postedDaysAgo / deadlineDays) * 100)));
 
   return (
-    <div>
+    <div className="wn-job-detail-page">
       <div className="wn-job-detail__hero">
         <div className="wn-job-detail__hero-top">
-          <div>
+          <div className="wn-job-detail__hero-copy">
             <div className="wn-job-detail__hero-eyebrow">{job.category}</div>
             <h2 className="wn-job-detail__hero-title">{job.title}</h2>
           </div>
@@ -51,12 +51,10 @@ export default function JobDetailsView({ job }: { job: Job }) {
       </div>
 
       <div className="wn-job-detail">
-        <div>
+        <div className="wn-job-detail__main">
           <div className="wn-job-detail__section">
             <div className="wn-job-detail__section-title">Description</div>
-            <p className="wn-dash-card-item__meta" style={{ whiteSpace: 'pre-wrap' }}>
-              {job.description}
-            </p>
+            <p className="wn-dash-card-item__meta wn-job-detail__description">{job.description}</p>
           </div>
 
           <div className="wn-job-detail__section">
@@ -71,7 +69,7 @@ export default function JobDetailsView({ job }: { job: Job }) {
           </div>
         </div>
 
-        <div className="wn-job-detail__sidebar">
+        <aside className="wn-job-detail__sidebar">
           <div className="wn-job-detail__sidebar-card">
             <div className="wn-job-detail__section-title">Job overview</div>
             <div className="wn-job-detail__sidebar-row">
@@ -88,11 +86,13 @@ export default function JobDetailsView({ job }: { job: Job }) {
             </div>
             <div className="wn-job-detail__sidebar-row">
               <span>Status</span>
-              <span><StatusBadge status={job.status} /></span>
+              <span>
+                <StatusBadge status={job.status} />
+              </span>
             </div>
 
-            <div style={{ marginTop: 8 }}>
-              <div className="wn-job-detail__sidebar-row" style={{ border: 'none', paddingBottom: 0 }}>
+            <div className="wn-job-detail__progress-block">
+              <div className="wn-job-detail__sidebar-row wn-job-detail__sidebar-row--flush">
                 <span>Time elapsed</span>
                 <span className={`wn-urgency-chip wn-urgency-chip--${urgency.level}`}>{urgency.label}</span>
               </div>
@@ -104,7 +104,7 @@ export default function JobDetailsView({ job }: { job: Job }) {
 
           <div className="wn-job-detail__sidebar-card">
             <div className="wn-job-detail__section-title">Posted by</div>
-            <div className="wn-job-card__client" style={{ marginBottom: 0 }}>
+            <div className="wn-job-card__client wn-job-detail__client">
               <span className="wn-avatar wn-avatar--lg">{getInitials(clientName)}</span>
               <span>
                 <strong>{clientName}</strong>
@@ -113,7 +113,7 @@ export default function JobDetailsView({ job }: { job: Job }) {
               </span>
             </div>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   );
