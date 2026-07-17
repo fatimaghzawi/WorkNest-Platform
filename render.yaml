@@ -15,7 +15,7 @@ services:
       - key: APP_URL
         value: https://worknest-17xd.onrender.com
       - key: CLIENT_URL
-        value: https://work-nest-eight.vercel.app
+        value: https://work-nest-platform-nu.vercel.app
       # Set in Render dashboard: MONGO_URI, JWT_SECRET, JWT_REFRESH_SECRET,
       # ELASTICEMAIL_API_KEY, EMAIL_FROM
 
