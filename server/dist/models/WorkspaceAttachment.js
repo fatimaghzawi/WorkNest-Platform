@@ -9,6 +9,7 @@ const zod_1 = require("zod");
 const zod_2 = require("./shared/zod");
 const workspaceAttachmentZodSchema = zod_1.z.object({
     jobId: zod_2.objectIdSchema,
+    taskId: zod_2.objectIdSchema.optional().nullable(),
     uploadedBy: zod_2.objectIdSchema,
     fileName: (0, zod_2.nonEmptyString)('File name'),
     fileUrl: (0, zod_2.nonEmptyString)('File URL'),
@@ -21,6 +22,12 @@ const workspaceAttachmentMongooseSchema = new mongoose_1.default.Schema({
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: 'Job',
         required: [true, 'Job ID is required'],
+        index: true,
+    },
+    taskId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'Task',
+        default: null,
         index: true,
     },
     uploadedBy: {
@@ -58,6 +65,7 @@ const workspaceAttachmentMongooseSchema = new mongoose_1.default.Schema({
     timestamps: { createdAt: true, updatedAt: false },
 });
 workspaceAttachmentMongooseSchema.index({ jobId: 1, createdAt: -1 });
+workspaceAttachmentMongooseSchema.index({ jobId: 1, taskId: 1, createdAt: -1 });
 const WorkspaceAttachment = mongoose_1.default.model('WorkspaceAttachment', workspaceAttachmentMongooseSchema);
 exports.workspaceAttachmentZodSchemas = {
     schema: workspaceAttachmentZodSchema,

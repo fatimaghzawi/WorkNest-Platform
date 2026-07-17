@@ -4,11 +4,11 @@ const workspaceService = require('../services/workspace.service');
 const { sendSuccess } = require('../utils/response');
 const AppError = require('../utils/AppError');
 const listTasks = async (req, res) => {
-    const { tasks, readOnly, meta } = await workspaceService.listTasks(req.params.jobId, req.user.id, req.user.role, req.query);
+    const { tasks, readOnly, permissions, progress, meta } = await workspaceService.listTasks(req.params.jobId, req.user.id, req.user.role, req.query);
     return sendSuccess(res, {
         message: 'Workspace tasks retrieved successfully',
         data: tasks,
-        meta: { readOnly, ...meta },
+        meta: { readOnly, permissions, progress, ...meta },
     });
 };
 const createTask = async (req, res) => {
@@ -47,11 +47,19 @@ const listAttachments = async (req, res) => {
         meta,
     });
 };
+const listTaskDeliverables = async (req, res) => {
+    const { groups, meta } = await workspaceService.listTaskDeliverables(req.params.jobId, req.user.id, req.user.role, req.query);
+    return sendSuccess(res, {
+        message: 'Task deliverables retrieved successfully',
+        data: groups,
+        meta,
+    });
+};
 const uploadAttachment = async (req, res) => {
     if (!req.file) {
         throw new AppError('No file uploaded', 400);
     }
-    const attachment = await workspaceService.uploadAttachment(req.params.jobId, req.user.id, req.user.role, req.file, { caption: req.body?.caption });
+    const attachment = await workspaceService.uploadAttachment(req.params.jobId, req.user.id, req.user.role, req.file, { caption: req.body?.caption, taskId: req.body?.taskId });
     return sendSuccess(res, {
         statusCode: 201,
         message: 'Attachment uploaded successfully',
@@ -71,6 +79,7 @@ module.exports = {
     deleteTask,
     getTeam,
     listAttachments,
+    listTaskDeliverables,
     uploadAttachment,
     deleteAttachment,
 };

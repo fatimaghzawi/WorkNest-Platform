@@ -20,9 +20,9 @@ const authenticate = async (req, res, next) => {
             return next(new AppError('Session expired. Please log in again.', 401));
         }
         req.user = {
-            id: decoded.id,
-            email: decoded.email,
-            role: decoded.role,
+            id: user._id.toString(),
+            email: user.email,
+            role: user.role,
         };
         next();
     }

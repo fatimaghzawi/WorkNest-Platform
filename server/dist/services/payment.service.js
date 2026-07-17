@@ -6,7 +6,9 @@ const env = require('../config/env');
 const { stripe, isConfigured: isStripeConfigured } = require('../config/stripe');
 const paymentRepository = require('../repositories/payment.repository');
 const projectRepository = require('../repositories/project.repository');
+const jobRepository = require('../repositories/job.repository');
 const notificationTriggers = require('./notificationTriggers');
+const { calculatePlatformFee } = require('../config/platformFee');
 const getId = (value) => {
     if (!value)
         return '';
@@ -35,6 +37,10 @@ const toClientPayment = (doc, projectTitle) => {
         amount: doc.amount,
         currency: doc.currency || 'USD',
         status: doc.status,
+        platformFee: doc.platformFee ?? undefined,
+        freelancerPayout: doc.freelancerPayout ?? undefined,
+        feeRate: doc.feeRate ?? undefined,
+        budgetRangeLabel: doc.budgetRangeLabel || undefined,
         cardBrand: doc.cardBrand || undefined,
         cardLast4: doc.cardLast4 || undefined,
         cardholderName: doc.cardholderName || undefined,
@@ -259,10 +265,17 @@ const releaseEscrow = async (projectId) => {
         throw new AppError('Escrow must be funded before funds can be released to the freelancer', 400);
     }
     const now = new Date();
+    const job = payment.jobId ? await jobRepository.findById(getId(payment.jobId)) : null;
+    const jobBudget = job?.budget || payment.amount;
+    const feeBreakdown = calculatePlatformFee(payment.amount, jobBudget);
     const updated = await paymentRepository.updateByProjectId(projectId, {
         status: 'released',
         releasedAt: now,
         paymentDate: now,
+        platformFee: feeBreakdown.platformFee,
+        freelancerPayout: feeBreakdown.freelancerPayout,
+        feeRate: feeBreakdown.feeRate,
+        budgetRangeLabel: feeBreakdown.budgetRangeLabel,
     });
     const project = await projectRepository.findById(projectId);
     await notificationTriggers.paymentReleased(updated, project);
@@ -345,11 +358,38 @@ const getWalletSummary = async (userId, userRole) => {
             inEscrow: pendingPayouts,
         };
     }
-    throw new AppError('Wallet summary is only available for clients and freelancers', 403);
+    if (userRole === 'admin') {
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const [totalProfit, profitThisMonth] = await Promise.all([
+            paymentRepository.sumPlatformFees('released'),
+            paymentRepository.sumPlatformFees('released', startOfMonth),
+        ]);
+        return {
+            role: 'admin',
+            totalProfit,
+            profitThisMonth,
+            availableBalance: totalProfit,
+        };
+    }
+    throw new AppError('Wallet summary is only available for clients, freelancers, and admins', 403);
 };
 const listPayments = async (userId, userRole, query = {}) => {
     const { page, limit, skip } = parsePagination(query);
     const status = typeof query.status === 'string' ? query.status : undefined;
+    if (userRole === 'admin') {
+        const [rows, total] = await Promise.all([
+            paymentRepository.findReleasedWithFees({ skip, limit }),
+            paymentRepository.countReleasedWithFees(),
+        ]);
+        const projectIds = rows.map((row) => getId(row.projectId));
+        const projects = await Promise.all(projectIds.map((id) => projectRepository.findById(id).catch(() => null)));
+        const titleMap = new Map(projects.filter(Boolean).map((project) => [getId(project._id), project.title]));
+        return {
+            payments: rows.map((row) => toClientPayment(row, titleMap.get(getId(row.projectId)))),
+            meta: buildPaginationMeta(total, page, limit),
+        };
+    }
     const [rows, total] = await Promise.all([
         paymentRepository.findForUser({ userId, role: userRole, status, skip, limit }),
         paymentRepository.countForUser(userId, userRole, status),

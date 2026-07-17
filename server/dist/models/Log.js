@@ -73,5 +73,6 @@ const logMongooseSchema = new mongoose_1.default.Schema({
 });
 logMongooseSchema.index({ createdAt: -1 });
 logMongooseSchema.index({ level: 1, createdAt: -1 });
+logMongooseSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 90 });
 const Log = mongoose_1.default.model('Log', logMongooseSchema);
 exports.default = Log;

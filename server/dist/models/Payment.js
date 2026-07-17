@@ -27,6 +27,10 @@ const paymentZodSchema = zod_1.z.object({
     depositedAt: zod_1.z.coerce.date().optional().nullable(),
     releasedAt: zod_1.z.coerce.date().optional().nullable(),
     refundedAt: zod_1.z.coerce.date().optional().nullable(),
+    platformFee: zod_1.z.number().min(0).optional(),
+    freelancerPayout: zod_1.z.number().min(0).optional(),
+    feeRate: zod_1.z.number().min(0).max(1).optional(),
+    budgetRangeLabel: zod_1.z.string().trim().max(40).optional(),
 });
 const createPaymentZodSchema = paymentZodSchema.omit({
     status: true,
@@ -120,6 +124,23 @@ const paymentMongooseSchema = new mongoose_1.default.Schema({
     },
     refundedAt: {
         type: Date,
+    },
+    platformFee: {
+        type: Number,
+        min: [0, 'Platform fee cannot be negative'],
+    },
+    freelancerPayout: {
+        type: Number,
+        min: [0, 'Freelancer payout cannot be negative'],
+    },
+    feeRate: {
+        type: Number,
+        min: [0, 'Fee rate cannot be negative'],
+        max: [1, 'Fee rate cannot exceed 100%'],
+    },
+    budgetRangeLabel: {
+        type: String,
+        trim: true,
     },
 }, {
     timestamps: { createdAt: true, updatedAt: false },

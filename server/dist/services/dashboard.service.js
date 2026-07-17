@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const dashboardRepository = require('../repositories/dashboard.repository');
+const paymentRepository = require('../repositories/payment.repository');
 const pctChange = (current, previous) => {
     if (previous <= 0)
         return current > 0 ? 100 : 0;
@@ -11,7 +12,7 @@ const getOverview = async () => {
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const startOfPrevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const endOfPrevMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
-    const [totalUsers, activeUsers, clients, freelancers, totalJobs, openJobs, inProgressJobs, closedJobs, totalProposals, pendingProposals, acceptedProposals, rejectedProposals, totalProjects, activeProjects, completedProjects, totalInterviews, upcomingInterviews, categories, totalBudget, openBudget, inProgressBudget, avgProgress, usersThisMonth, usersPrevMonth, jobsThisMonth, jobsPrevMonth, proposalsThisMonth, projectsThisMonth,] = await Promise.all([
+    const [totalUsers, activeUsers, clients, freelancers, totalJobs, openJobs, inProgressJobs, closedJobs, totalProposals, pendingProposals, acceptedProposals, rejectedProposals, totalProjects, activeProjects, completedProjects, totalInterviews, upcomingInterviews, categories, totalBudget, openBudget, inProgressBudget, avgProgress, usersThisMonth, usersPrevMonth, jobsThisMonth, jobsPrevMonth, proposalsThisMonth, projectsThisMonth, platformRevenue, platformRevenueThisMonth,] = await Promise.all([
         dashboardRepository.countUsers({}),
         dashboardRepository.countUsers({ isActive: true }),
         dashboardRepository.countUsers({ role: 'client' }),
@@ -47,6 +48,8 @@ const getOverview = async () => {
         }),
         dashboardRepository.countProposals({ createdAt: { $gte: startOfMonth } }),
         dashboardRepository.countProjects({ createdAt: { $gte: startOfMonth } }),
+        paymentRepository.sumPlatformFees('released'),
+        paymentRepository.sumPlatformFees('released', startOfMonth),
     ]);
     const completionRate = totalProjects > 0 ? Math.round((completedProjects / totalProjects) * 100) : 0;
     const acceptanceRate = totalProposals > 0 ? Math.round((acceptedProposals / totalProposals) * 100) : 0;
@@ -92,6 +95,8 @@ const getOverview = async () => {
             openBudget,
             inProgressBudget,
             closedBudget: Math.max(totalBudget - openBudget - inProgressBudget, 0),
+            platformRevenue,
+            platformRevenueThisMonth,
         },
         categories,
         period: '1 Month',

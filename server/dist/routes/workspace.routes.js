@@ -12,6 +12,7 @@ const { jobIdParamSchema, taskIdParamSchema, attachmentIdParamSchema, createTask
 const router = Router();
 router.get('/:jobId/team', authenticate, authorize('client', 'freelancer', 'admin'), validate(jobIdParamSchema), asyncHandler(workspaceController.getTeam));
 router.get('/:jobId/attachments', authenticate, authorize('client', 'freelancer', 'admin'), validate(listWorkspaceQuerySchema), asyncHandler(workspaceController.listAttachments));
+router.get('/:jobId/deliverables', authenticate, authorize('client', 'freelancer', 'admin'), validate(listWorkspaceQuerySchema), asyncHandler(workspaceController.listTaskDeliverables));
 router.post('/:jobId/attachments', authenticate, authorize('freelancer', 'admin'), validate(jobIdParamSchema), handleUpload(uploadWorkspace), asyncHandler(workspaceController.uploadAttachment));
 router.delete('/:jobId/attachments/:attachmentId', authenticate, authorize('freelancer', 'admin'), validate(attachmentIdParamSchema), asyncHandler(workspaceController.deleteAttachment));
 router.get('/:jobId/tasks', authenticate, authorize('client', 'freelancer', 'admin'), validate(listWorkspaceQuerySchema), asyncHandler(workspaceController.listTasks));

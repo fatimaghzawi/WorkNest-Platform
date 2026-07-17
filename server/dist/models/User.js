@@ -15,7 +15,11 @@ const userZodSchema = zod_1.z.object({
     email: zod_1.z.string().trim().email('Invalid email address').toLowerCase(),
     password: zod_1.z
         .string()
-        .min(8, 'Password must be at least 8 characters'),
+        .min(8, 'Password must be at least 8 characters')
+        .optional(),
+    authProvider: zod_1.z.enum(['local', 'google', 'github']).optional().default('local'),
+    googleId: zod_1.z.string().trim().min(1).optional(),
+    githubId: zod_1.z.string().trim().min(1).optional(),
     role: zod_1.z.enum(ROLES, { message: 'Role must be client, freelancer, or admin' }),
     phone: zod_2.optionalE164PhoneSchema,
     profileImage: zod_2.urlSchema.optional().or(zod_1.z.literal('')),
@@ -65,9 +69,31 @@ const userMongooseSchema = new mongoose_1.default.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Password is required'],
         minlength: [8, 'Password must be at least 8 characters'],
         select: false,
+    },
+    authProvider: {
+        type: String,
+        enum: {
+            values: ['local', 'google', 'github'],
+            message: 'Auth provider must be local, google, or github',
+        },
+        default: 'local',
+        index: true,
+    },
+    googleId: {
+        type: String,
+        trim: true,
+        sparse: true,
+        unique: true,
+        index: true,
+    },
+    githubId: {
+        type: String,
+        trim: true,
+        sparse: true,
+        unique: true,
+        index: true,
     },
     role: {
         type: String,
@@ -132,6 +158,14 @@ const userMongooseSchema = new mongoose_1.default.Schema({
     },
 }, {
     timestamps: true,
+});
+userMongooseSchema.pre('validate', function validatePassword() {
+    if (this.authProvider === 'google' || this.authProvider === 'github') {
+        return;
+    }
+    if (!this.password) {
+        this.invalidate('password', 'Password is required');
+    }
 });
 const User = mongoose_1.default.model('User', userMongooseSchema);
 exports.userZodSchemas = {

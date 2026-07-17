@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const env = require('./env');
+const { parseDurationToMs } = require('../utils/parseDuration');
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 const getCookieSameSite = () => {
     if (!env.isProduction) {
         return 'lax';
@@ -31,12 +33,25 @@ const jwtConfig = {
         secret: env.jwt.secret,
         expiresIn: env.jwt.expiresIn,
     },
+    refresh: {
+        secret: env.jwt.refreshSecret,
+        expiresIn: env.jwt.refreshExpiresIn,
+        expiresInMs: parseDurationToMs(env.jwt.refreshExpiresIn, THIRTY_DAYS_MS),
+    },
     cookie: {
         name: 'accessToken',
         httpOnly: true,
         secure: env.isProduction,
         sameSite,
-        maxAge: ONE_DAY_MS,
+        maxAge: parseDurationToMs(env.jwt.expiresIn, ONE_DAY_MS),
+    },
+    refreshCookie: {
+        name: 'refreshToken',
+        httpOnly: true,
+        secure: env.isProduction,
+        sameSite,
+        maxAge: parseDurationToMs(env.jwt.refreshExpiresIn, THIRTY_DAYS_MS),
+        path: '/api/auth',
     },
 };
 module.exports = jwtConfig;

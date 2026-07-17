@@ -21,6 +21,8 @@ const findByEmail = (email, includePassword = false) => {
     }
     return query;
 };
+const findByGoogleId = (googleId) => User.findOne({ googleId });
+const findByGithubId = (githubId) => User.findOne({ githubId });
 const findByVerificationToken = (hashedToken) => {
     return User.findOne({
         emailVerificationToken: hashedToken,
@@ -51,6 +53,8 @@ const deleteUser = (id) => {
 module.exports = {
     sanitizeUser,
     findByEmail,
+    findByGoogleId,
+    findByGithubId,
     findByVerificationToken,
     findByPasswordResetToken,
     createUser,

@@ -39,6 +39,9 @@ const envSchema = z
     RATE_LIMIT_MAX_REQUESTS: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().default(500)),
     MAX_FILE_SIZE: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().default(5 * 1024 * 1024)),
     UPLOAD_PATH: z.preprocess(emptyToUndefined, z.string().default('uploads')),
+    GOOGLE_CLIENT_ID: z.preprocess(emptyToUndefined, z.string().default('')),
+    GITHUB_CLIENT_ID: z.preprocess(emptyToUndefined, z.string().default('')),
+    GITHUB_CLIENT_SECRET: z.preprocess(emptyToUndefined, z.string().default('')),
 })
     .superRefine((data, ctx) => {
     if (data.NODE_ENV !== 'production')
@@ -157,6 +160,15 @@ const env = {
     upload: {
         maxFileSize: parsed.MAX_FILE_SIZE,
         path: parsed.UPLOAD_PATH,
+    },
+    google: {
+        clientId: parsed.GOOGLE_CLIENT_ID,
+        isConfigured: Boolean(parsed.GOOGLE_CLIENT_ID),
+    },
+    github: {
+        clientId: parsed.GITHUB_CLIENT_ID,
+        clientSecret: parsed.GITHUB_CLIENT_SECRET,
+        isConfigured: Boolean(parsed.GITHUB_CLIENT_ID && parsed.GITHUB_CLIENT_SECRET),
     },
 };
 module.exports = env;
