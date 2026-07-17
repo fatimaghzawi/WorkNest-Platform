@@ -763,16 +763,50 @@
   }
 
   .wn-workspace__summary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Swipeable kanban columns on phones */
+  .wn-kanban {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(280px, 85vw);
+    grid-template-columns: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: var(--space-2);
+    gap: var(--space-2);
+  }
+
+  .wn-kanban__column {
+    scroll-snap-align: start;
+    min-height: 320px;
+    max-height: 70dvh;
+  }
+
+  .wn-workspace__sidebar,
+  .wn-workspace__side {
+    order: 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-workspace__summary {
     grid-template-columns: 1fr;
   }
 
   .wn-kanban {
-    grid-template-columns: 1fr;
-    overflow-x: visible;
+    grid-auto-columns: minmax(260px, 88vw);
   }
 
-  .wn-kanban__column {
-    min-height: 280px;
-    max-height: none;
+  .wn-workspace-attachments__item {
+    grid-template-columns: 40px 1fr;
+  }
+
+  .wn-workspace-attachments__delete {
+    grid-column: 1 / -1;
+    justify-self: start;
   }
 }

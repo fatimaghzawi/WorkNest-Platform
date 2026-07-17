@@ -321,3 +321,18 @@
     height: 28px;
   }
 }
+
+@media (max-width: 768px) {
+  .wn-navbar__mobile-menu a,
+  .wn-navbar__mobile-menu .wn-btn {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .wn-navbar__mobile-menu {
+    max-height: calc(100dvh - var(--layout-navbar-height));
+    overflow-y: auto;
+    padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom));
+  }
+}

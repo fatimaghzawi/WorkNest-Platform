@@ -178,7 +178,7 @@
 
 .wn-freelancer-proposals .proposal-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 16px;
 }
 
@@ -212,5 +212,9 @@
   .wn-freelancer-proposals__toolbar {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .wn-freelancer-proposals .proposal-list {
+    grid-template-columns: 1fr;
   }
 }

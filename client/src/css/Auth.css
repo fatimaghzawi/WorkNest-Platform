@@ -892,8 +892,24 @@
   }
 
   .wn-auth-card {
-    padding: 28px 22px;
+    padding: 24px 18px;
     border-radius: 20px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .wn-auth-form-area {
+    padding: var(--space-2);
+    width: 100%;
+  }
+
+  .wn-auth-google,
+  .wn-auth-github-btn {
+    width: 100%;
+  }
+
+  .wn-auth-github-btn {
+    min-height: 44px;
   }
 }
 

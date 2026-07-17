@@ -267,3 +267,30 @@
     padding: var(--space-3) var(--space-2) var(--space-5);
   }
 }
+
+@media (max-width: 768px) {
+  .wn-admin-mobile-bar {
+    padding: 0 var(--space-2);
+    min-height: 56px;
+  }
+
+  .wn-admin-mobile-bar__toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .wn-admin-sidebar {
+    width: min(86vw, 300px);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .wn-admin-sidebar__link {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-admin-layout__main {
+    padding: var(--space-2) var(--space-2) var(--space-5);
+  }
+}

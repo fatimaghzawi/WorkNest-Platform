@@ -1,0 +1,275 @@
+/* ============================================================
+   WorkNest — Global mobile polish
+   Loaded last so it can refine existing page CSS safely.
+   ============================================================ */
+
+html {
+  -webkit-tap-highlight-color: rgba(73, 34, 91, 0.12);
+}
+
+button,
+a,
+input,
+select,
+textarea,
+label,
+summary {
+  touch-action: manipulation;
+}
+
+/* Prevent accidental page-wide horizontal scroll */
+#root,
+.wn-dash,
+.wn-admin-layout,
+.wn-auth-layout,
+.wn-landing {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* Comfortable tap targets */
+@media (max-width: 768px) {
+  .wn-btn,
+  .wn-auth-submit,
+  .wn-dash-nav__hamburger,
+  .wn-admin-mobile-bar__toggle,
+  .wn-navbar__toggle {
+    min-height: 44px;
+  }
+
+  .wn-input,
+  .wn-select,
+  .wn-textarea,
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  input[type='number'],
+  input[type='search'],
+  input[type='date'],
+  input[type='datetime-local'],
+  input[type='url'],
+  select,
+  textarea {
+    font-size: 16px !important; /* stops iOS zoom on focus */
+    max-width: 100%;
+  }
+
+  /* Shared page chrome */
+  .wn-dash-page__header,
+  .wn-page-hero__row,
+  .wn-studio-toolbar,
+  .wn-jobs-toolbar,
+  .wn-users-toolbar,
+  .wn-reports-toolbar,
+  .wn-wallet-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+
+  .wn-dash-page__header-actions,
+  .wn-page-hero__actions,
+  .wn-studio-toolbar__actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .wn-dash-page__header-actions .wn-btn,
+  .wn-page-hero__actions .wn-btn,
+  .wn-studio-toolbar__actions .wn-btn {
+    flex: 1 1 calc(50% - 4px);
+    justify-content: center;
+  }
+
+  /* Filters / search bars */
+  .wn-dash-search,
+  .wn-dash-filters,
+  .wn-filter-bar,
+  .wn-jobs-filters,
+  .wn-users-filters {
+    width: 100%;
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .wn-dash-search input,
+  .wn-filter-bar input,
+  .wn-dash-filters input,
+  .wn-dash-filters select,
+  .wn-jobs-filters input,
+  .wn-jobs-filters select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Cards & panels */
+  .wn-dash-page__card,
+  .wn-panel,
+  .wn-card,
+  .wn-money-card,
+  .wn-analytics-card,
+  .wn-status-card {
+    border-radius: var(--radius-lg);
+  }
+
+  /* Tables: always scrollable, never blow out layout */
+  .wn-dash-table-wrap,
+  .wn-reports-table-wrap,
+  .wn-admin-table-wrap,
+  .wn-logs-table-wrap,
+  table.wn-dash-table,
+  .wn-reports-table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .wn-dash-table,
+  .wn-reports-table,
+  .wn-admin-table,
+  .wn-logs-table {
+    min-width: 640px;
+  }
+
+  /* Grids that commonly overflow phones — collapse on small tablets */
+  .wn-freelancer-projects-grid,
+  .wn-freelancer-studio .proposal-list,
+  .wn-jobs-grid,
+  .wn-proposal-grid,
+  .wn-projects-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Duo / metric strips keep 2-up on tablet when possible */
+  .wn-duo-card__stats,
+  .wn-metric-row,
+  .wn-finance-strip,
+  .wn-wallet-fee-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Modals fill phone safely */
+  .wn-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .wn-modal,
+  .wn-modal--lg,
+  .wn-modal--xl,
+  .proposal-confirm-modal,
+  .proposal-details-modal,
+  .submit-proposal-modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92dvh;
+    margin: 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  .wn-modal__footer,
+  .wn-modal-footer {
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .wn-modal__footer .wn-btn,
+  .wn-modal-footer .wn-btn {
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  /* Pagination */
+  .wn-pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .wn-pagination button,
+  .wn-pagination__btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  /* Notifications dropdown on phones */
+  .wn-notifications-panel {
+    position: fixed !important;
+    top: calc(var(--layout-navbar-height) + 8px) !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: min(70dvh, 520px);
+  }
+
+  /* Toast stay in safe area */
+  .wn-toast-viewport,
+  .wn-toast-container {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-dash-page__header-actions .wn-btn,
+  .wn-page-hero__actions .wn-btn,
+  .wn-studio-toolbar__actions .wn-btn,
+  .wn-modal__footer .wn-btn,
+  .wn-modal-footer .wn-btn {
+    flex: 1 1 100%;
+  }
+
+  .wn-duo-card__stats,
+  .wn-metric-row,
+  .wn-finance-strip,
+  .wn-wallet-fee-grid,
+  .wn-stat-grid,
+  .wn-users-grid,
+  .wn-categories-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .wn-page-hero h1,
+  .wn-dash-page__title,
+  .wn-studio-title {
+    font-size: clamp(1.25rem, 6vw, 1.6rem);
+    line-height: 1.25;
+    word-break: break-word;
+  }
+
+  .wn-page-hero p,
+  .wn-dash-page__subtitle {
+    font-size: 0.92rem;
+  }
+
+  /* Soften dense admin/dashboard paddings */
+  .wn-admin-main,
+  .wn-dash__main {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+
+  .wn-dash-page__card {
+    padding: var(--space-2);
+  }
+}
+
+/* Landscape phones: keep modals usable */
+@media (max-height: 500px) and (orientation: landscape) {
+  .wn-modal,
+  .wn-modal--lg,
+  .wn-modal--xl {
+    max-height: 94dvh;
+  }
+
+  .wn-modal__body {
+    max-height: 60dvh;
+    overflow-y: auto;
+  }
+}

@@ -1162,3 +1162,18 @@ margin-top: var(--space-3);
   color: var(--color-text-main);
   white-space: pre-wrap;
 }
+@media (max-width: 480px) {
+  .wn-job-detail__layout,
+  .wn-job-form-layout {
+    gap: var(--space-2);
+  }
+
+  .wn-dash-detail-item,
+  .wn-job-card {
+    padding: var(--space-2);
+  }
+
+  .wn-job-detail__hero-title {
+    font-size: 1.2rem;
+  }
+}

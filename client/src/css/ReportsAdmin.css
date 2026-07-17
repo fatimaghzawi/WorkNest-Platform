@@ -286,3 +286,15 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 480px) {
+  .wn-reports-overview__tiles {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-reports-table th,
+  .wn-reports-table td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

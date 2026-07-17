@@ -947,3 +947,20 @@ grid-template-columns:1fr;
 
 
 }
+@media (max-width: 480px) {
+  .proposal-card,
+  .proposal-list-item {
+    padding: var(--space-2);
+  }
+
+  .proposal-card__actions,
+  .proposal-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .proposal-card__actions .wn-btn,
+  .proposal-toolbar .wn-btn {
+    width: 100%;
+  }
+}

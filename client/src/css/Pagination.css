@@ -66,3 +66,16 @@
   opacity: 0.45;
   cursor: not-allowed;
 }
+@media (max-width: 768px) {
+  .wn-pagination {
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .wn-pagination__dot,
+  .wn-pagination__arrow {
+    min-width: 40px;
+    min-height: 40px;
+  }
+}

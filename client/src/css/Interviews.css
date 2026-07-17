@@ -1027,6 +1027,27 @@
   .wn-interviews-overview__tiles {
     grid-template-columns: 1fr;
   }
+
+  .wn-interview-card,
+  .wn-interview-list-item {
+    padding: var(--space-2);
+  }
+
+  .wn-interview-card__actions,
+  .wn-interview-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .wn-interview-card__actions .wn-btn,
+  .wn-interview-toolbar .wn-btn {
+    width: 100%;
+  }
+
+  .wn-dashboard-mini-cal__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 /* Dashboard mini calendar */

@@ -128,7 +128,7 @@
 
 .wn-client-proposals__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 16px;
 }
 
@@ -239,5 +239,13 @@
 
   .wn-client-proposals__grid {
     grid-template-columns: 1fr;
+  }
+
+  .wn-client-proposal-card__actions {
+    flex-direction: column;
+  }
+
+  .wn-client-proposal-card__actions .wn-btn {
+    width: 100%;
   }
 }

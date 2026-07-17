@@ -190,3 +190,29 @@
   color: rgba(255, 255, 255, 0.78);
   margin: var(--space-3) 0 0;
 }
+
+@media (max-width: 768px) {
+  .wn-hero__content {
+    gap: var(--space-2);
+    padding: 0 var(--space-1);
+  }
+
+  .wn-hero__subtitle {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-hero__eyebrow {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  .wn-hero__title {
+    font-size: clamp(28px, 8vw, 36px);
+  }
+
+  .wn-hero__script {
+    font-size: 1.2em;
+  }
+}

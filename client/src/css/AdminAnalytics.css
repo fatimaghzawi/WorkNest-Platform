@@ -540,4 +540,25 @@
   .wn-finance-strip {
     grid-template-columns: 1fr;
   }
+
+  .wn-analytics-card,
+  .wn-chart-card {
+    padding: var(--space-2);
+  }
+
+  .wn-donut-center strong {
+    font-size: 1.15rem;
+  }
+
+  .recharts-responsive-container,
+  .wn-chart-wrap {
+    min-height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-analytics__hero-row,
+  .wn-analytics__main {
+    gap: var(--space-2);
+  }
 }

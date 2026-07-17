@@ -1285,3 +1285,23 @@ button.wn-jobs-overview__tile {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 480px) {
+  .wn-jobs-toolbar,
+  .wn-jobs-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .wn-job-row {
+    gap: 8px;
+  }
+
+  .wn-job-modal__footer {
+    flex-direction: column;
+  }
+
+  .wn-job-modal__footer .wn-btn {
+    width: 100%;
+  }
+}
