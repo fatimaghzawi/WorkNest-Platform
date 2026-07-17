@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Pagination from "../../components/common/Pagination";
 import { landingApi } from "../../api/landing.api";
 import type { LandingTopFreelancer } from "../../types/landing";
+import { resolveMediaUrl } from "../../utils/mediaUrl";
 import "../../css/StaticPage.css";
 import "../../landing page/css/TopFreelancers.css";
 
@@ -62,7 +63,7 @@ export default function Freelancers() {
                 <article className="wn-freelancer-card" key={f.freelancerId}>
                   {f.profileImage ? (
                     <img
-                      src={f.profileImage}
+                      src={resolveMediaUrl(f.profileImage)}
                       alt=""
                       className="wn-freelancer-card__avatar"
                       style={{ objectFit: "cover" }}

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { LandingTopFreelancer } from "../../types/landing";
+import { resolveMediaUrl } from "../../utils/mediaUrl";
 import "../css/TopFreelancers.css";
 
 function initials(firstName: string, lastName: string) {
@@ -47,7 +48,7 @@ export default function TopFreelancers({
               <article className="wn-freelancer-card" key={f.freelancerId}>
                 {f.profileImage ? (
                   <img
-                    src={f.profileImage}
+                    src={resolveMediaUrl(f.profileImage)}
                     alt=""
                     className="wn-freelancer-card__avatar"
                     style={{ objectFit: "cover" }}

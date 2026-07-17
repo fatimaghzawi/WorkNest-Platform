@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import "../../../css/Navbar.css";
 import logoImage from "../../../images/logo.png";
+import { resolveMediaUrl } from "../../../utils/mediaUrl";
 
 export interface NavLink {
   label: string;
@@ -224,7 +225,7 @@ export default function Navbar({
           {user && (
             <button type="button" className="wn-navbar__user" onClick={onUserClick}>
               {user.avatarUrl ? (
-                <img src={user.avatarUrl} alt="" className="wn-navbar__avatar" />
+                <img src={resolveMediaUrl(user.avatarUrl)} alt="" className="wn-navbar__avatar" />
               ) : (
                 <span className="wn-navbar__avatar-fallback">{initials(user.name)}</span>
               )}
