@@ -1,5 +1,6 @@
 ﻿const { Router } = require('express');
 const { sendSuccess } = require('../utils/response');
+const env = require('../config/env');
 
 const userRoutes = require('./user.routes');
 const profileRoutes = require('./profile.routes');
@@ -22,6 +23,7 @@ router.get('/health', (req, res) => {
     message: 'WorkNest API is running',
     data: {
       timestamp: new Date().toISOString(),
+      clientUrl: env.clientUrl,
     },
   });
 });

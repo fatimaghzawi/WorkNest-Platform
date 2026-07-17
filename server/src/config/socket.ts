@@ -20,7 +20,7 @@ const parseCookies = (cookieHeader = '') => {
 const initSocket = (httpServer) => {
   const io = new Server(httpServer, {
     cors: {
-      origin: env.clientUrl,
+      origin: env.clientUrl.replace(/\/$/, ''),
       methods: ['GET', 'POST'],
       credentials: true,
     },

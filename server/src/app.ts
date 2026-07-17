@@ -20,10 +20,16 @@ const app = express();
 
 app.set('trust proxy', 1);
 
-app.use(helmet());
+app.use(
+  helmet({
+    // Allow Vercel frontend + Google OAuth popup / postMessage
+    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
 app.use(
   cors({
-    origin: env.clientUrl,
+    origin: env.clientUrl.replace(/\/$/, ''),
     credentials: true,
   })
 );
