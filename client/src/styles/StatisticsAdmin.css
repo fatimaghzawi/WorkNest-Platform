@@ -391,11 +391,19 @@
 
 .wn-stats-panel__chart {
   width: 100%;
+  min-width: 0;
   height: 240px;
+  overflow: visible;
+  position: relative;
 }
 
 .wn-stats-panel__chart--tall {
   height: 300px;
+}
+
+.wn-stats-panel__chart .recharts-responsive-container {
+  width: 100% !important;
+  min-width: 0 !important;
 }
 
 /* Pipeline rings */
@@ -705,6 +713,18 @@
   .wn-stats-panel__header {
     flex-wrap: wrap;
   }
+
+  .wn-stats-panel__chart {
+    height: 260px;
+  }
+
+  .wn-stats-panel__chart--tall {
+    height: 280px;
+  }
+
+  .wn-stats-mini-donut__chart {
+    height: 180px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -718,5 +738,10 @@
 
   .wn-stats-panel__legend-inline {
     width: 100%;
+  }
+
+  .wn-stats-panel__chart,
+  .wn-stats-panel__chart--tall {
+    height: 240px;
   }
 }

@@ -7,6 +7,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import Button from '@/components/Button';
+import Modal from '@/components/Modal';
 import Pagination from '@/components/Pagination';
 import StatusBadge from '@/features/jobs/StatusBadge';
 import { BlockLoader } from '@/components/Loader';
@@ -34,6 +35,8 @@ import { useCheckoutReturn } from '@/hooks/useCheckoutReturn';
 import { formatCurrency, formatDate, formatDateTime } from '@/utils/format';
 import '@/styles/FreelancerStudio.css';
 import '@/styles/DesignSystem.css';
+import '@/styles/Proposal.css';
+import '@/styles/ClientProposals.css';
 
 const FILTERS: { label: string; value: ProposalStatus | '' }[] = [
   { label: 'All', value: '' },
@@ -75,6 +78,7 @@ export default function JobProposals() {
   const [actingId, setActingId] = useState<string | null>(null);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [prefill, setPrefill] = useState<PrefillProposal | null>(null);
+  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
   const [depositProject, setDepositProject] = useState<{
     id: string;
     title: string;
@@ -191,6 +195,22 @@ export default function JobProposals() {
     if (value === 'pending') return counts.pending;
     if (value === 'accepted') return counts.accepted;
     return counts.rejected;
+  };
+
+  const selectedFreelancer =
+    selectedProposal && typeof selectedProposal.freelancerId === 'object'
+      ? selectedProposal.freelancerId
+      : null;
+  const selectedFreelancerName = selectedFreelancer
+    ? `${selectedFreelancer.firstName} ${selectedFreelancer.lastName}`
+    : 'Freelancer';
+  const selectedFreelancerId =
+    selectedFreelancer?._id ||
+    (selectedProposal ? String(selectedProposal.freelancerId) : '');
+  const selectedProfilePath = `/client/freelancers/${selectedFreelancerId}`;
+  const selectedProfileState = {
+    from: location.pathname,
+    fromLabel: 'Back to proposals',
   };
 
   return (
@@ -330,9 +350,13 @@ export default function JobProposals() {
                       </div>
                     )}
 
-                    <p className="wn-freelancer-project-card__hint" style={{ WebkitLineClamp: 3, display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    <button
+                      type="button"
+                      className="wn-freelancer-project-card__hint wn-client-proposal-card__cover-btn"
+                      onClick={() => setSelectedProposal(proposal)}
+                    >
                       {proposal.coverLetter}
-                    </p>
+                    </button>
 
                     <div className="wn-duo-card__stats">
                       <div className="wn-duo-card__stat">
@@ -350,6 +374,9 @@ export default function JobProposals() {
                     </div>
 
                     <div className="wn-freelancer-project-card__actions">
+                      <Button size="sm" variant="outline" onClick={() => setSelectedProposal(proposal)}>
+                        View details
+                      </Button>
                       <Button size="sm" variant="outline" to={profilePath} state={profileState}>
                         View profile
                       </Button>
@@ -409,6 +436,132 @@ export default function JobProposals() {
         }}
         onScheduled={handleSchedule}
       />
+
+      <Modal
+        open={Boolean(selectedProposal)}
+        onClose={() => setSelectedProposal(null)}
+        title="Proposal details"
+        size="lg"
+        footer={
+          selectedProposal ? (
+            <div className="wn-deposit-modal__actions" style={{ width: '100%', justifyContent: 'flex-end' }}>
+              <Button variant="outline" to={selectedProfilePath} state={selectedProfileState}>
+                View profile
+              </Button>
+              {(selectedProposal.status === 'pending' || selectedProposal.status === 'accepted') && (
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    const proposal = selectedProposal;
+                    setSelectedProposal(null);
+                    void openSchedule(proposal);
+                  }}
+                >
+                  Schedule interview
+                </Button>
+              )}
+              {selectedProposal.status === 'pending' && (
+                <>
+                  <Button
+                    variant="outline"
+                    disabled={actingId === selectedProposal._id}
+                    onClick={() => {
+                      const id = selectedProposal._id;
+                      setSelectedProposal(null);
+                      void handleStatusChange(id, 'rejected');
+                    }}
+                  >
+                    Reject
+                  </Button>
+                  <Button
+                    loading={actingId === selectedProposal._id}
+                    onClick={() => {
+                      const id = selectedProposal._id;
+                      setSelectedProposal(null);
+                      void handleStatusChange(id, 'accepted');
+                    }}
+                  >
+                    Accept
+                  </Button>
+                </>
+              )}
+            </div>
+          ) : undefined
+        }
+      >
+        {selectedProposal && (
+          <div className="proposal-details-modal" style={{ boxShadow: 'none', padding: 0, maxWidth: 'none' }}>
+            <div className="wn-client-proposal-card__identity" style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+              <UserAvatar
+                firstName={selectedFreelancer?.firstName || 'F'}
+                lastName={selectedFreelancer?.lastName || 'L'}
+                role="freelancer"
+                image={selectedFreelancer?.profileImage}
+                size="lg"
+              />
+              <div>
+                <h3 className="wn-freelancer-project-card__title" style={{ margin: 0 }}>
+                  {selectedFreelancerName}
+                </h3>
+                <p className="wn-freelancer-project-card__meta" style={{ margin: '4px 0 8px' }}>
+                  Submitted {formatDateTime(selectedProposal.createdAt)}
+                </p>
+                <StatusBadge status={selectedProposal.status} kind="proposal" />
+              </div>
+            </div>
+
+            {selectedFreelancer?.skills && selectedFreelancer.skills.length > 0 && (
+              <div className="wn-dash-skills" style={{ marginBottom: 16 }}>
+                {selectedFreelancer.skills.map((skill) => (
+                  <span key={skill} className="wn-dash-skill">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {selectedFreelancer?.bio && (
+              <div className="proposal-details-modal__section" style={{ marginTop: 0 }}>
+                <h4>About</h4>
+                <p>{selectedFreelancer.bio}</p>
+              </div>
+            )}
+
+            <div
+              className="proposal-details-modal__section"
+              style={{ marginTop: selectedFreelancer?.bio ? undefined : 0 }}
+            >
+              <h4>Cover letter</h4>
+              <p style={{ whiteSpace: 'pre-wrap' }}>{selectedProposal.coverLetter}</p>
+            </div>
+
+            <div
+              className="proposal-info"
+              style={{ marginTop: 20, gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}
+            >
+              <div>
+                <span>Bid</span>
+                <strong>{formatCurrency(selectedProposal.price)}</strong>
+              </div>
+              <div>
+                <span>Timeline</span>
+                <strong>{selectedProposal.timeline}</strong>
+              </div>
+            </div>
+
+            {selectedFreelancer?.portfolioLink && (
+              <div className="proposal-details-modal__section">
+                <h4>Portfolio</h4>
+                <p>
+                  <a href={selectedFreelancer.portfolioLink} target="_blank" rel="noreferrer">
+                    {selectedFreelancer.portfolioLink}
+                  </a>
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
 
       {depositProject && (
         <DepositEscrowModal

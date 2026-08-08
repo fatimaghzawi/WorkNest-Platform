@@ -27,6 +27,7 @@ import { StatGridSkeleton } from '@/components/Skeleton';
 import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
 import { formatCurrency } from '@/utils/format';
 import { useToast } from '@/hooks/useToast';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { getApiErrorMessage } from '@/utils/apiError';
 import '@/styles/DesignSystem.css';
 import '@/styles/AdminAnalytics.css';
@@ -79,6 +80,7 @@ const emptyOverview: DashboardOverview = {
 
 export default function AdminDashboardHome() {
   const toast = useToast();
+  const isCompact = useMediaQuery('(max-width: 768px)');
   const [loading, setLoading] = useState(true);
   const [payload, setPayload] = useState<AdminDashboardPayload | null>(null);
 
@@ -155,18 +157,39 @@ export default function AdminDashboardHome() {
                 </div>
               </div>
 
-              <div style={{ width: '100%', height: 260 }}>
-                <ResponsiveContainer>
-                  <ComposedChart data={chartPoints} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+              <div className="wn-chart-frame" style={{ width: '100%', height: isCompact ? 220 : 260 }}>
+                <ResponsiveContainer width="100%" height="100%" debounce={50}>
+                  <ComposedChart
+                    data={chartPoints}
+                    margin={
+                      isCompact
+                        ? { top: 8, right: 4, left: 0, bottom: 4 }
+                        : { top: 8, right: 8, left: 0, bottom: 0 }
+                    }
+                  >
                     <CartesianGrid strokeDasharray="3 3" stroke="#EDE4F3" vertical={false} />
-                    <XAxis dataKey="label" tick={{ fill: '#9CA3AF', fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <YAxis yAxisId="left" tick={{ fill: '#9CA3AF', fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <XAxis
+                      dataKey="label"
+                      tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 12 }}
+                      axisLine={false}
+                      tickLine={false}
+                      interval={isCompact ? 'preserveStartEnd' : 0}
+                      minTickGap={isCompact ? 16 : 8}
+                    />
+                    <YAxis
+                      yAxisId="left"
+                      tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 12 }}
+                      axisLine={false}
+                      tickLine={false}
+                      width={isCompact ? 28 : 40}
+                    />
                     <YAxis
                       yAxisId="right"
                       orientation="right"
-                      tick={{ fill: '#9CA3AF', fontSize: 12 }}
+                      tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 12 }}
                       axisLine={false}
                       tickLine={false}
+                      width={isCompact ? 24 : 40}
                     />
                     <Tooltip
                       contentStyle={{
@@ -175,13 +198,20 @@ export default function AdminDashboardHome() {
                         boxShadow: '0 8px 24px rgba(73,34,91,0.12)',
                       }}
                     />
-                    <Bar yAxisId="left" dataKey="jobs" fill={PURPLE} radius={[8, 8, 0, 0]} barSize={18} name="Jobs" />
+                    <Bar
+                      yAxisId="left"
+                      dataKey="jobs"
+                      fill={PURPLE}
+                      radius={[8, 8, 0, 0]}
+                      barSize={isCompact ? 12 : 18}
+                      name="Jobs"
+                    />
                     <Line
                       yAxisId="right"
                       type="monotone"
                       dataKey="proposals"
                       stroke={ORANGE}
-                      strokeWidth={3}
+                      strokeWidth={isCompact ? 2 : 3}
                       dot={false}
                       name="Proposals"
                     />
@@ -257,7 +287,7 @@ export default function AdminDashboardHome() {
             <p>Proposal conversion & hiring spend this month</p>
 
             <div className="wn-donut-wrap" style={{ height: 120 }}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" debounce={50}>
                 <PieChart>
                   <Pie
                     data={gaugeData}
@@ -297,9 +327,9 @@ export default function AdminDashboardHome() {
               </div>
             </div>
 
-            <div style={{ width: '100%', height: 48, marginTop: 12, opacity: 0.85 }}>
-              <ResponsiveContainer>
-                <ComposedChart data={chartPoints.slice(-8)}>
+            <div className="wn-chart-frame" style={{ width: '100%', height: 48, marginTop: 12, opacity: 0.85 }}>
+              <ResponsiveContainer width="100%" height="100%" debounce={50}>
+                <ComposedChart data={chartPoints.slice(-8)} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                   <Bar dataKey="jobs" fill="rgba(255,255,255,0.35)" barSize={6} radius={[4, 4, 0, 0]} />
                   <Line type="monotone" dataKey="proposals" stroke={LIGHT} strokeWidth={2} dot={false} />
                 </ComposedChart>

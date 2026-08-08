@@ -187,6 +187,28 @@
   overflow: hidden;
 }
 
+.wn-client-proposal-card__cover-btn {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.wn-client-proposal-card__cover-btn:hover {
+  color: var(--color-text-main);
+}
+
 .wn-client-proposal-card__stats {
   display: grid;
   grid-template-columns: 1fr 1fr;

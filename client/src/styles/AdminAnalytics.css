@@ -41,8 +41,24 @@
 
 .wn-analytics-card__chart {
   width: 100%;
-  height: 200px;
-  min-height: 200px;
+  min-width: 0;
+  height: 220px;
+  min-height: 220px;
+  overflow: visible;
+  position: relative;
+}
+
+.wn-chart-frame {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: inherit;
+  overflow: visible;
+}
+
+.wn-chart-frame .recharts-responsive-container {
+  width: 100% !important;
+  min-width: 0 !important;
 }
 
 .wn-chart-kpi--compact {
@@ -180,6 +196,13 @@
   grid-template-columns: 1fr 140px;
   gap: 16px;
   align-items: center;
+}
+
+.wn-status-card__chart {
+  width: 140px;
+  height: 140px;
+  min-width: 0;
+  justify-self: end;
 }
 
 .wn-status-card__label {
@@ -535,6 +558,14 @@
 
   .wn-status-card {
     grid-template-columns: 1fr;
+    justify-items: stretch;
+  }
+
+  .wn-status-card__chart {
+    width: 100%;
+    max-width: 160px;
+    height: 160px;
+    margin-inline: auto;
   }
 
   .wn-finance-strip {
@@ -546,13 +577,36 @@
     padding: var(--space-2);
   }
 
+  .wn-analytics-card__chart {
+    height: 240px;
+    min-height: 240px;
+  }
+
+  .wn-chart-kpi,
+  .wn-chart-kpi--compact {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .wn-chart-kpi strong,
+  .wn-chart-kpi--compact strong {
+    font-size: 0.95rem;
+    word-break: break-word;
+  }
+
+  .wn-chart-kpi span,
+  .wn-chart-kpi--compact span {
+    font-size: 0.68rem;
+    line-height: 1.25;
+  }
+
   .wn-donut-center strong {
     font-size: 1.15rem;
   }
 
-  .recharts-responsive-container,
-  .wn-chart-wrap {
-    min-height: 220px;
+  .wn-donut-wrap {
+    max-width: 100%;
   }
 }
 
@@ -560,5 +614,15 @@
   .wn-analytics__hero-row,
   .wn-analytics__main {
     gap: var(--space-2);
+  }
+
+  .wn-chart-kpi,
+  .wn-chart-kpi--compact {
+    grid-template-columns: 1fr;
+  }
+
+  .wn-analytics-card__chart {
+    height: 220px;
+    min-height: 220px;
   }
 }

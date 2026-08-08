@@ -40,6 +40,24 @@ summary,
   overflow-x: clip;
 }
 
+/* Recharts needs visible overflow; clip on ancestors hides axes/bars on narrow screens */
+.wn-analytics-card__chart,
+.wn-stats-panel__chart,
+.wn-chart-frame,
+.wn-donut-wrap,
+.wn-stats-mini-donut__chart {
+  max-width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+.wn-analytics-card__chart .recharts-wrapper,
+.wn-stats-panel__chart .recharts-wrapper,
+.wn-chart-frame .recharts-wrapper,
+.wn-donut-wrap .recharts-wrapper {
+  max-width: 100% !important;
+}
+
 /* Sticky headers: height token already includes safe-area on small screens */
 .wn-navbar,
 .wn-dash-nav {

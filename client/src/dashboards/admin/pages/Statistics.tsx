@@ -32,6 +32,7 @@ import {
   RankedBars,
 } from '@/dashboards/admin/components/statistics/chartHelpers';
 import { useToast } from '@/hooks/useToast';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { getApiErrorMessage } from '@/utils/apiError';
 import { formatCurrency, formatStatusLabel } from '@/utils/format';
 import '@/styles/DesignSystem.css';
@@ -95,6 +96,7 @@ function toPieData(items: StatusCount[] | { role: string; count: number }[], lab
 
 export default function AdminStatistics() {
   const toast = useToast();
+  const isCompact = useMediaQuery('(max-width: 768px)');
   const [months, setMonths] = useState<(typeof PERIOD_OPTIONS)[number]['value']>(12);
   const [loading, setLoading] = useState(true);
   const [payload, setPayload] = useState<PlatformStatisticsPayload>(emptyPayload);
@@ -256,8 +258,15 @@ export default function AdminStatistics() {
               <div className="wn-stats-empty">No timeline data yet.</div>
             ) : (
               <div className="wn-stats-panel__chart wn-stats-panel__chart--tall">
-                <ResponsiveContainer>
-                  <ComposedChart data={timeline} margin={{ top: 12, right: 8, left: -6, bottom: 0 }}>
+                <ResponsiveContainer width="100%" height="100%" debounce={50}>
+                  <ComposedChart
+                    data={timeline}
+                    margin={
+                      isCompact
+                        ? { top: 8, right: 4, left: 0, bottom: 8 }
+                        : { top: 12, right: 8, left: 0, bottom: 0 }
+                    }
+                  >
                     <defs>
                       <linearGradient id="statJobsFill" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor={CHART.purple} stopOpacity={0.55} />
@@ -271,23 +280,27 @@ export default function AdminStatistics() {
                     <CartesianGrid stroke="rgba(110,52,130,0.08)" strokeDasharray="4 6" vertical={false} />
                     <XAxis
                       dataKey="monthLabel"
-                      tick={{ fill: '#8B7A96', fontSize: 11, fontWeight: 500 }}
+                      tick={{ fill: '#8B7A96', fontSize: isCompact ? 9 : 11, fontWeight: 500 }}
                       axisLine={false}
                       tickLine={false}
                       dy={8}
+                      interval={isCompact ? 'preserveStartEnd' : 0}
+                      minTickGap={isCompact ? 20 : 8}
                     />
                     <YAxis
                       yAxisId="left"
-                      tick={{ fill: '#8B7A96', fontSize: 11 }}
+                      tick={{ fill: '#8B7A96', fontSize: isCompact ? 9 : 11 }}
                       axisLine={false}
                       tickLine={false}
+                      width={isCompact ? 28 : 40}
                     />
                     <YAxis
                       yAxisId="right"
                       orientation="right"
-                      tick={{ fill: '#8B7A96', fontSize: 11 }}
+                      tick={{ fill: '#8B7A96', fontSize: isCompact ? 9 : 11 }}
                       axisLine={false}
                       tickLine={false}
+                      width={isCompact ? 24 : 40}
                     />
                     <Tooltip content={<GlassTooltip />} />
                     <Area
@@ -344,23 +357,33 @@ export default function AdminStatistics() {
               <div className="wn-stats-empty wn-stats-empty--light">No budget data yet.</div>
             ) : (
               <div className="wn-stats-panel__chart">
-                <ResponsiveContainer>
-                  <BarChart data={timeline} margin={{ top: 8, right: 4, left: -18, bottom: 0 }}>
+                <ResponsiveContainer width="100%" height="100%" debounce={50}>
+                  <BarChart
+                    data={timeline}
+                    margin={
+                      isCompact
+                        ? { top: 8, right: 4, left: 0, bottom: 8 }
+                        : { top: 8, right: 4, left: 0, bottom: 0 }
+                    }
+                  >
                     <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
                     <XAxis
                       dataKey="monthLabel"
-                      tick={{ fill: 'rgba(255,255,255,0.65)', fontSize: 10 }}
+                      tick={{ fill: 'rgba(255,255,255,0.65)', fontSize: isCompact ? 9 : 10 }}
                       axisLine={false}
                       tickLine={false}
+                      interval={isCompact ? 'preserveStartEnd' : 0}
+                      minTickGap={isCompact ? 20 : 8}
                     />
                     <YAxis
-                      tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 10 }}
+                      tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: isCompact ? 9 : 10 }}
                       axisLine={false}
                       tickLine={false}
+                      width={isCompact ? 28 : 40}
                       tickFormatter={(v) => `$${v >= 1000 ? `${Math.round(v / 1000)}k` : v}`}
                     />
                     <Tooltip content={<GlassTooltip />} />
-                    <Bar dataKey="budget" name="Budget" radius={[10, 10, 4, 4]} barSize={18}>
+                    <Bar dataKey="budget" name="Budget" radius={[10, 10, 4, 4]} barSize={isCompact ? 12 : 18}>
                       {timeline.map((_, index) => (
                         <Cell
                           key={index}

@@ -120,6 +120,15 @@
   gap: 14px;
 }
 
+.wn-deposit-modal__embedded {
+  min-height: 420px;
+  width: 100%;
+}
+
+.wn-deposit-modal__embedded iframe {
+  width: 100% !important;
+}
+
 .wn-deposit-modal__stripe-copy {
   margin: 0;
   font-size: 13px;

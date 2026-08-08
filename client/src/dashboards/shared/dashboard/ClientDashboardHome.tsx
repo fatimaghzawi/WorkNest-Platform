@@ -31,6 +31,7 @@ import DashboardInterviewMiniCalendar from '@/dashboards/shared/dashboard/Dashbo
 import DashboardStudioShell from '@/dashboards/shared/studio/DashboardStudioShell';
 import { formatCurrency } from '@/utils/format';
 import { useToast } from '@/hooks/useToast';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { getApiErrorMessage } from '@/utils/apiError';
 import '@/styles/DesignSystem.css';
 import '@/styles/AdminAnalytics.css';
@@ -88,6 +89,7 @@ const emptyOverview: ClientDashboardOverview = {
 
 export default function ClientDashboardHome() {
   const toast = useToast();
+  const isCompact = useMediaQuery('(max-width: 768px)');
   const [loading, setLoading] = useState(true);
   const [payload, setPayload] = useState<ClientDashboardPayload | null>(null);
 
@@ -212,18 +214,38 @@ export default function ClientDashboardHome() {
               </div>
 
               <div className="wn-analytics-card__chart">
-                <ResponsiveContainer>
-                  <ComposedChart data={chartPoints} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+                <ResponsiveContainer width="100%" height="100%" debounce={50}>
+                  <ComposedChart
+                    data={chartPoints}
+                    margin={
+                      isCompact
+                        ? { top: 8, right: 4, left: 0, bottom: 4 }
+                        : { top: 4, right: 4, left: 0, bottom: 0 }
+                    }
+                  >
                     <CartesianGrid strokeDasharray="3 3" stroke="#EDE4F3" vertical={false} />
-                    <XAxis dataKey="label" tick={{ fill: '#9CA3AF', fontSize: 10 }} axisLine={false} tickLine={false} />
-                    <YAxis yAxisId="left" tick={{ fill: '#9CA3AF', fontSize: 10 }} axisLine={false} tickLine={false} width={32} />
+                    <XAxis
+                      dataKey="label"
+                      tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                      interval={isCompact ? 'preserveStartEnd' : 0}
+                      minTickGap={isCompact ? 16 : 8}
+                    />
+                    <YAxis
+                      yAxisId="left"
+                      tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                      width={isCompact ? 28 : 32}
+                    />
                     <YAxis
                       yAxisId="right"
                       orientation="right"
-                      tick={{ fill: '#9CA3AF', fontSize: 10 }}
+                      tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 10 }}
                       axisLine={false}
                       tickLine={false}
-                      width={28}
+                      width={isCompact ? 24 : 28}
                     />
                     <Tooltip
                       contentStyle={{
@@ -233,7 +255,14 @@ export default function ClientDashboardHome() {
                         fontSize: 12,
                       }}
                     />
-                    <Bar yAxisId="left" dataKey="jobs" fill={PURPLE} radius={[6, 6, 0, 0]} barSize={14} name="Jobs posted" />
+                    <Bar
+                      yAxisId="left"
+                      dataKey="jobs"
+                      fill={PURPLE}
+                      radius={[6, 6, 0, 0]}
+                      barSize={isCompact ? 10 : 14}
+                      name="Jobs posted"
+                    />
                     <Line
                       yAxisId="right"
                       type="monotone"
@@ -284,9 +313,9 @@ export default function ClientDashboardHome() {
                   {overview.jobs.open} open · {overview.jobs.inProgress} in progress · {overview.jobs.closed} closed
                 </p>
               </div>
-              <div style={{ width: 140, height: 140 }}>
+              <div className="wn-status-card__chart">
                 {jobPieData.length > 0 ? (
-                  <ResponsiveContainer>
+                  <ResponsiveContainer width="100%" height="100%" debounce={50}>
                     <PieChart>
                       <Pie data={jobPieData} dataKey="value" innerRadius={38} outerRadius={58} stroke="none">
                         {jobPieData.map((entry) => (
@@ -313,9 +342,9 @@ export default function ClientDashboardHome() {
                   {overview.proposals.rejected} declined
                 </p>
               </div>
-              <div style={{ width: 140, height: 140 }}>
+              <div className="wn-status-card__chart">
                 {proposalPieData.length > 0 ? (
-                  <ResponsiveContainer>
+                  <ResponsiveContainer width="100%" height="100%" debounce={50}>
                     <PieChart>
                       <Pie data={proposalPieData} dataKey="value" innerRadius={38} outerRadius={58} stroke="none">
                         {proposalPieData.map((entry) => (
@@ -389,7 +418,7 @@ export default function ClientDashboardHome() {
             <p>Proposal conversion & project progress this month</p>
 
             <div className="wn-donut-wrap" style={{ height: 120 }}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" debounce={50}>
                 <PieChart>
                   <Pie
                     data={hireRateData}
@@ -431,9 +460,9 @@ export default function ClientDashboardHome() {
               </div>
             </div>
 
-            <div style={{ width: '100%', height: 48, marginTop: 12, opacity: 0.85 }}>
-              <ResponsiveContainer>
-                <ComposedChart data={chartPoints.slice(-8)}>
+            <div className="wn-chart-frame" style={{ width: '100%', height: 48, marginTop: 12, opacity: 0.85 }}>
+              <ResponsiveContainer width="100%" height="100%" debounce={50}>
+                <ComposedChart data={chartPoints.slice(-8)} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                   <Bar dataKey="jobs" fill="rgba(255,255,255,0.35)" barSize={6} radius={[4, 4, 0, 0]} />
                   <Line type="monotone" dataKey="proposals" stroke={LIGHT} strokeWidth={2} dot={false} />
                 </ComposedChart>

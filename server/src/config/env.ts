@@ -66,6 +66,7 @@ const envSchema = z
     CLIENT_URL: z.preprocess(emptyToUndefined, z.string().default('http://localhost:5173')),
 
     STRIPE_SECRET_KEY: z.preprocess(emptyToUndefined, z.string().default('')),
+    STRIPE_PUBLISHABLE_KEY: z.preprocess(emptyToUndefined, z.string().default('')),
     STRIPE_WEBHOOK_SECRET: z.preprocess(emptyToUndefined, z.string().default('')),
 
     RATE_LIMIT_WINDOW_MS: z.preprocess(
@@ -185,9 +186,10 @@ const configuredClientOrigins = String(parsed.CLIENT_URL)
   .filter(Boolean);
 
 // Always allow known frontend deploys so CORS does not break when CLIENT_URL is stale.
+// Keep this list in sync with the live Vercel production URL only (dead preview URLs cause
+// DEPLOYMENT_NOT_FOUND when used as CLIENT_URL for email deep links).
 const knownFrontendOrigins = [
   'https://work-nest-platform-nu.vercel.app',
-  'https://work-nest-eight.vercel.app',
 ];
 
 const allowedOrigins = Array.from(
@@ -235,6 +237,7 @@ const env = {  //export the environment variables and make them available in the
 
   stripe: {
     secretKey: parsed.STRIPE_SECRET_KEY,
+    publishableKey: parsed.STRIPE_PUBLISHABLE_KEY,
     webhookSecret: parsed.STRIPE_WEBHOOK_SECRET,
     isConfigured: Boolean(parsed.STRIPE_SECRET_KEY),
   },

@@ -33,8 +33,8 @@ export default function MiniDonut({
     <div className="wn-stats-mini-donut">
       {title ? <p className="wn-stats-mini-donut__title">{title}</p> : null}
       <div className="wn-stats-mini-donut__chart">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
+        <ResponsiveContainer width="100%" height="100%" debounce={50}>
+          <PieChart margin={{ top: 4, right: 4, bottom: 4, left: 4 }}>
             <Pie
               data={data}
               dataKey="value"

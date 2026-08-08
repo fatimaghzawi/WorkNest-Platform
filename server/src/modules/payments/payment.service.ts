@@ -154,6 +154,7 @@ const createCheckoutSession = async (
   const separator = safeReturnPath.includes('?') ? '&' : '?';
 
   const session = await stripe.checkout.sessions.create({
+    ui_mode: 'embedded',
     mode: 'payment',
     payment_method_types: ['card'],
     line_items: [
@@ -174,12 +175,12 @@ const createCheckoutSession = async (
       paymentId: getId(payment._id),
       clientId,
     },
-    success_url: `${clientPath(safeReturnPath)}${separator}checkout=success&projectId=${projectId}&session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${clientPath(safeReturnPath)}${separator}checkout=cancelled&projectId=${projectId}`,
+    // Fallback if the embedded flow redirects (rare); primary completion is in-app.
+    return_url: `${clientPath(safeReturnPath)}${separator}checkout=success&projectId=${projectId}&session_id={CHECKOUT_SESSION_ID}`,
   });
 
-  if (!session.url) {
-    throw new AppError('Failed to create Stripe checkout session', 500);
+  if (!session.client_secret) {
+    throw new AppError('Failed to create Stripe embedded checkout session', 500);
   }
 
   await paymentRepository.updateByProjectId(projectId, {
@@ -187,8 +188,9 @@ const createCheckoutSession = async (
   });
 
   return {
-    url: session.url,
+    clientSecret: session.client_secret,
     sessionId: session.id,
+    publishableKey: env.stripe.publishableKey || undefined,
   };
 };
 

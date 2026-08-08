@@ -41,8 +41,9 @@ export interface WalletSummary {
 }
 
 export interface CheckoutSessionResponse {
-  url: string;
+  clientSecret: string;
   sessionId: string;
+  publishableKey?: string;
 }
 
 export interface ListPaymentsParams {
