@@ -1,12 +1,12 @@
 ﻿import { FormEvent, useState, useEffect } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import Button from '../../components/common/Button';
-import Input from '../../components/common/Input';
-import { IconEye, IconEyeOff, IconLock, IconMail } from '../../components/auth/AuthIcons';
-import SocialAuthButtons, { hasSocialAuth } from '../../components/auth/SocialAuthButtons';
-import { getDashboardPath, useAuth } from '../../hooks/useAuth';
-import { useToast } from '../../hooks/useToast';
-import { getApiErrorMessage } from '../../utils/apiError';
+import Button from '@/components/Button';
+import Input from '@/components/Input';
+import { IconEye, IconEyeOff, IconLock, IconMail } from '@/features/auth/AuthIcons';
+import SocialAuthButtons, { hasSocialAuth } from '@/features/auth/SocialAuthButtons';
+import { getDashboardPath, useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/useToast';
+import { getApiErrorMessage } from '@/utils/apiError';
 
 export default function Login() {
   const navigate = useNavigate();

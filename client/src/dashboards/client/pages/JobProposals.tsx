@@ -6,34 +6,34 @@ import {
   FileText,
   XCircle,
 } from 'lucide-react';
-import Button from '../../../components/common/Button';
-import Pagination from '../../../components/common/Pagination';
-import StatusBadge from '../../../components/jobs/StatusBadge';
-import { BlockLoader } from '../../../components/common/Loader';
-import UserAvatar from '../../../components/users/UserAvatar';
-import { jobsApi } from '../../../api/jobs.api';
-import { proposalsApi } from '../../../api/proposals.api';
-import { projectsApi } from '../../../api/projects.api';
-import { interviewsApi } from '../../../api/interviews.api';
-import DepositEscrowModal from '../../_shared/payments/DepositEscrowModal';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import DashboardStudioShell from '../../_shared/studio/DashboardStudioShell';
-import DashboardOverview from '../../_shared/studio/DashboardOverview';
-import DashboardStudioPanel from '../../_shared/studio/DashboardStudioPanel';
+import Button from '@/components/Button';
+import Pagination from '@/components/Pagination';
+import StatusBadge from '@/features/jobs/StatusBadge';
+import { BlockLoader } from '@/components/Loader';
+import UserAvatar from '@/features/users/UserAvatar';
+import { jobsApi } from '@/api/jobs.api';
+import { proposalsApi } from '@/api/proposals.api';
+import { projectsApi } from '@/api/projects.api';
+import { interviewsApi } from '@/api/interviews.api';
+import DepositEscrowModal from '@/dashboards/shared/payments/DepositEscrowModal';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import DashboardStudioShell from '@/dashboards/shared/studio/DashboardStudioShell';
+import DashboardOverview from '@/dashboards/shared/studio/DashboardOverview';
+import DashboardStudioPanel from '@/dashboards/shared/studio/DashboardStudioPanel';
 import ScheduleInterviewModal, {
   type PrefillProposal,
-} from '../../_shared/interviews/ScheduleInterviewModal';
-import type { Job } from '../../../types/job';
-import type { Proposal, ProposalStatus } from '../../../types/proposal';
-import type { CreateInterviewPayload } from '../../../types/interview';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import { useToast } from '../../../hooks/useToast';
-import { useConfirm } from '../../../context/ConfirmContext';
-import { useCheckoutReturn } from '../../../hooks/useCheckoutReturn';
-import { formatCurrency, formatDate, formatDateTime } from '../../../utils/format';
-import '../../../css/FreelancerStudio.css';
-import '../../../css/DesignSystem.css';
+} from '@/dashboards/shared/interviews/ScheduleInterviewModal';
+import type { Job } from '@/types/job';
+import type { Proposal, ProposalStatus } from '@/types/proposal';
+import type { CreateInterviewPayload } from '@/types/interview';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { useToast } from '@/hooks/useToast';
+import { useConfirm } from '@/context/ConfirmContext';
+import { useCheckoutReturn } from '@/hooks/useCheckoutReturn';
+import { formatCurrency, formatDate, formatDateTime } from '@/utils/format';
+import '@/styles/FreelancerStudio.css';
+import '@/styles/DesignSystem.css';
 
 const FILTERS: { label: string; value: ProposalStatus | '' }[] = [
   { label: 'All', value: '' },

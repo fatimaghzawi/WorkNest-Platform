@@ -1,11 +1,11 @@
-import Button from '../../../../components/common/Button';
-import Modal from '../../../../components/common/Modal';
-import StatusBadge from '../../../../components/jobs/StatusBadge';
-import type { Category } from '../../../../types/category';
-import { formatDate, formatDateTime } from '../../../../utils/format';
-import '../../../../css/DashboardFeatures.css';
-import '../../../../css/JobsAdmin.css';
-import '../../../../css/CategoriesAdmin.css';
+import Button from '@/components/Button';
+import Modal from '@/components/Modal';
+import StatusBadge from '@/features/jobs/StatusBadge';
+import type { Category } from '@/types/category';
+import { formatDate, formatDateTime } from '@/utils/format';
+import '@/styles/DashboardFeatures.css';
+import '@/styles/JobsAdmin.css';
+import '@/styles/CategoriesAdmin.css';
 
 export default function CategoryDetailModal({
   category,

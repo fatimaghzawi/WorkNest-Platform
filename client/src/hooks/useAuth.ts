@@ -1,1 +1,1 @@
-﻿export { useAuthContext as useAuth, getDashboardPath } from '../context/AuthContext';
+﻿export { useAuthContext as useAuth, getDashboardPath } from '@/context/AuthContext';

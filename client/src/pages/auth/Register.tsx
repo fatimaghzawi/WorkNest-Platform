@@ -1,10 +1,10 @@
 ﻿import { FormEvent, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import Button from '../../components/common/Button';
-import Input from '../../components/common/Input';
-import AuthSuccessPanel from '../../components/auth/AuthSuccessPanel';
-import SocialAuthButtons, { hasSocialAuth } from '../../components/auth/SocialAuthButtons';
-import PasswordStrength from '../../components/auth/PasswordStrength';
+import Button from '@/components/Button';
+import Input from '@/components/Input';
+import AuthSuccessPanel from '@/features/auth/AuthSuccessPanel';
+import SocialAuthButtons, { hasSocialAuth } from '@/features/auth/SocialAuthButtons';
+import PasswordStrength from '@/features/auth/PasswordStrength';
 import {
   IconBriefcase,
   IconEye,
@@ -13,10 +13,10 @@ import {
   IconMail,
   IconPen,
   IconUser,
-} from '../../components/auth/AuthIcons';
-import { getDashboardPath, useAuth } from '../../hooks/useAuth';
-import { useToast } from '../../hooks/useToast';
-import { getApiErrorMessage } from '../../utils/apiError';
+} from '@/features/auth/AuthIcons';
+import { getDashboardPath, useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/useToast';
+import { getApiErrorMessage } from '@/utils/apiError';
 
 type Role = 'client' | 'freelancer';
 

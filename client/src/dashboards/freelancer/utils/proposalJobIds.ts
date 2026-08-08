@@ -1,5 +1,5 @@
-import { proposalsApi } from '../../../api/proposals.api';
-import type { Proposal } from '../../../types/proposal';
+import { proposalsApi } from '@/api/proposals.api';
+import type { Proposal } from '@/types/proposal';
 
 export async function fetchAllMyProposalJobIds() {
   const ids = new Set<string>();

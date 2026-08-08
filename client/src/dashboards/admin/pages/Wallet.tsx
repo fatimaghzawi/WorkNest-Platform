@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import { DollarSign, PiggyBank, TrendingUp, Wallet } from 'lucide-react';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import Badge from '../../../components/common/Badge';
-import Pagination from '../../../components/common/Pagination';
-import WalletTransactionRow from '../../_shared/payments/WalletTransactionRow';
-import { paymentsApi } from '../../../api/payments.api';
-import type { Payment, WalletSummary } from '../../../types/payment';
-import { formatCurrency, formatDateTime } from '../../../utils/format';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import { useToast } from '../../../hooks/useToast';
-import '../../../css/DesignSystem.css';
-import '../../../css/Payments.css';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import Badge from '@/components/Badge';
+import Pagination from '@/components/Pagination';
+import WalletTransactionRow from '@/dashboards/shared/payments/WalletTransactionRow';
+import { paymentsApi } from '@/api/payments.api';
+import type { Payment, WalletSummary } from '@/types/payment';
+import { formatCurrency, formatDateTime } from '@/utils/format';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { useToast } from '@/hooks/useToast';
+import '@/styles/DesignSystem.css';
+import '@/styles/Payments.css';
 
 const emptyWallet: WalletSummary = {
   role: 'admin',

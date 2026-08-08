@@ -1,5 +1,5 @@
-import { Job } from "../../../../types/job";
-import JobCard from "./JobCard";
+import { Job } from "@/types/job";
+import JobCard from "@/dashboards/freelancer/components/jobs/JobCard";
 
 interface JobListProps {
   jobs: Job[];

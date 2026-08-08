@@ -1,5 +1,5 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
-import { ChartLegend, GlassTooltip } from './chartHelpers';
+import { ChartLegend, GlassTooltip } from '@/dashboards/admin/components/statistics/chartHelpers';
 
 export default function MiniDonut({
   title,

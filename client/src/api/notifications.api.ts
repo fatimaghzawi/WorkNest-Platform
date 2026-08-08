@@ -1,6 +1,6 @@
-﻿import api from './axios';
-import type { ApiSuccessResponse } from '../types/api';
-import type { Notification } from '../types/notification';
+﻿import api from '@/api/axios';
+import type { ApiSuccessResponse } from '@/types/api';
+import type { Notification } from '@/types/notification';
 
 export const notificationsApi = {
   list: (params?: { page?: number; limit?: number; unreadOnly?: boolean }) =>

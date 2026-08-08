@@ -1,4 +1,4 @@
-import InterviewsPage from '../../_shared/interviews/InterviewsPage';
+import InterviewsPage from '@/dashboards/shared/interviews/InterviewsPage';
 
 export default function AdminInterviews() {
   return <InterviewsPage role="admin" />;

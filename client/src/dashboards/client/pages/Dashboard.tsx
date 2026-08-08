@@ -1,4 +1,4 @@
-import ClientDashboardHome from '../../_shared/dashboard/ClientDashboardHome';
+import ClientDashboardHome from '@/dashboards/shared/dashboard/ClientDashboardHome';
 
 export default function Dashboard() {
   return <ClientDashboardHome />;

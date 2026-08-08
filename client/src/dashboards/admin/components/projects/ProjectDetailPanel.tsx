@@ -1,9 +1,9 @@
 import { CalendarDays, LayoutGrid, Users } from 'lucide-react';
-import Button from '../../../../components/common/Button';
-import Badge from '../../../../components/common/Badge';
-import type { Project } from '../../../../api/projects.api';
-import { formatDate } from '../../../../utils/format';
-import '../../../../css/ProjectsAdmin.css';
+import Button from '@/components/Button';
+import Badge from '@/components/Badge';
+import type { Project } from '@/api/projects.api';
+import { formatDate } from '@/utils/format';
+import '@/styles/ProjectsAdmin.css';
 
 function statusVariant(status: Project['status']) {
   if (status === 'active') return 'success' as const;

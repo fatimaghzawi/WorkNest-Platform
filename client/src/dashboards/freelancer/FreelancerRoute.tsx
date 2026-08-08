@@ -1,4 +1,4 @@
-import { createRoleRoute } from '../_shared/RoleRoute';
+import { createRoleRoute } from '@/dashboards/shared/RoleRoute';
 
 const FreelancerRoute = createRoleRoute('freelancer');
 

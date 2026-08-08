@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-import type { SystemLog } from '../../../../types/log';
-import { formatDateTime } from '../../../../utils/format';
+import type { SystemLog } from '@/types/log';
+import { formatDateTime } from '@/utils/format';
 
 const LEVEL_LABELS = {
   info: 'Info',

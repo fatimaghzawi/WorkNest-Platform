@@ -1,6 +1,6 @@
-﻿import api from './axios';
-import type { ApiMessageResponse, ApiSuccessResponse, PaginationMeta } from '../types/api';
-import type { WorkspaceTask, WorkspaceTeam, WorkspacePermissions, WorkspaceAttachment, TaskDeliverableGroup } from '../dashboards/_shared/workspace/types';
+﻿import api from '@/api/axios';
+import type { ApiMessageResponse, ApiSuccessResponse, PaginationMeta } from '@/types/api';
+import type { WorkspaceTask, WorkspaceTeam, WorkspacePermissions, WorkspaceAttachment, TaskDeliverableGroup } from '@/dashboards/shared/workspace/types';
 
 export type WorkspaceTasksMeta = PaginationMeta & {
   readOnly?: boolean;

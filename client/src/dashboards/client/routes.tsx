@@ -1,17 +1,17 @@
 import { Route } from 'react-router-dom';
-import ClientRoute from './ClientRoute';
-import ClientLayout from './layout/ClientLayout';
-import Dashboard from './pages/Dashboard';
-import MyJobs from './pages/MyJobs';
-import CreateJob from './pages/CreateJob';
-import EditJob from './pages/EditJob';
-import JobProposals from './pages/JobProposals';
-import Interviews from './pages/Interviews';
-import Workspace from './pages/Workspace';
-import Payments from './pages/Payments';
-import Profile from './pages/Profile';
-import FreelancerProfile from './pages/FreelancerProfile';
-import MyProjects from './pages/MyProjects';
+import ClientRoute from '@/dashboards/client/ClientRoute';
+import ClientLayout from '@/dashboards/client/layout/ClientLayout';
+import Dashboard from '@/dashboards/client/pages/Dashboard';
+import MyJobs from '@/dashboards/client/pages/MyJobs';
+import CreateJob from '@/dashboards/client/pages/CreateJob';
+import EditJob from '@/dashboards/client/pages/EditJob';
+import JobProposals from '@/dashboards/client/pages/JobProposals';
+import Interviews from '@/dashboards/client/pages/Interviews';
+import Workspace from '@/dashboards/client/pages/Workspace';
+import Payments from '@/dashboards/client/pages/Payments';
+import Profile from '@/dashboards/client/pages/Profile';
+import FreelancerProfile from '@/dashboards/client/pages/FreelancerProfile';
+import MyProjects from '@/dashboards/client/pages/MyProjects';
 
 export const clientDashboardRoutes = (
   <Route element={<ClientRoute />}>

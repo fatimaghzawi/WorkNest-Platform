@@ -18,11 +18,11 @@ import {
   type DashboardOverview,
   type PlatformStatisticsPayload,
   type StatusCount,
-} from '../../../api/dashboard.api';
-import Button from '../../../components/common/Button';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import StatisticsOverview from '../components/statistics/StatisticsOverview';
-import MiniDonut from '../components/statistics/MiniDonut';
+} from '@/api/dashboard.api';
+import Button from '@/components/Button';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import StatisticsOverview from '@/dashboards/admin/components/statistics/StatisticsOverview';
+import MiniDonut from '@/dashboards/admin/components/statistics/MiniDonut';
 import {
   CHART,
   GlassTooltip,
@@ -30,13 +30,13 @@ import {
   PROPOSAL_COLORS,
   PROJECT_COLORS,
   RankedBars,
-} from '../components/statistics/chartHelpers';
-import { useToast } from '../../../hooks/useToast';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import { formatCurrency, formatStatusLabel } from '../../../utils/format';
-import '../../../css/DesignSystem.css';
-import '../../../css/Interviews.css';
-import '../../../css/StatisticsAdmin.css';
+} from '@/dashboards/admin/components/statistics/chartHelpers';
+import { useToast } from '@/hooks/useToast';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { formatCurrency, formatStatusLabel } from '@/utils/format';
+import '@/styles/DesignSystem.css';
+import '@/styles/Interviews.css';
+import '@/styles/StatisticsAdmin.css';
 
 const PERIOD_OPTIONS = [
   { value: 6, label: '6M' },

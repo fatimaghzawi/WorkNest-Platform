@@ -1,5 +1,5 @@
 import { Briefcase, CircleCheck, CirclePause, FolderOpen } from 'lucide-react';
-import type { JobStatus } from '../../../../types/job';
+import type { JobStatus } from '@/types/job';
 
 export interface JobPipelineStats {
   total: number;

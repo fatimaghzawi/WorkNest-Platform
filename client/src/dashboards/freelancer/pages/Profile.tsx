@@ -1,4 +1,4 @@
-import ModernProfilePage from '../../_shared/profile/ModernProfilePage';
+import ModernProfilePage from '@/dashboards/shared/profile/ModernProfilePage';
 
 export default function Profile() {
   return (

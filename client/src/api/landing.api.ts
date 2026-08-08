@@ -1,6 +1,6 @@
-import api from './axios';
-import type { ApiSuccessResponse } from '../types/api';
-import type { LandingFeaturedJob, LandingTopFreelancer } from '../types/landing';
+import api from '@/api/axios';
+import type { ApiSuccessResponse } from '@/types/api';
+import type { LandingFeaturedJob, LandingTopFreelancer } from '@/types/landing';
 
 export const landingApi = {
   getFeaturedJobs: () =>

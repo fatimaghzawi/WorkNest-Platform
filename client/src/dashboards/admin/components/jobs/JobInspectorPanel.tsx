@@ -1,8 +1,8 @@
-import Button from '../../../../components/common/Button';
-import StatusBadge from '../../../../components/jobs/StatusBadge';
-import type { Job, JobClient, JobStatus } from '../../../../types/job';
-import { formatCurrency, formatDate, formatDateTime } from '../../../../utils/format';
-import '../../../../css/JobsAdmin.css';
+import Button from '@/components/Button';
+import StatusBadge from '@/features/jobs/StatusBadge';
+import type { Job, JobClient, JobStatus } from '@/types/job';
+import { formatCurrency, formatDate, formatDateTime } from '@/utils/format';
+import '@/styles/JobsAdmin.css';
 
 const STATUS_OPTIONS: JobStatus[] = ['open', 'closed', 'in_progress'];
 

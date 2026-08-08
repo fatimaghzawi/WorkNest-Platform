@@ -1,7 +1,33 @@
+# Dependencies
 node_modules/
+docs/node_modules/
+
+# Environment / secrets
 .env
+.env.*
+!.env.example
+!**/.env.example
+
+# Logs & OS junk
 *.log
 .DS_Store
+Thumbs.db
+
+# Build outputs (Vercel/Render build these)
+dist/
+client/dist/
+server/dist/
+
+# Uploads (keep folder placeholders only)
 server/src/uploads/**/*
 !server/src/uploads/**/.gitkeep
+
+# Local-only docs tooling
 docs/local/
+docs/package-lock.json
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

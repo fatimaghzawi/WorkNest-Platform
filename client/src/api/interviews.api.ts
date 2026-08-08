@@ -1,11 +1,11 @@
-﻿import api from './axios';
-import type { ApiSuccessResponse } from '../types/api';
+﻿import api from '@/api/axios';
+import type { ApiSuccessResponse } from '@/types/api';
 import type {
   CreateInterviewPayload,
   Interview,
   ListInterviewsParams,
   UpdateInterviewPayload,
-} from '../types/interview';
+} from '@/types/interview';
 
 export const interviewsApi = {
   list: (params?: ListInterviewsParams) =>

@@ -1,8 +1,8 @@
 import { CalendarDays, UserRound } from 'lucide-react';
-import StatusBadge from '../../../../components/jobs/StatusBadge';
-import type { Job, JobClient } from '../../../../types/job';
-import { formatCurrency, formatDate } from '../../../../utils/format';
-import '../../../../css/JobsAdmin.css';
+import StatusBadge from '@/features/jobs/StatusBadge';
+import type { Job, JobClient } from '@/types/job';
+import { formatCurrency, formatDate } from '@/utils/format';
+import '@/styles/JobsAdmin.css';
 
 function getClient(job: Job): JobClient | null {
   return typeof job.clientId === 'object' ? job.clientId : null;

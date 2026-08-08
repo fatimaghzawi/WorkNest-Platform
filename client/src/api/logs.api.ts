@@ -1,6 +1,6 @@
-import api from './axios';
-import type { ApiSuccessResponse } from '../types/api';
-import type { ListLogsParams, LogStats, SystemLog } from '../types/log';
+import api from '@/api/axios';
+import type { ApiSuccessResponse } from '@/types/api';
+import type { ListLogsParams, LogStats, SystemLog } from '@/types/log';
 
 export const logsApi = {
   list: (params?: ListLogsParams) =>

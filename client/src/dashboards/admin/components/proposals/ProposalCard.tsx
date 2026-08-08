@@ -1,10 +1,10 @@
-import Button from '../../../../components/common/Button';
-import StatusBadge from '../../../../components/jobs/StatusBadge';
-import UserAvatar from '../../../../components/users/UserAvatar';
-import type { Proposal } from '../../../../types/proposal';
-import { formatCurrency, formatDateTime } from '../../../../utils/format';
-import { getProposalFreelancer, getProposalJobTitle } from '../../../../utils/proposal';
-import '../../../../css/ProposalsAdmin.css';
+import Button from '@/components/Button';
+import StatusBadge from '@/features/jobs/StatusBadge';
+import UserAvatar from '@/features/users/UserAvatar';
+import type { Proposal } from '@/types/proposal';
+import { formatCurrency, formatDateTime } from '@/utils/format';
+import { getProposalFreelancer, getProposalJobTitle } from '@/utils/proposal';
+import '@/styles/ProposalsAdmin.css';
 
 export default function ProposalCard({
   proposal,

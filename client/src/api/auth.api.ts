@@ -1,5 +1,5 @@
-﻿import api from './axios';
-import type { GoogleLoginPayload, LoginPayload, RegisterPayload, User } from '../types/auth';
+﻿import api from '@/api/axios';
+import type { GoogleLoginPayload, LoginPayload, RegisterPayload, User } from '@/types/auth';
 
 export const authApi = {
   register: (payload: RegisterPayload) =>

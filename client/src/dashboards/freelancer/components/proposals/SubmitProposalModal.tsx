@@ -1,15 +1,15 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Briefcase, CalendarDays, DollarSign, Clock3, Send } from 'lucide-react';
-import { proposalsApi } from '../../../../api/proposals.api';
-import Button from '../../../../components/common/Button';
-import Input from '../../../../components/common/Input';
-import Modal from '../../../../components/common/Modal';
-import type { Job } from '../../../../types/job';
-import { formatCurrency, formatDate, getDeadlineUrgency } from '../../../../utils/format';
-import { getApiErrorMessage } from '../../../../utils/apiError';
-import { useToast } from '../../../../hooks/useToast';
-import '../../../../css/DesignSystem.css';
-import '../../../../css/Proposal.css';
+import { proposalsApi } from '@/api/proposals.api';
+import Button from '@/components/Button';
+import Input from '@/components/Input';
+import Modal from '@/components/Modal';
+import type { Job } from '@/types/job';
+import { formatCurrency, formatDate, getDeadlineUrgency } from '@/utils/format';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { useToast } from '@/hooks/useToast';
+import '@/styles/DesignSystem.css';
+import '@/styles/Proposal.css';
 
 interface SubmitProposalModalProps {
   job: Job | null;

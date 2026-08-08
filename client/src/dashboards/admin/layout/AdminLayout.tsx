@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import AdminSidebar from '../components/AdminSidebar';
-import '../../../css/AdminSidebar.css';
+import AdminSidebar from '@/dashboards/admin/components/AdminSidebar';
+import '@/styles/AdminSidebar.css';
 
 export default function AdminLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);

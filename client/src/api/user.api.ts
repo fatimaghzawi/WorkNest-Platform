@@ -1,12 +1,12 @@
-﻿import api from './axios';
-import type { ApiMessageResponse, ApiSuccessResponse } from '../types/api';
+﻿import api from '@/api/axios';
+import type { ApiMessageResponse, ApiSuccessResponse } from '@/types/api';
 import type {
   AdminUser,
   CreateUserPayload,
   ListUsersParams,
   UpdateUserPayload,
   UserStats,
-} from '../types/user';
+} from '@/types/user';
 
 export const usersApi = {
   list: (params?: ListUsersParams) =>

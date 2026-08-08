@@ -4,20 +4,20 @@ import {
   projectsApi,
   type Project,
   type ProjectStatus,
-} from '../../../api/projects.api';
-import Button from '../../../components/common/Button';
-import Pagination from '../../../components/common/Pagination';
-import { useToast } from '../../../hooks/useToast';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import ProjectsOverview, { type ProjectPipelineStats } from '../components/projects/ProjectsOverview';
-import ProjectQueue from '../components/projects/ProjectQueue';
-import ProjectDetailPanel from '../components/projects/ProjectDetailPanel';
-import '../../../css/DesignSystem.css';
-import '../../../css/AdminAnalytics.css';
-import '../../../css/DashboardFeatures.css';
-import '../../../css/ProjectsAdmin.css';
+} from '@/api/projects.api';
+import Button from '@/components/Button';
+import Pagination from '@/components/Pagination';
+import { useToast } from '@/hooks/useToast';
+import { getApiErrorMessage } from '@/utils/apiError';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import ProjectsOverview, { type ProjectPipelineStats } from '@/dashboards/admin/components/projects/ProjectsOverview';
+import ProjectQueue from '@/dashboards/admin/components/projects/ProjectQueue';
+import ProjectDetailPanel from '@/dashboards/admin/components/projects/ProjectDetailPanel';
+import '@/styles/DesignSystem.css';
+import '@/styles/AdminAnalytics.css';
+import '@/styles/DashboardFeatures.css';
+import '@/styles/ProjectsAdmin.css';
 
 type StatusFilter = ProjectStatus | 'all';
 

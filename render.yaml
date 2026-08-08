@@ -1,12 +1,11 @@
 services:
-  # Backend API only — frontend deploys on Vercel (free tier)
   - type: web
     name: worknest-api
     runtime: node
     rootDir: server
     buildCommand: npm install && npm run build
     startCommand: npm start
-    healthCheckPath: /api/v1/health
+    healthCheckPath: /api/v1/health/ready
     envVars:
       - key: NODE_ENV
         value: production
@@ -16,6 +15,9 @@ services:
         value: https://worknest-platform.onrender.com
       - key: CLIENT_URL
         value: https://work-nest-platform-nu.vercel.app
-      # Set in Render dashboard: MONGO_URI, JWT_SECRET, JWT_REFRESH_SECRET,
-      # ELASTICEMAIL_API_KEY, EMAIL_FROM
-
+      # Required secrets (set in Render dashboard):
+      # MONGO_URI, JWT_SECRET, JWT_REFRESH_SECRET,
+      # STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
+      # ELASTICEMAIL_API_KEY (or SENDGRID_API_KEY / SMTP),
+      # EMAIL_FROM, GOOGLE_CLIENT_ID, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
+      # Note: local uploads/ is ephemeral on Render — use object storage for durable files.

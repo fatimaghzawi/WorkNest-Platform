@@ -1,8 +1,14 @@
 ﻿import axios from 'axios';
-import { clearAccessToken, getAccessToken, setAccessToken } from '../utils/authToken';
+import { clearAccessToken, getAccessToken, setAccessToken } from '@/utils/authToken';
+
+const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+
+if (import.meta.env.PROD && !API_BASE) {
+  throw new Error('VITE_API_URL must be set for production builds');
+}
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '',
+  baseURL: API_BASE,
   withCredentials: true,
   timeout: 30_000,
   headers: {
@@ -29,7 +35,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
   if (!refreshPromise) {
     refreshPromise = axios
       .post<{ success: boolean; accessToken: string }>(
-        `${import.meta.env.VITE_API_URL || ''}/api/auth/refresh`,
+        `${API_BASE}/api/auth/refresh`,
         {},
         { withCredentials: true, timeout: 30_000 }
       )

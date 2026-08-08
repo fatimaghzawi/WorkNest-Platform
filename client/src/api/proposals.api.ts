@@ -1,13 +1,13 @@
-﻿import api from "./axios";
+﻿import api from "@/api/axios";
 import type {
   ApiMessageResponse,
   ApiSuccessResponse,
-} from "../types/api";
+} from "@/types/api";
 import type {
   ListProposalsParams,
   Proposal,
   ProposalStatus,
-} from "../types/proposal";
+} from "@/types/proposal";
 
 export const proposalsApi = {
   // Admin

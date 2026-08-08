@@ -1,11 +1,11 @@
 ﻿import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Button from '../../components/common/Button';
-import Input from '../../components/common/Input';
-import AuthSuccessPanel from '../../components/auth/AuthSuccessPanel';
-import { IconMail } from '../../components/auth/AuthIcons';
-import { authApi } from '../../api/auth.api';
-import { getApiErrorMessage } from '../../utils/apiError';
+import Button from '@/components/Button';
+import Input from '@/components/Input';
+import AuthSuccessPanel from '@/features/auth/AuthSuccessPanel';
+import { IconMail } from '@/features/auth/AuthIcons';
+import { authApi } from '@/api/auth.api';
+import { getApiErrorMessage } from '@/utils/apiError';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');

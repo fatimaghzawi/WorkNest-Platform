@@ -1,5 +1,5 @@
 const env = require('./env');
-const { appPath } = require('../utils/appUrls');
+const { appPath } = require('../common/utils/appUrls');
 
 const githubConfig = {
   clientId: env.github.clientId,

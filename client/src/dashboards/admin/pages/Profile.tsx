@@ -1,4 +1,4 @@
-import ProfileSettingsPage from '../../_shared/profile/ProfileSettingsPage';
+import ProfileSettingsPage from '@/dashboards/shared/profile/ProfileSettingsPage';
 
 export default function Profile() {
   return (

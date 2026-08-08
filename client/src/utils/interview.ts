@@ -1,4 +1,4 @@
-import type { Interview, InterviewJob } from '../types/interview';
+import type { Interview, InterviewJob } from '@/types/interview';
 
 type PopulatedJobRef = { title?: string };
 

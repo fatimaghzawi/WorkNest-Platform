@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { User } from 'lucide-react';
-import { profileApi } from '../../../api/profile.api';
-import type { PublicFreelancerProfilePayload } from '../../../types/profile';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import FreelancerPublicProfileView from '../../_shared/profile/FreelancerPublicProfileView';
-import { StatGridSkeleton } from '../../../components/common/Skeleton';
-import { useToast } from '../../../hooks/useToast';
-import { getApiErrorMessage } from '../../../utils/apiError';
+import { profileApi } from '@/api/profile.api';
+import type { PublicFreelancerProfilePayload } from '@/types/profile';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import FreelancerPublicProfileView from '@/dashboards/shared/profile/FreelancerPublicProfileView';
+import { StatGridSkeleton } from '@/components/Skeleton';
+import { useToast } from '@/hooks/useToast';
+import { getApiErrorMessage } from '@/utils/apiError';
 
 export default function FreelancerProfile() {
   const { freelancerId } = useParams<{ freelancerId: string }>();

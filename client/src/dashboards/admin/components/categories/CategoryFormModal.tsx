@@ -1,7 +1,7 @@
-import CategoryForm from '../../../../components/categories/CategoryForm';
-import Modal from '../../../../components/common/Modal';
-import type { Category, CreateCategoryPayload, UpdateCategoryPayload } from '../../../../types/category';
-import '../../../../css/JobsAdmin.css';
+import CategoryForm from '@/features/categories/CategoryForm';
+import Modal from '@/components/Modal';
+import type { Category, CreateCategoryPayload, UpdateCategoryPayload } from '@/types/category';
+import '@/styles/JobsAdmin.css';
 
 export default function CategoryFormModal({
   title,

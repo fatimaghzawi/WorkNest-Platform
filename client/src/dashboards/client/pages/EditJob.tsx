@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BlockLoader } from '../../../components/common/Loader';
-import JobForm from '../../../components/jobs/JobForm';
-import { jobsApi } from '../../../api/jobs.api';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import DashboardStudioShell from '../../_shared/studio/DashboardStudioShell';
-import { useToast } from '../../../hooks/useToast';
-import type { Job, UpdateJobPayload } from '../../../types/job';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import '../../../css/DashboardFeatures.css';
-import '../../../css/FreelancerStudio.css';
+import { BlockLoader } from '@/components/Loader';
+import JobForm from '@/features/jobs/JobForm';
+import { jobsApi } from '@/api/jobs.api';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import DashboardStudioShell from '@/dashboards/shared/studio/DashboardStudioShell';
+import { useToast } from '@/hooks/useToast';
+import type { Job, UpdateJobPayload } from '@/types/job';
+import { getApiErrorMessage } from '@/utils/apiError';
+import '@/styles/DashboardFeatures.css';
+import '@/styles/FreelancerStudio.css';
 
 export default function EditJob() {
   const { jobId } = useParams<{ jobId: string }>();

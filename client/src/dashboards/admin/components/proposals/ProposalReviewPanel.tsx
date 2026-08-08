@@ -1,9 +1,9 @@
-import StatusBadge from '../../../../components/jobs/StatusBadge';
-import UserAvatar from '../../../../components/users/UserAvatar';
-import type { Proposal } from '../../../../types/proposal';
-import { formatCurrency, formatDateTime } from '../../../../utils/format';
-import { getProposalFreelancer, getProposalJobTitle } from '../../../../utils/proposal';
-import '../../../../css/ProposalsAdmin.css';
+import StatusBadge from '@/features/jobs/StatusBadge';
+import UserAvatar from '@/features/users/UserAvatar';
+import type { Proposal } from '@/types/proposal';
+import { formatCurrency, formatDateTime } from '@/utils/format';
+import { getProposalFreelancer, getProposalJobTitle } from '@/utils/proposal';
+import '@/styles/ProposalsAdmin.css';
 
 export default function ProposalReviewPanel({ proposal }: { proposal: Proposal }) {
   const freelancer = getProposalFreelancer(proposal);

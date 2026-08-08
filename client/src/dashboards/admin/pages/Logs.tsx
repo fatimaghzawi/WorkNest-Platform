@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { RefreshCw, Search } from 'lucide-react';
-import { logsApi } from '../../../api/logs.api';
-import Button from '../../../components/common/Button';
-import Pagination from '../../../components/common/Pagination';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import LogsOverview from '../components/logs/LogsOverview';
-import LogStream from '../components/logs/LogStream';
-import type { LogLevelFilter, LogStats, SystemLog } from '../../../types/log';
-import { useToast } from '../../../hooks/useToast';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import '../../../css/DesignSystem.css';
-import '../../../css/AdminAnalytics.css';
-import '../../../css/DashboardFeatures.css';
-import '../../../css/LogsAdmin.css';
+import { logsApi } from '@/api/logs.api';
+import Button from '@/components/Button';
+import Pagination from '@/components/Pagination';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import LogsOverview from '@/dashboards/admin/components/logs/LogsOverview';
+import LogStream from '@/dashboards/admin/components/logs/LogStream';
+import type { LogLevelFilter, LogStats, SystemLog } from '@/types/log';
+import { useToast } from '@/hooks/useToast';
+import { getApiErrorMessage } from '@/utils/apiError';
+import '@/styles/DesignSystem.css';
+import '@/styles/AdminAnalytics.css';
+import '@/styles/DashboardFeatures.css';
+import '@/styles/LogsAdmin.css';
 
 const LEVEL_FILTERS: { value: LogLevelFilter; label: string; className?: string }[] = [
   { value: 'all', label: 'All' },

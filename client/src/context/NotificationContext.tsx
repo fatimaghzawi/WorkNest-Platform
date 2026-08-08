@@ -9,15 +9,15 @@ import {
   type ReactNode,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { notificationsApi } from '../api/notifications.api';
-import { useAuth } from '../hooks/useAuth';
-import { useToast } from '../hooks/useToast';
+import { notificationsApi } from '@/api/notifications.api';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/useToast';
 import {
   connectNotificationSocket,
   disconnectNotificationSocket,
-} from '../lib/notificationSocket';
-import type { Notification } from '../types/notification';
-import { getNotificationHref } from '../utils/notificationLinks';
+} from '@/lib/notificationSocket';
+import type { Notification } from '@/types/notification';
+import { getNotificationHref } from '@/utils/notificationLinks';
 
 interface NotificationContextValue {
   notifications: Notification[];

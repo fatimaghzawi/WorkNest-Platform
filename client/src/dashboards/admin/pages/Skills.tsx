@@ -1,5 +1,5 @@
 import { Sparkles } from 'lucide-react';
-import FeaturePlaceholder from '../../_shared/FeaturePlaceholder';
+import FeaturePlaceholder from '@/dashboards/shared/FeaturePlaceholder';
 
 export default function AdminSkills() {
   return (

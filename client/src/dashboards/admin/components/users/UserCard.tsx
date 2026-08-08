@@ -1,7 +1,7 @@
 import { MapPin } from 'lucide-react';
-import type { AdminUser } from '../../../../types/user';
-import UserAvatar from '../../../../components/users/UserAvatar';
-import '../../../../css/UsersAdmin.css';
+import type { AdminUser } from '@/types/user';
+import UserAvatar from '@/features/users/UserAvatar';
+import '@/styles/UsersAdmin.css';
 
 const ROLE_LABELS: Record<AdminUser['role'], string> = {
   client: 'Client',

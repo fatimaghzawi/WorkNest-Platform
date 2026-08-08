@@ -1,12 +1,12 @@
 ﻿import { FormEvent, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import Button from '../../components/common/Button';
-import Input from '../../components/common/Input';
-import AuthSuccessPanel from '../../components/auth/AuthSuccessPanel';
-import PasswordStrength from '../../components/auth/PasswordStrength';
-import { IconEye, IconEyeOff, IconLock } from '../../components/auth/AuthIcons';
-import { authApi } from '../../api/auth.api';
-import { getApiErrorMessage } from '../../utils/apiError';
+import Button from '@/components/Button';
+import Input from '@/components/Input';
+import AuthSuccessPanel from '@/features/auth/AuthSuccessPanel';
+import PasswordStrength from '@/features/auth/PasswordStrength';
+import { IconEye, IconEyeOff, IconLock } from '@/features/auth/AuthIcons';
+import { authApi } from '@/api/auth.api';
+import { getApiErrorMessage } from '@/utils/apiError';
 
 export default function ResetPassword() {
   const { token = '' } = useParams<{ token: string }>();

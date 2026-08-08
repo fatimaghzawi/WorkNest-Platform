@@ -1,5 +1,5 @@
-import DashboardNavbar from '../../_shared/DashboardNavbar';
-import { CLIENT_NAV_LINKS } from '../nav';
+import DashboardNavbar from '@/dashboards/shared/DashboardNavbar';
+import { CLIENT_NAV_LINKS } from '@/dashboards/client/nav';
 
 export default function ClientNavbar() {
   return (

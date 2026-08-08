@@ -1,21 +1,21 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FileText, X } from 'lucide-react';
-import Pagination from '../../../components/common/Pagination';
-import { proposalsApi } from '../../../api/proposals.api';
-import { jobsApi } from '../../../api/jobs.api';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import ProposalQueue from '../components/proposals/ProposalQueue';
-import ProposalReviewPanel from '../components/proposals/ProposalReviewPanel';
-import ProposalsOverview, { type ProposalPipelineStats } from '../components/proposals/ProposalsOverview';
-import type { Proposal, ProposalStatus } from '../../../types/proposal';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import { useToast } from '../../../hooks/useToast';
-import '../../../css/DesignSystem.css';
-import '../../../css/AdminAnalytics.css';
-import '../../../css/DashboardFeatures.css';
-import '../../../css/ProposalsAdmin.css';
+import Pagination from '@/components/Pagination';
+import { proposalsApi } from '@/api/proposals.api';
+import { jobsApi } from '@/api/jobs.api';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import ProposalQueue from '@/dashboards/admin/components/proposals/ProposalQueue';
+import ProposalReviewPanel from '@/dashboards/admin/components/proposals/ProposalReviewPanel';
+import ProposalsOverview, { type ProposalPipelineStats } from '@/dashboards/admin/components/proposals/ProposalsOverview';
+import type { Proposal, ProposalStatus } from '@/types/proposal';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { useToast } from '@/hooks/useToast';
+import '@/styles/DesignSystem.css';
+import '@/styles/AdminAnalytics.css';
+import '@/styles/DashboardFeatures.css';
+import '@/styles/ProposalsAdmin.css';
 
 type StatusFilter = ProposalStatus | 'all';
 

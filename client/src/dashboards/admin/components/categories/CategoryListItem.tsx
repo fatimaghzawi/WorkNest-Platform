@@ -1,7 +1,7 @@
-import type { Category } from '../../../../types/category';
-import { formatDate } from '../../../../utils/format';
-import '../../../../css/JobsAdmin.css';
-import '../../../../css/CategoriesAdmin.css';
+import type { Category } from '@/types/category';
+import { formatDate } from '@/utils/format';
+import '@/styles/JobsAdmin.css';
+import '@/styles/CategoriesAdmin.css';
 
 export default function CategoryListItem({
   category,

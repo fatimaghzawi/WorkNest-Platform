@@ -1,11 +1,11 @@
-import api from './axios';
-import type { ApiMessageResponse, ApiSuccessResponse } from '../types/api';
+import api from '@/api/axios';
+import type { ApiMessageResponse, ApiSuccessResponse } from '@/types/api';
 import type {
   Category,
   CreateCategoryPayload,
   ListCategoriesParams,
   UpdateCategoryPayload,
-} from '../types/category';
+} from '@/types/category';
 
 export const categoriesApi = {
   list: (params?: ListCategoriesParams) =>

@@ -1,5 +1,5 @@
-import ProposalCard from "./ProposalCard";
-import type { Proposal } from "../../../../types/proposal";
+import ProposalCard from "@/dashboards/freelancer/components/proposals/ProposalCard";
+import type { Proposal } from "@/types/proposal";
 
 interface Props {
   proposals: Proposal[];

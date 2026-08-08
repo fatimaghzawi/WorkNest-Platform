@@ -1,4 +1,4 @@
-import type { Proposal, ProposalFreelancer } from '../types/proposal';
+import type { Proposal, ProposalFreelancer } from '@/types/proposal';
 
 /** Populated ref — `typeof null === 'object'`, so check value is non-null. */
 export function getProposalFreelancer(proposal: Proposal): ProposalFreelancer | null {

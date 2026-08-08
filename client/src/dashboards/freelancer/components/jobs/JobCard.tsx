@@ -1,7 +1,7 @@
-import Button from "../../../../components/common/Button";
-import StatusBadge from "../../../../components/jobs/StatusBadge";
-import { Job } from "../../../../types/job";
-import { formatCurrency, formatDate } from "../../../../utils/format";
+import Button from "@/components/Button";
+import StatusBadge from "@/features/jobs/StatusBadge";
+import { Job } from "@/types/job";
+import { formatCurrency, formatDate } from "@/utils/format";
 
 interface JobCardProps {
   job: Job;

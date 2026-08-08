@@ -1,5 +1,5 @@
 import { AlertTriangle, Info, ScrollText, XCircle } from 'lucide-react';
-import type { LogStats } from '../../../../types/log';
+import type { LogStats } from '@/types/log';
 
 export default function LogsOverview({ stats }: { stats: LogStats }) {
   return (

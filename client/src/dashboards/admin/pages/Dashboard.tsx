@@ -1,4 +1,4 @@
-import AdminDashboardHome from '../../_shared/dashboard/AdminDashboardHome';
+import AdminDashboardHome from '@/dashboards/shared/dashboard/AdminDashboardHome';
 
 export default function Dashboard() {
   return <AdminDashboardHome />;

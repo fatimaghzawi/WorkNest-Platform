@@ -7,8 +7,8 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import Button from '../components/common/Button';
-import Modal from '../components/common/Modal';
+import Button from '@/components/Button';
+import Modal from '@/components/Modal';
 
 export type ConfirmOptions = {
   title: string;

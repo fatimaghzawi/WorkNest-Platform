@@ -1,4 +1,4 @@
-import type { DashboardNavLink } from '../_shared/DashboardNavbar';
+import type { DashboardNavLink } from '@/dashboards/shared/DashboardNavbar';
 
 export const FREELANCER_NAV_LINKS: DashboardNavLink[] = [
   { label: 'Dashboard', href: '/freelancer/dashboard' },

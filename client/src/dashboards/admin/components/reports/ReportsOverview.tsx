@@ -6,8 +6,8 @@ import {
   Users,
   Video,
 } from 'lucide-react';
-import type { DashboardOverview } from '../../../../api/dashboard.api';
-import { formatCurrency } from '../../../../utils/format';
+import type { DashboardOverview } from '@/api/dashboard.api';
+import { formatCurrency } from '@/utils/format';
 
 export interface ReportsOverviewProps {
   overview: DashboardOverview;

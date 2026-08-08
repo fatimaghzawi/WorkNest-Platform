@@ -1,6 +1,6 @@
-import type { Job, JobClient } from '../../../../types/job';
-import { formatCurrency, formatDate } from '../../../../utils/format';
-import '../../../../css/JobsAdmin.css';
+import type { Job, JobClient } from '@/types/job';
+import { formatCurrency, formatDate } from '@/utils/format';
+import '@/styles/JobsAdmin.css';
 
 function getClient(job: Job): JobClient | null {
   return typeof job.clientId === 'object' ? job.clientId : null;

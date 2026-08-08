@@ -1,8 +1,8 @@
-import Button from '../../../../components/common/Button';
-import StatusBadge from '../../../../components/jobs/StatusBadge';
-import type { Category } from '../../../../types/category';
-import { formatDate, formatDateTime } from '../../../../utils/format';
-import '../../../../css/CategoriesAdmin.css';
+import Button from '@/components/Button';
+import StatusBadge from '@/features/jobs/StatusBadge';
+import type { Category } from '@/types/category';
+import { formatDate, formatDateTime } from '@/utils/format';
+import '@/styles/CategoriesAdmin.css';
 
 export default function CategoryInspectorPanel({
   category,

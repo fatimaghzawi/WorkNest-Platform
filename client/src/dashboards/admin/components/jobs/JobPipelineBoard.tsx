@@ -1,6 +1,6 @@
-import { formatCurrency, formatDate } from '../../../../utils/format';
-import type { Job } from '../../../../types/job';
-import '../../../../css/JobsAdmin.css';
+import { formatCurrency, formatDate } from '@/utils/format';
+import type { Job } from '@/types/job';
+import '@/styles/JobsAdmin.css';
 
 const LANES = [
   { status: 'open' as const, label: 'Open', hint: 'Accepting proposals' },

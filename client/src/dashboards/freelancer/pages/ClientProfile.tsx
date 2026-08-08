@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { User } from 'lucide-react';
-import { profileApi } from '../../../api/profile.api';
-import type { PublicClientProfilePayload } from '../../../types/profile';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import ClientPublicProfileView from '../../_shared/profile/ClientPublicProfileView';
-import { StatGridSkeleton } from '../../../components/common/Skeleton';
-import { useToast } from '../../../hooks/useToast';
-import { getApiErrorMessage } from '../../../utils/apiError';
+import { profileApi } from '@/api/profile.api';
+import type { PublicClientProfilePayload } from '@/types/profile';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import ClientPublicProfileView from '@/dashboards/shared/profile/ClientPublicProfileView';
+import { StatGridSkeleton } from '@/components/Skeleton';
+import { useToast } from '@/hooks/useToast';
+import { getApiErrorMessage } from '@/utils/apiError';
 
 export default function ClientProfile() {
   const { clientId } = useParams<{ clientId: string }>();

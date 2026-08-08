@@ -1,21 +1,21 @@
 import { Route } from 'react-router-dom';
-import AdminRoute from './AdminRoute';
-import AdminLayout from './layout/AdminLayout';
-import Dashboard from './pages/Dashboard';
-import Users from './pages/Users';
-import UserProfileView from './pages/UserProfileView';
-import Jobs from './pages/Jobs';
-import Categories from './pages/Categories';
-import Proposals from './pages/Proposals';
-import Skills from './pages/Skills';
-import Projects from './pages/Projects';
-import Interviews from './pages/Interviews';
-import Workspace from './pages/Workspace';
-import Reports from './pages/Reports';
-import Statistics from './pages/Statistics';
-import Logs from './pages/Logs';
-import Profile from './pages/Profile';
-import Wallet from './pages/Wallet';
+import AdminRoute from '@/dashboards/admin/AdminRoute';
+import AdminLayout from '@/dashboards/admin/layout/AdminLayout';
+import Dashboard from '@/dashboards/admin/pages/Dashboard';
+import Users from '@/dashboards/admin/pages/Users';
+import UserProfileView from '@/dashboards/admin/pages/UserProfileView';
+import Jobs from '@/dashboards/admin/pages/Jobs';
+import Categories from '@/dashboards/admin/pages/Categories';
+import Proposals from '@/dashboards/admin/pages/Proposals';
+import Skills from '@/dashboards/admin/pages/Skills';
+import Projects from '@/dashboards/admin/pages/Projects';
+import Interviews from '@/dashboards/admin/pages/Interviews';
+import Workspace from '@/dashboards/admin/pages/Workspace';
+import Reports from '@/dashboards/admin/pages/Reports';
+import Statistics from '@/dashboards/admin/pages/Statistics';
+import Logs from '@/dashboards/admin/pages/Logs';
+import Profile from '@/dashboards/admin/pages/Profile';
+import Wallet from '@/dashboards/admin/pages/Wallet';
 
 export const adminDashboardRoutes = (
   <Route element={<AdminRoute />}>

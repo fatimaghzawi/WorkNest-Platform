@@ -1,5 +1,5 @@
 import { Briefcase, Shield, Sparkles, Users } from 'lucide-react';
-import type { UserStats } from '../../../../types/user';
+import type { UserStats } from '@/types/user';
 
 function pct(part: number, total: number) {
   return total > 0 ? Math.round((part / total) * 100) : 0;

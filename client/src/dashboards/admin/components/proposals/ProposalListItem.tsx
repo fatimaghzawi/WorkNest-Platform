@@ -1,9 +1,9 @@
-import Button from '../../../../components/common/Button';
-import StatusBadge from '../../../../components/jobs/StatusBadge';
-import type { Proposal } from '../../../../types/proposal';
-import { formatCurrency, formatDateTime } from '../../../../utils/format';
-import { getProposalFreelancerName, getProposalJobTitle } from '../../../../utils/proposal';
-import '../../../../css/ProposalsAdmin.css';
+import Button from '@/components/Button';
+import StatusBadge from '@/features/jobs/StatusBadge';
+import type { Proposal } from '@/types/proposal';
+import { formatCurrency, formatDateTime } from '@/utils/format';
+import { getProposalFreelancerName, getProposalJobTitle } from '@/utils/proposal';
+import '@/styles/ProposalsAdmin.css';
 
 export default function ProposalListItem({
   proposal,

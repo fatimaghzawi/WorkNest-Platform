@@ -1,23 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CheckCircle2, Clock3, LayoutGrid, Sparkles } from 'lucide-react';
-import { projectsApi, type Project } from '../../../api/projects.api';
-import Badge from '../../../components/common/Badge';
-import Button from '../../../components/common/Button';
-import Pagination from '../../../components/common/Pagination';
-import { BlockLoader } from '../../../components/common/Loader';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import CompleteProjectModal from '../../_shared/projects/CompleteProjectModal';
+import { projectsApi, type Project } from '@/api/projects.api';
+import Badge from '@/components/Badge';
+import Button from '@/components/Button';
+import Pagination from '@/components/Pagination';
+import { BlockLoader } from '@/components/Loader';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import CompleteProjectModal from '@/dashboards/shared/projects/CompleteProjectModal';
 import {
   projectStatusBadgeVariant,
   projectStatusLabel,
-} from '../../_shared/projects/projectStatus';
-import FreelancerStudioShell from '../components/FreelancerStudioShell';
-import FreelancerOverview from '../components/FreelancerOverview';
-import FreelancerStudioPanel from '../components/FreelancerStudioPanel';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import { useToast } from '../../../hooks/useToast';
-import '../../../css/FreelancerStudio.css';
+} from '@/dashboards/shared/projects/projectStatus';
+import FreelancerStudioShell from '@/dashboards/freelancer/components/FreelancerStudioShell';
+import FreelancerOverview from '@/dashboards/freelancer/components/FreelancerOverview';
+import FreelancerStudioPanel from '@/dashboards/freelancer/components/FreelancerStudioPanel';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { useToast } from '@/hooks/useToast';
+import '@/styles/FreelancerStudio.css';
 
 const PROJECTS_PAGE_SIZE = 9;
 

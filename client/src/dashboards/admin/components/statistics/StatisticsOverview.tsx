@@ -7,8 +7,8 @@ import {
   Users,
   Video,
 } from 'lucide-react';
-import type { DashboardOverview } from '../../../../api/dashboard.api';
-import { formatCurrency } from '../../../../utils/format';
+import type { DashboardOverview } from '@/api/dashboard.api';
+import { formatCurrency } from '@/utils/format';
 
 const TILES = [
   { key: 'users', icon: Users, label: 'Members', tone: 'purple' },

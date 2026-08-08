@@ -1,19 +1,23 @@
 const http = require('http');
+const mongoose = require('mongoose');
 const app = require('./app');
 const env = require('./config/env');
-const connectDB = require('./config/db');
-const initSocket = require('./config/socket');
-const emailService = require('./services/email/email.service');
-const notificationService = require('./services/notification.service');
-const { logInfo, logError } = require('./utils/logger');
+const connectDB = require('./common/database/db');
+const initSocket = require('./shared/sockets');
+const emailService = require('./shared/integrations/email').emailService;
+const notificationService = require('./modules/notifications').notificationService;
+const { logInfo, logError, pinoLogger } = require('./common/utils/logger');
 
 let httpServer;
+let io;
+
+const SHUTDOWN_TIMEOUT_MS = 10_000;
 
 const startServer = async () => {
   await connectDB();
 
   httpServer = http.createServer(app);
-  const io = initSocket(httpServer);
+  io = initSocket(httpServer);
 
   app.set('io', io);
   notificationService.setSocketIo(io);
@@ -36,6 +40,7 @@ const startServer = async () => {
     console.log(`APP_URL: ${env.appUrl}`);
     console.log(`Email provider: ${env.email.provider}`);
     console.log(`Health: ${env.appUrl}/api/v1/health`);
+    console.log(`Ready:  ${env.appUrl}/api/v1/health/ready`);
 
     try {
       await emailService.verifyConnection();
@@ -45,33 +50,63 @@ const startServer = async () => {
         meta: { environment: env.nodeEnv, appUrl: env.appUrl },
       });
     } catch (error) {
-      logError('Server startup aborted — email service unavailable', {
+      logError('Email service unavailable at startup', {
         source: 'system',
         category: 'startup',
         meta: { message: error.message },
       });
-      console.error('Server startup aborted: email is not working.');
-      process.exit(1);
+      // Do not kill the API for transient email outages in production.
+      if (!env.isProduction) {
+        console.error('Server startup aborted: email is not working (dev fail-fast).');
+        process.exit(1);
+      }
+      console.warn('Continuing without verified email — check mail credentials.');
     }
   });
 };
 
-const shutdown = (signal) => {
+const shutdown = async (signal) => {
   console.log(`${signal} received. Shutting down gracefully...`);
+  pinoLogger.info({ signal }, 'Graceful shutdown started');
 
-  if (!httpServer) {
-    process.exit(0);
+  const forceExit = setTimeout(() => {
+    console.error('Forced shutdown after timeout');
+    process.exit(1);
+  }, SHUTDOWN_TIMEOUT_MS);
+  forceExit.unref?.();
+
+  try {
+    if (io) {
+      await new Promise((resolve) => io.close(() => resolve(undefined)));
+    }
+
+    if (httpServer) {
+      await new Promise((resolve, reject) => {
+        httpServer.close((err) => (err ? reject(err) : resolve(undefined)));
+      });
+      console.log('HTTP server closed');
+    }
+
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.connection.close();
+      console.log('MongoDB connection closed');
+    }
+  } catch (error) {
+    console.error('Error during shutdown:', error);
+    process.exit(1);
     return;
   }
 
-  httpServer.close(() => {
-    console.log('HTTP server closed');
-    process.exit(0);
-  });
+  clearTimeout(forceExit);
+  process.exit(0);
 };
 
-process.on('SIGTERM', () => shutdown('SIGTERM'));
-process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => {
+  void shutdown('SIGTERM');
+});
+process.on('SIGINT', () => {
+  void shutdown('SIGINT');
+});
 
 process.on('unhandledRejection', (error: unknown) => {
   console.error('Unhandled rejection:', error);
@@ -80,7 +115,7 @@ process.on('unhandledRejection', (error: unknown) => {
     category: 'runtime',
     meta: { message: error instanceof Error ? error.message : String(error) },
   });
-  shutdown('unhandledRejection');
+  void shutdown('unhandledRejection');
 });
 
 process.on('uncaughtException', (error: unknown) => {
@@ -90,7 +125,7 @@ process.on('uncaughtException', (error: unknown) => {
     category: 'runtime',
     meta: { message: error instanceof Error ? error.message : String(error) },
   });
-  shutdown('uncaughtException');
+  void shutdown('uncaughtException');
 });
 
 if (require.main === module) {

@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const { z } = require('zod');
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const emptyToUndefined = (value) => (value === '' ? undefined : value);
 

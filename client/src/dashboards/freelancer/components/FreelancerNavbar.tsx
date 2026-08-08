@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, LayoutGrid } from 'lucide-react';
-import Button from '../../../components/common/Button';
-import { useAuth } from '../../../hooks/useAuth';
-import { projectsApi, type Project } from '../../../api/projects.api';
-import { projectStatusLabel } from '../../_shared/projects/projectStatus';
-import logoImage from '../../../images/logo.png';
-import { FREELANCER_NAV_LINKS, FREELANCER_PROJECTS_PATH } from '../nav';
-import DashboardNavUser from '../../_shared/DashboardNavUser';
-import DashboardNavMobileFooter from '../../_shared/DashboardNavMobileFooter';
-import NotificationBell from '../../_shared/NotificationBell';
-import '../../../css/Dashboard.css';
+import Button from '@/components/Button';
+import { useAuth } from '@/hooks/useAuth';
+import { projectsApi, type Project } from '@/api/projects.api';
+import { projectStatusLabel } from '@/dashboards/shared/projects/projectStatus';
+import logoImage from '@/assets/logo.png';
+import { FREELANCER_NAV_LINKS, FREELANCER_PROJECTS_PATH } from '@/dashboards/freelancer/nav';
+import DashboardNavUser from '@/dashboards/shared/DashboardNavUser';
+import DashboardNavMobileFooter from '@/dashboards/shared/DashboardNavMobileFooter';
+import NotificationBell from '@/dashboards/shared/NotificationBell';
+import '@/styles/Dashboard.css';
 
 function isActivePath(currentPath: string, href: string) {
   if (href === currentPath) return true;

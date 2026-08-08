@@ -1,5 +1,5 @@
 ﻿const env = require('./env');
-const { parseDurationToMs } = require('../utils/parseDuration');
+const { parseDurationToMs } = require('../common/utils/parseDuration');
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;

@@ -1,5 +1,5 @@
 import { Briefcase, CircleCheck, CircleX, FolderKanban } from 'lucide-react';
-import type { ProjectStatus } from '../../../../api/projects.api';
+import type { ProjectStatus } from '@/api/projects.api';
 
 export interface ProjectPipelineStats {
   total: number;

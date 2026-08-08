@@ -1,5 +1,5 @@
-import api from './axios';
-import type { ApiSuccessResponse } from '../types/api';
+import api from '@/api/axios';
+import type { ApiSuccessResponse } from '@/types/api';
 
 export type ProjectStatus = 'active' | 'pending_review' | 'completed' | 'cancelled';
 

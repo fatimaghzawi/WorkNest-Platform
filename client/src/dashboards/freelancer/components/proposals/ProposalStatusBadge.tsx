@@ -1,4 +1,4 @@
-import type { ProposalStatus } from "../../../../types/proposal";
+import type { ProposalStatus } from "@/types/proposal";
 
 interface Props {
   status: ProposalStatus;

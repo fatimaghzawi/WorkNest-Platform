@@ -1,24 +1,24 @@
 ﻿import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Tags } from 'lucide-react';
-import Button from '../../../components/common/Button';
-import Pagination from '../../../components/common/Pagination';
-import { categoriesApi } from '../../../api/categories.api';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
+import Button from '@/components/Button';
+import Pagination from '@/components/Pagination';
+import { categoriesApi } from '@/api/categories.api';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
 import CategoriesOverview, {
   type CategoryPipelineStats,
-} from '../components/categories/CategoriesOverview';
-import CategoryPipelineBoard from '../components/categories/CategoryPipelineBoard';
-import CategoryInspectorPanel from '../components/categories/CategoryInspectorPanel';
-import CategoryFormModal from '../components/categories/CategoryFormModal';
-import type { Category, CreateCategoryPayload } from '../../../types/category';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import { useDebouncedValue } from '../../../hooks/useDebouncedValue';
-import { useToast } from '../../../hooks/useToast';
-import '../../../css/DesignSystem.css';
-import '../../../css/AdminAnalytics.css';
-import '../../../css/DashboardFeatures.css';
-import '../../../css/CategoriesAdmin.css';
+} from '@/dashboards/admin/components/categories/CategoriesOverview';
+import CategoryPipelineBoard from '@/dashboards/admin/components/categories/CategoryPipelineBoard';
+import CategoryInspectorPanel from '@/dashboards/admin/components/categories/CategoryInspectorPanel';
+import CategoryFormModal from '@/dashboards/admin/components/categories/CategoryFormModal';
+import type { Category, CreateCategoryPayload } from '@/types/category';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { useDebouncedValue } from '@/hooks/useDebouncedValue';
+import { useToast } from '@/hooks/useToast';
+import '@/styles/DesignSystem.css';
+import '@/styles/AdminAnalytics.css';
+import '@/styles/DashboardFeatures.css';
+import '@/styles/CategoriesAdmin.css';
 
 type ActiveFilter = 'all' | 'active' | 'inactive';
 

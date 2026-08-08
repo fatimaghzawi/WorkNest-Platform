@@ -12,16 +12,16 @@ const bcrypt = require('bcryptjs');
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env'), quiet: true });
 
-import User from '../models/User';
-import Category from '../models/Category';
-import Job from '../models/Job';
-import Proposal from '../models/Proposal';
-import Project from '../models/Project';
-import Payment from '../models/Payment';
-import Task from '../models/Task';
-import Interview from '../models/Interview';
-import Notification from '../models/Notification';
-import { calculatePlatformFee } from '../config/platformFee';
+import User from '../modules/users/user.model';
+import Category from '../modules/categories/category.model';
+import Job from '../modules/jobs/job.model';
+import Proposal from '../modules/proposals/proposal.model';
+import Project from '../modules/projects/project.model';
+import Payment from '../modules/payments/payment.model';
+import Task from '../modules/workspace/task.model';
+import Interview from '../modules/interviews/interview.model';
+import Notification from '../modules/notifications/notification.model';
+import { calculatePlatformFee } from '../modules/payments/payments.constants';
 
 const DEMO_PASSWORD = 'Demo1234!';
 const ADMIN_EMAIL = 'admin@worknest.com';

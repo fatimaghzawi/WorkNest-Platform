@@ -1,5 +1,10 @@
+/**
+ * Express application factory.
+ * Process bootstrap (listen, sockets, shutdown) lives in `server.ts`.
+ * Feature routes: `/api/auth` (auth module) + `/api/v1/*` (routes/index.ts).
+ */
 const express = require('express');
-require('./models/registerModels');
+require('./common/database/registerModels');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -8,21 +13,25 @@ const rateLimit = require('express-rate-limit');
 
 const env = require('./config/env');
 const routes = require('./routes');
-const authRoutes = require('./routes/auth.routes');
-const paymentController = require('./controllers/payment.controller');
-const asyncHandler = require('./utils/asyncHandler');
-const { getUploadsRoot } = require('./utils/uploadPaths');
-const logger = require('./middlewares/logger.middleware');
-const notFound = require('./middlewares/notFound.middleware');
-const errorHandler = require('./middlewares/error.middleware');
+const { authRoutes } = require('./modules/auth');
+const { paymentController } = require('./modules/payments');
+const asyncHandler = require('./common/utils/asyncHandler');
+const { getUploadSubfolder } = require('./common/utils/uploadPaths');
+const requestId = require('./common/middleware/requestId.middleware');
+const csrfOriginGuard = require('./common/middleware/csrfOrigin.middleware');
+const { registerSecureUploadRoutes } = require('./common/middleware/secureUploads.middleware');
+const logger = require('./common/middleware/logger.middleware');
+const notFound = require('./common/middleware/notFound.middleware');
+const errorHandler = require('./common/middleware/error.middleware');
 
 const app = express();
 
 app.set('trust proxy', 1);
 
+app.use(requestId);
+
 app.use(
   helmet({
-    // Allow Vercel frontend + Google OAuth popup / postMessage
     crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
     crossOriginResourcePolicy: { policy: 'cross-origin' },
   })
@@ -33,7 +42,7 @@ app.use(
       if (!origin || env.allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
-      return callback(new Error(`Origin ${origin} not allowed by CORS`));
+      return callback(null, false);
     },
     credentials: true,
   })
@@ -46,17 +55,25 @@ app.post(
   asyncHandler(paymentController.stripeWebhook)
 );
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(cookieParser());
+app.use(csrfOriginGuard);
 app.use(logger);
 
+// Profile avatars remain publicly readable (UUID filenames).
 app.use(
-  '/uploads',
-  express.static(getUploadsRoot(), {
+  '/uploads/profile',
+  express.static(getUploadSubfolder('profile'), {
     maxAge: env.isProduction ? '7d' : 0,
+    index: false,
+    redirect: false,
+    fallthrough: false,
   })
 );
+
+// Workspace files require authentication + job membership.
+registerSecureUploadRoutes(app);
 
 const limiter = rateLimit({
   windowMs: env.rateLimit.windowMs,
@@ -72,6 +89,7 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 
+// Auth stays outside /api/v1 so existing clients keep /api/auth/*.
 app.use('/api/auth', authRoutes);
 app.use('/api/v1', routes);
 
@@ -80,6 +98,8 @@ app.get('/', (req, res) => {
     success: true,
     message: 'Welcome to WorkNest API',
     docs: '/api/v1/health',
+    requestId: req.requestId,
+    timestamp: new Date().toISOString(),
   });
 });
 

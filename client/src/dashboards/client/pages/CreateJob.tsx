@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import JobForm from '../../../components/jobs/JobForm';
-import { jobsApi } from '../../../api/jobs.api';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import DashboardStudioShell from '../../_shared/studio/DashboardStudioShell';
-import { useToast } from '../../../hooks/useToast';
-import type { CreateJobPayload } from '../../../types/job';
-import '../../../css/FreelancerStudio.css';
+import JobForm from '@/features/jobs/JobForm';
+import { jobsApi } from '@/api/jobs.api';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import DashboardStudioShell from '@/dashboards/shared/studio/DashboardStudioShell';
+import { useToast } from '@/hooks/useToast';
+import type { CreateJobPayload } from '@/types/job';
+import '@/styles/FreelancerStudio.css';
 
 export default function CreateJob() {
   const navigate = useNavigate();

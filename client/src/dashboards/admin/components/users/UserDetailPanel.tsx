@@ -1,11 +1,11 @@
 import { CheckCircle2, ExternalLink, Mail, MapPin, UserRound } from 'lucide-react';
-import Button from '../../../../components/common/Button';
-import UserAvatar from '../../../../components/users/UserAvatar';
-import type { AdminUser } from '../../../../types/user';
-import type { UserRole } from '../../../../types/auth';
-import { formatDate, formatDateTime } from '../../../../utils/format';
-import { buildGmailComposeUrl } from '../../../../utils/mailto';
-import '../../../../css/UsersAdmin.css';
+import Button from '@/components/Button';
+import UserAvatar from '@/features/users/UserAvatar';
+import type { AdminUser } from '@/types/user';
+import type { UserRole } from '@/types/auth';
+import { formatDate, formatDateTime } from '@/utils/format';
+import { buildGmailComposeUrl } from '@/utils/mailto';
+import '@/styles/UsersAdmin.css';
 
 const ROLE_LABELS: Record<UserRole, string> = {
   client: 'Client',

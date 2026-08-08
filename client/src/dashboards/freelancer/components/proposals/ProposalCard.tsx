@@ -8,13 +8,13 @@ import {
   Pencil,
   Trash2,
 } from 'lucide-react';
-import Button from '../../../../components/common/Button';
-import UserAvatar from '../../../../components/users/UserAvatar';
-import ProposalStatusBadge from './ProposalStatusBadge';
-import { formatCurrency, formatDate } from '../../../../utils/format';
-import { getProposalFreelancer } from '../../../../utils/proposal';
-import { useAuth } from '../../../../hooks/useAuth';
-import type { Proposal } from '../../../../types/proposal';
+import Button from '@/components/Button';
+import UserAvatar from '@/features/users/UserAvatar';
+import ProposalStatusBadge from '@/dashboards/freelancer/components/proposals/ProposalStatusBadge';
+import { formatCurrency, formatDate } from '@/utils/format';
+import { getProposalFreelancer } from '@/utils/proposal';
+import { useAuth } from '@/hooks/useAuth';
+import type { Proposal } from '@/types/proposal';
 
 interface Props {
   proposal: Proposal;

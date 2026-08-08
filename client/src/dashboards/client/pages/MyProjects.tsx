@@ -1,30 +1,30 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CheckCircle2, Clock3, LayoutGrid, Sparkles, Wallet } from 'lucide-react';
-import { projectsApi, type Project } from '../../../api/projects.api';
-import Badge from '../../../components/common/Badge';
-import Button from '../../../components/common/Button';
-import Pagination from '../../../components/common/Pagination';
-import { BlockLoader } from '../../../components/common/Loader';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import DashboardStudioShell from '../../_shared/studio/DashboardStudioShell';
-import DashboardOverview from '../../_shared/studio/DashboardOverview';
-import DashboardStudioPanel from '../../_shared/studio/DashboardStudioPanel';
-import RequestReviewModal from '../../_shared/projects/RequestReviewModal';
-import DepositEscrowModal from '../../_shared/payments/DepositEscrowModal';
-import EscrowMoneyCard from '../../_shared/payments/EscrowMoneyCard';
+import { projectsApi, type Project } from '@/api/projects.api';
+import Badge from '@/components/Badge';
+import Button from '@/components/Button';
+import Pagination from '@/components/Pagination';
+import { BlockLoader } from '@/components/Loader';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import DashboardStudioShell from '@/dashboards/shared/studio/DashboardStudioShell';
+import DashboardOverview from '@/dashboards/shared/studio/DashboardOverview';
+import DashboardStudioPanel from '@/dashboards/shared/studio/DashboardStudioPanel';
+import RequestReviewModal from '@/dashboards/shared/projects/RequestReviewModal';
+import DepositEscrowModal from '@/dashboards/shared/payments/DepositEscrowModal';
+import EscrowMoneyCard from '@/dashboards/shared/payments/EscrowMoneyCard';
 import {
   projectStatusBadgeVariant,
   projectStatusLabel,
-} from '../../_shared/projects/projectStatus';
-import { useConfirm } from '../../../context/ConfirmContext';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import { useToast } from '../../../hooks/useToast';
-import { useCheckoutReturn } from '../../../hooks/useCheckoutReturn';
-import { formatDateTime, formatCurrency } from '../../../utils/format';
-import '../../../css/DashboardFeatures.css';
-import '../../../css/FreelancerStudio.css';
-import '../../../css/Payments.css';
+} from '@/dashboards/shared/projects/projectStatus';
+import { useConfirm } from '@/context/ConfirmContext';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { useToast } from '@/hooks/useToast';
+import { useCheckoutReturn } from '@/hooks/useCheckoutReturn';
+import { formatDateTime, formatCurrency } from '@/utils/format';
+import '@/styles/DashboardFeatures.css';
+import '@/styles/FreelancerStudio.css';
+import '@/styles/Payments.css';
 
 const PROJECTS_PAGE_SIZE = 9;
 

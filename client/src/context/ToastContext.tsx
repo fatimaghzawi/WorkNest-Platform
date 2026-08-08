@@ -6,8 +6,8 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import ToastContainer from '../components/common/Toast/ToastContainer';
-import type { ToastItem, ToastOptions, ToastVariant } from '../types/toast';
+import ToastContainer from '@/components/Toast/ToastContainer';
+import type { ToastItem, ToastOptions, ToastVariant } from '@/types/toast';
 
 const DEFAULT_DURATION = 4500;
 const MAX_TOASTS = 4;

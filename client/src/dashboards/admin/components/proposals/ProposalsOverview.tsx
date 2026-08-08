@@ -1,5 +1,5 @@
 import { CircleCheck, CircleX, Clock3, Inbox } from 'lucide-react';
-import type { ProposalStatus } from '../../../../types/proposal';
+import type { ProposalStatus } from '@/types/proposal';
 
 export interface ProposalPipelineStats {
   total: number;

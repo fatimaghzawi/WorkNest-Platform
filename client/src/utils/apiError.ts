@@ -1,5 +1,5 @@
 import { isAxiosError } from 'axios';
-import type { ApiError } from '../types/auth';
+import type { ApiError } from '@/types/auth';
 
 export const getApiErrorMessage = (error: unknown, fallback = 'Something went wrong'): string => {
   if (isAxiosError<ApiError>(error)) {

@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Button from '../../../components/common/Button';
-import { BlockLoader } from '../../../components/common/Loader';
-import JobDetailsView from '../../../components/jobs/JobDetailsView';
-import SubmitProposalModal from '../components/proposals/SubmitProposalModal';
-import { jobsApi } from '../../../api/jobs.api';
-import { proposalsApi } from '../../../api/proposals.api';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import Card, { CardBody } from '../../../components/common/Card';
-import { useToast } from '../../../hooks/useToast';
-import type { Job } from '../../../types/job';
-import type { Proposal } from '../../../types/proposal';
-import { getApiErrorMessage } from '../../../utils/apiError';
+import Button from '@/components/Button';
+import { BlockLoader } from '@/components/Loader';
+import JobDetailsView from '@/features/jobs/JobDetailsView';
+import SubmitProposalModal from '@/dashboards/freelancer/components/proposals/SubmitProposalModal';
+import { jobsApi } from '@/api/jobs.api';
+import { proposalsApi } from '@/api/proposals.api';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import Card, { CardBody } from '@/components/Card';
+import { useToast } from '@/hooks/useToast';
+import type { Job } from '@/types/job';
+import type { Proposal } from '@/types/proposal';
+import { getApiErrorMessage } from '@/utils/apiError';
 import { Briefcase, Send } from 'lucide-react';
-import '../../../css/DashboardFeatures.css';
+import '@/styles/DashboardFeatures.css';
 
 export default function JobDetails() {
   const { jobId } = useParams<{ jobId: string }>();

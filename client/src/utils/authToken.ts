@@ -1,25 +1,14 @@
-const STORAGE_KEY = 'worknest_access_token';
+/** In-memory access token only — never persist to storage (XSS-resistant). Cookies hold the session. */
+let memoryToken: string | null = null;
 
 export function getAccessToken(): string | null {
-  try {
-    return sessionStorage.getItem(STORAGE_KEY);
-  } catch {
-    return null;
-  }
+  return memoryToken;
 }
 
 export function setAccessToken(token: string): void {
-  try {
-    sessionStorage.setItem(STORAGE_KEY, token);
-  } catch {
-    // sessionStorage may be unavailable in some embedded browsers
-  }
+  memoryToken = token;
 }
 
 export function clearAccessToken(): void {
-  try {
-    sessionStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // ignore
-  }
+  memoryToken = null;
 }

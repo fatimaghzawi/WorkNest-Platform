@@ -1,5 +1,5 @@
-import type { UserRole } from '../types/auth';
-import type { Notification } from '../types/notification';
+import type { UserRole } from '@/types/auth';
+import type { Notification } from '@/types/notification';
 
 export function getNotificationHref(notification: Notification, role: UserRole): string {
   const prefix =

@@ -1,5 +1,5 @@
 import type { TooltipProps } from 'recharts';
-import { formatCurrency } from '../../../../utils/format';
+import { formatCurrency } from '@/utils/format';
 
 export const CHART = {
   purple: '#49225B',

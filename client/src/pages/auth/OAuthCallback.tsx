@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authApi } from '../../api/auth.api';
-import { getDashboardPath } from '../../hooks/useAuth';
-import { useToast } from '../../hooks/useToast';
-import { setAccessToken } from '../../utils/authToken';
-import { useAuth } from '../../hooks/useAuth';
+import { authApi } from '@/api/auth.api';
+import { getDashboardPath } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/useToast';
+import { setAccessToken } from '@/utils/authToken';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function OAuthCallback() {
   const navigate = useNavigate();

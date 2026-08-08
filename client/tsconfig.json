@@ -12,7 +12,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src", "vite.config.ts"]
+  "include": ["src"]
 }

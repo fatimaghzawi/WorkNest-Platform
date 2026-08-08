@@ -1,1 +1,1 @@
-export { default } from '../../_shared/studio/DashboardStudioPanel';
+export { default } from '@/dashboards/shared/studio/DashboardStudioPanel';

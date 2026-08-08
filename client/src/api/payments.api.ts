@@ -1,6 +1,6 @@
-﻿import api from './axios';
-import type { ApiSuccessResponse } from '../types/api';
-import type { CheckoutSessionResponse, ListPaymentsParams, Payment, WalletSummary } from '../types/payment';
+﻿import api from '@/api/axios';
+import type { ApiSuccessResponse } from '@/types/api';
+import type { CheckoutSessionResponse, ListPaymentsParams, Payment, WalletSummary } from '@/types/payment';
 
 export const paymentsApi = {
   wallet: () => api.get<ApiSuccessResponse<WalletSummary>>('/api/v1/payments/wallet'),

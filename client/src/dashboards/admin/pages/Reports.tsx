@@ -6,18 +6,18 @@ import {
   type DashboardOverview,
   type DashboardRecentJob,
   type PlatformReportPayload,
-} from '../../../api/dashboard.api';
-import Button from '../../../components/common/Button';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import ReportsOverview from '../components/reports/ReportsOverview';
-import { useToast } from '../../../hooks/useToast';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import { formatCurrency, formatDate, formatStatusLabel } from '../../../utils/format';
-import { generatePlatformReportPdf } from '../../../utils/generatePlatformReportPdf';
-import '../../../css/DesignSystem.css';
-import '../../../css/AdminAnalytics.css';
-import '../../../css/DashboardFeatures.css';
-import '../../../css/ReportsAdmin.css';
+} from '@/api/dashboard.api';
+import Button from '@/components/Button';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import ReportsOverview from '@/dashboards/admin/components/reports/ReportsOverview';
+import { useToast } from '@/hooks/useToast';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { formatCurrency, formatDate, formatStatusLabel } from '@/utils/format';
+import { generatePlatformReportPdf } from '@/utils/generatePlatformReportPdf';
+import '@/styles/DesignSystem.css';
+import '@/styles/AdminAnalytics.css';
+import '@/styles/DashboardFeatures.css';
+import '@/styles/ReportsAdmin.css';
 
 const MONTHS = [
   'Jan',

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { paymentsApi } from '../api/payments.api';
-import { getApiErrorMessage } from '../utils/apiError';
-import { useToast } from './useToast';
+import { paymentsApi } from '@/api/payments.api';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { useToast } from '@/hooks/useToast';
 
 export function useCheckoutReturn(onSuccess?: () => void | Promise<void>) {
   const toast = useToast();

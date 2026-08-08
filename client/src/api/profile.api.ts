@@ -1,15 +1,15 @@
-﻿import api from './axios';
+﻿import api from '@/api/axios';
 
 import type {
   ApiSuccessResponse,
-} from '../types/api';
+} from '@/types/api';
 
 import type {
   UpdateProfilePayload,
   UserProfile,
   PublicFreelancerProfilePayload,
   PublicClientProfilePayload,
-} from '../types/profile';
+} from '@/types/profile';
 
 
 

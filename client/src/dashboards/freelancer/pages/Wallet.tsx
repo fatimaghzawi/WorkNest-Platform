@@ -1,22 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Shield, TrendingUp, Wallet, WalletCards } from 'lucide-react';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import Button from '../../../components/common/Button';
-import Pagination from '../../../components/common/Pagination';
-import PaginatedEscrowSection from '../../_shared/payments/PaginatedEscrowSection';
-import WalletTransactionRow from '../../_shared/payments/WalletTransactionRow';
-import FreelancerStudioShell from '../components/FreelancerStudioShell';
-import FreelancerOverview from '../components/FreelancerOverview';
-import FreelancerStudioPanel from '../components/FreelancerStudioPanel';
-import { paymentsApi } from '../../../api/payments.api';
-import type { Payment, WalletSummary } from '../../../types/payment';
-import { formatCurrency, formatDateTime } from '../../../utils/format';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import { useToast } from '../../../hooks/useToast';
-import '../../../css/DesignSystem.css';
-import '../../../css/Payments.css';
-import '../../../css/FreelancerStudio.css';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import Button from '@/components/Button';
+import Pagination from '@/components/Pagination';
+import PaginatedEscrowSection from '@/dashboards/shared/payments/PaginatedEscrowSection';
+import WalletTransactionRow from '@/dashboards/shared/payments/WalletTransactionRow';
+import FreelancerStudioShell from '@/dashboards/freelancer/components/FreelancerStudioShell';
+import FreelancerOverview from '@/dashboards/freelancer/components/FreelancerOverview';
+import FreelancerStudioPanel from '@/dashboards/freelancer/components/FreelancerStudioPanel';
+import { paymentsApi } from '@/api/payments.api';
+import type { Payment, WalletSummary } from '@/types/payment';
+import { formatCurrency, formatDateTime } from '@/utils/format';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { useToast } from '@/hooks/useToast';
+import '@/styles/DesignSystem.css';
+import '@/styles/Payments.css';
+import '@/styles/FreelancerStudio.css';
 
 const emptyWallet: WalletSummary = {
   role: 'freelancer',

@@ -1,2 +1,2 @@
-export { default } from '../../_shared/studio/DashboardOverview';
-export type { DashboardOverviewTile as FreelancerOverviewTile } from '../../_shared/studio/DashboardOverview';
+export { default } from '@/dashboards/shared/studio/DashboardOverview';
+export type { DashboardOverviewTile as FreelancerOverviewTile } from '@/dashboards/shared/studio/DashboardOverview';

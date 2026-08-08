@@ -7,10 +7,10 @@
   useState,
   type ReactNode,
 } from 'react';
-import { authApi } from '../api/auth.api';
-import type { GoogleLoginPayload, LoginPayload, RegisterPayload, User } from '../types/auth';
-import { getApiErrorMessage } from '../utils/apiError';
-import { clearAccessToken, setAccessToken } from '../utils/authToken';
+import { authApi } from '@/api/auth.api';
+import type { GoogleLoginPayload, LoginPayload, RegisterPayload, User } from '@/types/auth';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { clearAccessToken, setAccessToken } from '@/utils/authToken';
 
 interface AuthContextValue {
   user: User | null;

@@ -1,8 +1,8 @@
-import UserAvatar from '../../../../components/users/UserAvatar';
-import type { Proposal } from '../../../../types/proposal';
-import { formatCurrency } from '../../../../utils/format';
-import { getProposalFreelancer, getProposalJobTitle } from '../../../../utils/proposal';
-import '../../../../css/ProposalsAdmin.css';
+import UserAvatar from '@/features/users/UserAvatar';
+import type { Proposal } from '@/types/proposal';
+import { formatCurrency } from '@/utils/format';
+import { getProposalFreelancer, getProposalJobTitle } from '@/utils/proposal';
+import '@/styles/ProposalsAdmin.css';
 
 export default function ProposalQueue({
   proposals,

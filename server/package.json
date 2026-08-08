@@ -9,10 +9,12 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "seed": "tsx src/scripts/seedDemoData.ts",
+    "audit:prod": "npm audit --audit-level=high"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=20"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.6",
@@ -30,6 +32,8 @@
     "morgan": "^1.11.0",
     "multer": "^2.2.0",
     "nodemailer": "^9.0.3",
+    "pino": "^10.3.1",
+    "pino-http": "^11.0.0",
     "socket.io": "^4.8.3",
     "stripe": "^22.3.0",
     "zod": "^4.4.3"

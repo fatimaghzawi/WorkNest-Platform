@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import Button from '../../../components/common/Button';
-import { useAuth } from '../../../hooks/useAuth';
-import logoImage from '../../../images/logo.png';
-import { ADMIN_NAV_LINKS } from '../nav';
-import DashboardNavUser from '../../_shared/DashboardNavUser';
-import '../../../css/AdminSidebar.css';
+import Button from '@/components/Button';
+import { useAuth } from '@/hooks/useAuth';
+import logoImage from '@/assets/logo.png';
+import { ADMIN_NAV_LINKS } from '@/dashboards/admin/nav';
+import DashboardNavUser from '@/dashboards/shared/DashboardNavUser';
+import '@/styles/AdminSidebar.css';
 
 function isActivePath(currentPath: string, href: string) {
   if (href === currentPath) return true;

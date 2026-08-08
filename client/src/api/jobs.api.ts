@@ -1,12 +1,12 @@
-﻿import api from './axios';
-import type { ApiMessageResponse, ApiSuccessResponse } from '../types/api';
+﻿import api from '@/api/axios';
+import type { ApiMessageResponse, ApiSuccessResponse } from '@/types/api';
 import type {
   CreateJobPayload,
   Job,
   JobStatus,
   ListJobsParams,
   UpdateJobPayload,
-} from '../types/job';
+} from '@/types/job';
 
 export const jobsApi = {
   list: (params?: ListJobsParams) =>

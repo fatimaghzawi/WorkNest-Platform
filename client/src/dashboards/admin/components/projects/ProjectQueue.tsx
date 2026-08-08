@@ -1,6 +1,6 @@
-import type { Project } from '../../../../api/projects.api';
-import { formatDate } from '../../../../utils/format';
-import '../../../../css/ProjectsAdmin.css';
+import type { Project } from '@/api/projects.api';
+import { formatDate } from '@/utils/format';
+import '@/styles/ProjectsAdmin.css';
 
 export default function ProjectQueue({
   projects,

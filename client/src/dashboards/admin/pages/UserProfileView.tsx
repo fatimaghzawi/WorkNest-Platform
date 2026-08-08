@@ -9,20 +9,20 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import Button from '../../../components/common/Button';
-import UserAvatar from '../../../components/users/UserAvatar';
-import { usersApi } from '../../../api/user.api';
-import DashboardPageHeader from '../../_shared/DashboardPageHeader';
-import EmptyState from '../../_shared/EmptyState';
-import { StatGridSkeleton } from '../../../components/common/Skeleton';
-import { useToast } from '../../../hooks/useToast';
-import { getApiErrorMessage } from '../../../utils/apiError';
-import { buildGmailComposeUrl } from '../../../utils/mailto';
-import { formatDate } from '../../../utils/format';
-import type { AdminUser } from '../../../types/user';
-import '../../../css/DesignSystem.css';
-import '../../../css/AdminAnalytics.css';
-import '../../../css/UsersAdmin.css';
+import Button from '@/components/Button';
+import UserAvatar from '@/features/users/UserAvatar';
+import { usersApi } from '@/api/user.api';
+import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
+import EmptyState from '@/dashboards/shared/EmptyState';
+import { StatGridSkeleton } from '@/components/Skeleton';
+import { useToast } from '@/hooks/useToast';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { buildGmailComposeUrl } from '@/utils/mailto';
+import { formatDate } from '@/utils/format';
+import type { AdminUser } from '@/types/user';
+import '@/styles/DesignSystem.css';
+import '@/styles/AdminAnalytics.css';
+import '@/styles/UsersAdmin.css';
 
 export default function AdminUserProfileView() {
   const { userId } = useParams<{ userId: string }>();

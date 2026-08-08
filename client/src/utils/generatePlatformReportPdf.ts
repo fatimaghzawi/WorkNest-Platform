@@ -5,7 +5,7 @@ import type {
   DashboardCustomer,
   DashboardOverview,
   DashboardRecentJob,
-} from '../api/dashboard.api';
+} from '@/api/dashboard.api';
 
 const BRAND = {
   primary: [73, 34, 91] as [number, number, number],

@@ -1,4 +1,4 @@
-import PortfolioPage from '../../_shared/portfolio/PortfolioPage';
+import PortfolioPage from '@/dashboards/shared/portfolio/PortfolioPage';
 
 export default function FreelancerPortfolio() {
   return <PortfolioPage />;

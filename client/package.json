@@ -23,6 +23,7 @@
     "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
+    "@types/node": "^26.1.2",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
@@ -30,6 +31,6 @@
     "vite": "^6.0.3"
   },
   "engines": {
-    "node": "24.x"
+    "node": ">=20"
   }
 }

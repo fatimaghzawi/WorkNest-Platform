@@ -1,7 +1,7 @@
-import { formatDate } from '../../../../utils/format';
-import StatusBadge from '../../../../components/jobs/StatusBadge';
-import type { Category } from '../../../../types/category';
-import '../../../../css/CategoriesAdmin.css';
+import { formatDate } from '@/utils/format';
+import StatusBadge from '@/features/jobs/StatusBadge';
+import type { Category } from '@/types/category';
+import '@/styles/CategoriesAdmin.css';
 
 const LANES = [
   { key: 'active' as const, label: 'Active', hint: 'Visible to clients' },
