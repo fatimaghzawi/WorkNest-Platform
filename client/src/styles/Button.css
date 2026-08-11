@@ -11,7 +11,7 @@
   border: 1px solid transparent;
   cursor: pointer;
   white-space: nowrap;
-  transition: var(--transition-normal);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   user-select: none;
   text-decoration: none;
 }
@@ -33,21 +33,23 @@
   padding: 0 var(--space-2);
   font-size: 13px;
   line-height: 18px;
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
 }
 
 .wn-btn--md {
   height: var(--size-button-md);
-  padding: 12px 24px; /* theme.components.button.padding */
-  font-size: 16px;
+  padding: 12px 22px;
+  font-size: 15px;
   line-height: 20px;
+  border-radius: 999px;
 }
 
 .wn-btn--lg {
   height: var(--size-button-lg);
   padding: 0 var(--space-4);
-  font-size: 18px;
+  font-size: 17px;
   line-height: 24px;
+  border-radius: 999px;
 }
 
 .wn-btn--full-width {
@@ -56,18 +58,23 @@
 
 /* --- Variant: Primary --- */
 .wn-btn--primary {
-  background-color: var(--color-primary-main);
+  background: linear-gradient(135deg, var(--color-primary-hover), var(--color-primary-main) 55%, #3d1c4d);
   color: var(--color-text-inverted);
+  box-shadow: 0 8px 20px rgba(73, 34, 91, 0.25);
 }
 .wn-btn--primary:hover:not(:disabled) {
-  background-color: var(--color-primary-hover);
+  background: linear-gradient(135deg, #7a3d92, var(--color-primary-hover) 55%, var(--color-primary-main));
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(73, 34, 91, 0.32);
 }
 .wn-btn--primary:active:not(:disabled) {
   background-color: var(--color-primary-active);
+  transform: none;
 }
 .wn-btn--primary:disabled {
   background-color: var(--color-primary-disabled);
   color: var(--color-text-inverted);
+  box-shadow: none;
 }
 
 /* --- Variant: Secondary --- */

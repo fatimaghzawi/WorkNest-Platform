@@ -1,10 +1,27 @@
 /* Admin dashboard — fixed sidebar layout */
 
 .wn-admin-layout {
-  --wn-admin-sidebar-width: 260px;
+  --wn-admin-sidebar-width: 248px;
+  position: relative;
+  isolation: isolate;
   min-height: 100vh;
   display: flex;
-  background: var(--color-brand-dashboard-background);
+  background:
+    radial-gradient(ellipse 65% 45% at 100% 0%, rgba(165, 106, 189, 0.38), transparent 55%),
+    radial-gradient(ellipse 45% 35% at 0% 100%, rgba(249, 115, 22, 0.12), transparent 50%),
+    radial-gradient(ellipse 40% 30% at 60% 40%, rgba(110, 52, 130, 0.1), transparent 55%),
+    linear-gradient(168deg, #dccfe9 0%, #e7dcf2 40%, #e4daf0 100%);
+}
+
+.wn-admin-layout::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(73, 34, 91, 0.04) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 90%);
 }
 
 .wn-admin-layout__content {
@@ -23,9 +40,13 @@
   width: var(--wn-admin-sidebar-width);
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, var(--color-primary-main) 0%, var(--color-primary-active) 100%);
+  background:
+    radial-gradient(ellipse 120% 60% at 0% 0%, rgba(165, 106, 189, 0.35), transparent 55%),
+    linear-gradient(185deg, #5a2a70 0%, var(--color-primary-main) 42%, var(--color-primary-active) 100%);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: var(--shadow-medium, 0 8px 24px rgba(73, 34, 91, 0.25));
+  box-shadow:
+    12px 0 40px rgba(50, 20, 64, 0.28),
+    inset -1px 0 0 rgba(255, 255, 255, 0.05);
   font-family: var(--font-body);
   color: rgba(255, 255, 255, 0.92);
 }
@@ -51,10 +72,11 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 4px 8px;
+  padding: 5px 9px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
-  color: #fff;
+  background: rgba(249, 115, 22, 0.28);
+  color: #ffedd5;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .wn-admin-sidebar__nav {
@@ -69,30 +91,33 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .wn-admin-sidebar__link {
   display: block;
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
+  padding: 11px 14px;
+  border-radius: 14px;
   font-size: 14px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.78);
   text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
 
 .wn-admin-sidebar__link:hover {
   color: #fff;
   background: rgba(255, 255, 255, 0.12);
+  transform: translateX(2px);
 }
 
 .wn-admin-sidebar__link--active {
   color: #fff;
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(90deg, rgba(249, 115, 22, 0.28), rgba(255, 255, 255, 0.14));
   font-weight: 600;
-  box-shadow: inset 3px 0 0 rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 3px 0 0 #fdba74,
+    0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .wn-admin-sidebar__footer {
@@ -174,7 +199,7 @@
   width: 100%;
   max-width: var(--layout-max-container-width);
   margin: 0 auto;
-  padding: var(--space-4) var(--layout-grid-margin) var(--space-6);
+  padding: 18px var(--layout-grid-margin) 32px;
 }
 
 .wn-admin-mobile-bar {

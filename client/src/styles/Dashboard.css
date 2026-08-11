@@ -1,20 +1,56 @@
 /* Shared dashboard shell styles */
 
 .wn-dash {
+  position: relative;
+  isolation: isolate;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--color-brand-dashboard-background);
+  background:
+    radial-gradient(ellipse 70% 48% at 0% -8%, rgba(165, 106, 189, 0.42), transparent 58%),
+    radial-gradient(ellipse 55% 40% at 100% 4%, rgba(249, 115, 22, 0.16), transparent 52%),
+    radial-gradient(ellipse 45% 35% at 55% 100%, rgba(110, 52, 130, 0.18), transparent 55%),
+    linear-gradient(168deg, #dccfe9 0%, #e7dcf2 38%, #e4daf0 100%);
+}
+
+.wn-dash::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(rgba(73, 34, 91, 0.045) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 92%);
+}
+
+.wn-dash::after {
+  content: '';
+  position: fixed;
+  width: min(520px, 70vw);
+  height: min(520px, 70vw);
+  right: -12%;
+  top: 18%;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(165, 106, 189, 0.28), transparent 68%);
+  filter: blur(8px);
 }
 
 .wn-dash-nav {
   position: sticky;
   top: 0;
   z-index: var(--z-sticky-navbar);
-  background: var(--color-primary-main);
-  border-bottom: 1px solid var(--color-border-light);
-  box-shadow: var(--shadow-low);
+  background:
+    linear-gradient(120deg, #3a1a4a 0%, var(--color-primary-main) 42%, #5c2d72 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 10px 30px rgba(50, 20, 64, 0.28),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06);
   font-family: var(--font-body);
+  backdrop-filter: saturate(1.2);
 }
 
 .wn-dash-nav__bar {
@@ -24,7 +60,8 @@
   align-items: center;
   gap: var(--space-2);
   min-height: var(--layout-navbar-height);
-  padding: 0 var(--layout-grid-margin);
+  width: 100%;
+  padding: 0 24px;
 }
 
 .wn-dash-nav__menu-btn {
@@ -69,24 +106,26 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 4px 10px;
+  padding: 5px 11px;
   border-radius: 999px;
   white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
 }
 
 .wn-dash-nav__badge--admin {
-  background: rgba(239, 68, 68, 0.12);
-  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.22);
+  color: #fecaca;
 }
 
 .wn-dash-nav__badge--client {
-  background: rgba(59, 130, 246, 0.12);
-  color: #1d4ed8;
+  background: rgba(59, 130, 246, 0.22);
+  color: #bfdbfe;
 }
 
 .wn-dash-nav__badge--freelancer {
-  background: rgba(34, 197, 94, 0.12);
-  color: #15803d;
+  background: rgba(20, 184, 166, 0.22);
+  color: #99f6e4;
 }
 
 .wn-dash-nav__links {
@@ -97,32 +136,35 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .wn-dash-nav__link {
   display: inline-flex;
   align-items: center;
   padding: 8px 12px;
-  border-radius: var(--radius-md);
-  font-size: 14px;
+  border-radius: 999px;
+  font-size: 13.5px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.82);
   text-decoration: none;
-  transition: var(--transition-fast);
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   white-space: nowrap;
 }
 
 .wn-dash-nav__link--active {
   color: var(--color-text-inverted);
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.16);
   font-weight: 600;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 .wn-dash-nav__link:hover {
   color: var(--color-text-inverted);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
 }
 
 .wn-dash-nav__dropdown {
@@ -412,45 +454,49 @@
   width: 100%;
   max-width: var(--layout-max-container-width);
   margin: 0 auto;
-  padding: var(--space-4) var(--layout-grid-margin) var(--space-6);
+  padding: 18px var(--layout-grid-margin) 32px;
 }
 
 .wn-dash-page__eyebrow {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-primary-main);
-  margin-bottom: 8px;
+  color: var(--color-brand-orange);
+  margin-bottom: 4px;
 }
 
 .wn-dash-page__title {
   font-family: var(--font-heading);
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  color: var(--color-text-main);
-  margin: 0 0 var(--space-2);
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  color: var(--color-primary-main);
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
 }
 
 .wn-dash-page__subtitle {
   color: var(--color-text-secondary);
-  line-height: 1.6;
+  line-height: 1.45;
+  font-size: 0.92rem;
   margin: 0;
 }
 
 .wn-dash-page__header-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
+  gap: 10px;
+  margin-top: 12px;
 }
 
 .wn-dash-page__card {
-  margin-top: var(--space-4);
-  background: var(--color-brand-surface);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  box-shadow: var(--shadow-low);
+  margin-top: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.78));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 18px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-med);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 @media (max-width: 1024px) {
@@ -514,12 +560,12 @@
 
 @media (max-width: 768px) {
   .wn-dash__main {
-    padding: var(--space-3) var(--space-2) var(--space-5);
+    padding: 12px var(--space-2) 24px;
   }
 
   .wn-dash-page__card {
-    padding: var(--space-3);
-    margin-top: var(--space-3);
+    padding: 14px;
+    margin-top: 12px;
   }
 
   .wn-dash-nav {

@@ -3,7 +3,7 @@
 .wn-workspace {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: 14px;
 }
 
 .wn-workspace__toolbar {
@@ -18,8 +18,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2);
-  padding: 14px 16px;
+  gap: 10px;
+  padding: 10px 12px;
   border-radius: var(--radius-lg);
   background: var(--color-brand-surface);
   border: 1px solid var(--color-border-light);
@@ -81,8 +81,8 @@
 
 .wn-workspace__layout {
   display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: var(--space-3);
+  grid-template-columns: 1fr 280px;
+  gap: 14px;
   align-items: start;
 }
 
@@ -195,9 +195,11 @@
   flex-direction: column;
   min-height: 420px;
   max-height: calc(100dvh - 320px);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, var(--color-brand-background), var(--color-brand-surface));
-  border: 1px solid var(--color-border-light);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(245, 235, 250, 0.9), rgba(255, 255, 255, 0.95));
+  border: 1px solid rgba(232, 224, 240, 0.95);
+  box-shadow: var(--shadow-low);
   scroll-snap-align: start;
 }
 
@@ -207,7 +209,7 @@
   justify-content: space-between;
   gap: 8px;
   padding: 14px 14px 10px;
-  border-bottom: 1px solid var(--color-border-light);
+  border-bottom: 1px solid rgba(232, 224, 240, 0.9);
 }
 
 .wn-kanban__column-title {
@@ -224,6 +226,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
 }
 
 .wn-kanban__column-dot--todo { background: var(--color-text-muted); }
@@ -234,9 +237,9 @@
 .wn-kanban__column-count {
   font-size: 12px;
   font-weight: 700;
-  color: var(--color-text-secondary);
-  background: var(--color-brand-light-purple);
-  padding: 2px 8px;
+  color: var(--color-primary-main);
+  background: rgba(165, 106, 189, 0.16);
+  padding: 3px 9px;
   border-radius: 999px;
 }
 
@@ -250,7 +253,8 @@
 }
 
 .wn-kanban__column-body--drag-over {
-  background: rgba(165, 106, 189, 0.08);
+  background: rgba(165, 106, 189, 0.12);
+  box-shadow: inset 0 0 0 2px rgba(165, 106, 189, 0.28);
 }
 
 .wn-task-card {

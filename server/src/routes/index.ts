@@ -18,6 +18,7 @@ const { notificationRoutes } = require('../modules/notifications');
 const { dashboardRoutes } = require('../modules/dashboard');
 const { logRoutes } = require('../modules/logs');
 const { landingRoutes } = require('../modules/landing');
+const { matchingRoutes } = require('../modules/matching');
 
 const router = Router();
 
@@ -73,5 +74,6 @@ router.use('/notifications', notificationRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/logs', logRoutes);
 router.use('/landing', landingRoutes);
+router.use('/matching', matchingRoutes);
 
 module.exports = router;

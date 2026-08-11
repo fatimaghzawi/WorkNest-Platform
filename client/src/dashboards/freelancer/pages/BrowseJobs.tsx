@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Briefcase, CheckCircle2, Clock3, Send } from 'lucide-react';
 import Pagination from '@/components/Pagination';
 import { jobsApi } from '@/api/jobs.api';
+import { matchingApi } from '@/api/matching.api';
 import { categoriesApi } from '@/api/categories.api';
 import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
 import EmptyState from '@/dashboards/shared/EmptyState';
@@ -9,10 +10,12 @@ import { BlockLoader } from '@/components/Loader';
 import type { Category } from '@/types/category';
 import type { Job } from '@/types/job';
 import type { ListJobsParams } from '@/types/job';
+import type { JobMatchSuggestion } from '@/types/matching';
 import { getApiErrorMessage } from '@/utils/apiError';
 import { useToast } from '@/hooks/useToast';
 import JobFilters from '@/dashboards/freelancer/components/jobs/JobFilters';
 import JobList from '@/dashboards/freelancer/components/jobs/JobList';
+import JobMatchSuggestions from '@/dashboards/shared/matching/JobMatchSuggestions';
 import SubmitProposalModal from '@/dashboards/freelancer/components/proposals/SubmitProposalModal';
 import FreelancerStudioShell from '@/dashboards/freelancer/components/FreelancerStudioShell';
 import FreelancerOverview from '@/dashboards/freelancer/components/FreelancerOverview';
@@ -39,11 +42,13 @@ export default function BrowseJobs() {
   const [loading, setLoading] = useState(true);
   const [proposalJob, setProposalJob] = useState<Job | null>(null);
   const [submittedJobIds, setSubmittedJobIds] = useState<Set<string>>(new Set());
+  const [suggestions, setSuggestions] = useState<JobMatchSuggestion[]>([]);
+  const [matchHint, setMatchHint] = useState<string | undefined>();
 
   const loadJobs = useCallback(async () => {
     setLoading(true);
     try {
-      const [jobsResponse, submittedIds] = await Promise.all([
+      const [jobsResponse, submittedIds, matchRes] = await Promise.all([
         jobsApi.list({
           page,
           limit: JOBS_PAGE_SIZE,
@@ -55,12 +60,20 @@ export default function BrowseJobs() {
           sort,
         }),
         fetchAllMyProposalJobIds(),
+        matchingApi.suggestJobs({ page: 1, limit: 8 }).catch(() => null),
       ]);
 
       setJobs(jobsResponse.data.data);
       setTotalPages(jobsResponse.data.meta?.totalPages || 1);
       setTotalJobs(jobsResponse.data.meta?.total ?? jobsResponse.data.data.length);
       setSubmittedJobIds(submittedIds);
+      if (matchRes) {
+        setSuggestions(matchRes.data.data || []);
+        setMatchHint(matchRes.data.meta?.hint);
+      } else {
+        setSuggestions([]);
+        setMatchHint(undefined);
+      }
     } catch (err) {
       toast.error(getApiErrorMessage(err, 'Failed to load jobs.'));
     } finally {
@@ -163,6 +176,15 @@ export default function BrowseJobs() {
           onClear={resetFilters}
         />
       </section>
+
+      {!loading && suggestions.length > 0 ? (
+        <JobMatchSuggestions
+          suggestions={suggestions}
+          hint={matchHint}
+          submittedJobIds={submittedJobIds}
+          onSubmitProposal={setProposalJob}
+        />
+      ) : null}
 
       <FreelancerStudioPanel
         title="Open jobs"

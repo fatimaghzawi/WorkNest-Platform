@@ -1,5 +1,5 @@
-import { Job } from "@/types/job";
-import JobCard from "@/dashboards/freelancer/components/jobs/JobCard";
+import JobCard from '@/dashboards/freelancer/components/jobs/JobCard';
+import type { Job } from '@/types/job';
 
 interface JobListProps {
   jobs: Job[];
@@ -15,24 +15,19 @@ export default function JobList({
   if (!jobs.length) {
     return (
       <section className="wn-dash-empty">
-        <h3 className="wn-dash-empty__title">
-          No jobs found
-        </h3>
-
-        <p>
-          Try adjusting your search or filters to
-          discover more opportunities.
-        </p>
+        <h3 className="wn-dash-empty__title">No jobs found</h3>
+        <p>Try adjusting your search or filters to discover more opportunities.</p>
       </section>
     );
   }
 
   return (
-    <section className="wn-dash-card-list">
-      {jobs.map((job) => (
+    <section className="wn-job-tickets" aria-label="Open job briefs">
+      {jobs.map((job, index) => (
         <JobCard
           key={job._id}
           job={job}
+          index={index}
           hasSubmittedProposal={submittedJobIds?.has(job._id)}
           onSubmitProposal={onSubmitProposal}
         />

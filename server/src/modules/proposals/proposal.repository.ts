@@ -84,6 +84,12 @@ const findPendingByJobExcept = (jobId: string, exceptProposalId: string) =>
     'freelancerId'
   );
 
+/** Distinct job IDs this freelancer already proposed on (for suggestion filtering). */
+const findJobIdsByFreelancer = async (freelancerId: string) => {
+  const rows = await Proposal.find({ freelancerId }).select('jobId').lean();
+  return rows.map((r) => String(r.jobId)).filter(Boolean);
+};
+
 module.exports = {
   create,
   findById,
@@ -97,4 +103,5 @@ module.exports = {
   deleteByJobId,
   rejectPendingByJobExcept,
   findPendingByJobExcept,
+  findJobIdsByFreelancer,
 };

@@ -1,4 +1,4 @@
-﻿const AppError = require('../../common/errors/AppError');
+const AppError = require('../../common/errors/AppError');
 const { parsePagination, buildPaginationMeta } = require('../../common/utils/pagination');
 const env = require('../../config/env');
 const { stripe, isConfigured: isStripeConfigured } = require('../../shared/integrations/stripe/stripe');

@@ -1,4 +1,6 @@
-/* Global styles - to be implemented */
+/* Global styles + design tokens */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap');
 
 * {
   margin: 0;
@@ -9,18 +11,22 @@
 body {
   font-family: var(--font-body), system-ui, -apple-system, sans-serif;
   color: var(--color-text-main);
-  background: var(--color-brand-surface);
+  background:
+    radial-gradient(ellipse 80% 55% at 8% -10%, rgba(165, 106, 189, 0.35), transparent 55%),
+    radial-gradient(ellipse 60% 45% at 100% 0%, rgba(249, 115, 22, 0.14), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 70% 100%, rgba(110, 52, 130, 0.12), transparent 55%),
+    linear-gradient(165deg, #e5daf2 0%, #ebe3f5 42%, #e8dff1 100%);
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
+  -webkit-font-smoothing: antialiased;
 }
 
 img {
   max-width: 100%;
   height: auto;
 }
-
 
 :root {
   /* Color: Primary */
@@ -38,22 +44,26 @@ img {
   --color-accent-main: #A56ABD;
   --color-accent-hover: #BC8CD3;
   --color-accent-focus-ring: #A56ABD;
+  --color-brand-orange: #F97316;
+  --color-brand-teal: #14B8A6;
 
   /* Color: Brand surfaces */
   --color-brand-light-purple: #E7DBEF;
-  --color-brand-background: #F5EBFA;
-  --color-brand-dashboard-background: #FAFAFA;
+  --color-brand-background: #EDE4F5;
+  --color-brand-dashboard-background: #E6DBF0;
   --color-brand-surface: #FFFFFF;
+  --color-brand-glass: rgba(255, 255, 255, 0.72);
+  --color-brand-canvas: #E6DBF0;
 
   /* Color: Text */
-  --color-text-main: #1F2937;
-  --color-text-secondary: #6B7280;
-  --color-text-muted: #9CA3AF;
+  --color-text-main: #1A1224;
+  --color-text-secondary: #5B5268;
+  --color-text-muted: #8B8298;
   --color-text-inverted: #FFFFFF;
 
   /* Color: Borders */
-  --color-border-light: #E5E7EB;
-  --color-border-main: #D1D5DB;
+  --color-border-light: #E8E0F0;
+  --color-border-main: #D4CBE0;
 
   /* Color: Status */
   --color-status-success: #22C55E;
@@ -62,8 +72,8 @@ img {
   --color-status-info: #3B82F6;
 
   /* Typography */
-  --font-heading: 'Poppins', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Poppins', system-ui, sans-serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
 
   /* Spacing (8pt scale helpers) */
   --space-1: 8px;
@@ -79,13 +89,13 @@ img {
   --breakpoint-desktop: 1200px;
   --breakpoint-ultrawide: 1920px;
 
-  /* Layout */
-  --layout-sidebar-width: 260px;
-  --layout-navbar-height: 72px;
+  /* Layout — balanced content width */
+  --layout-sidebar-width: 248px;
+  --layout-navbar-height: 58px;
   --layout-bottom-nav-height: 0px;
-  --layout-max-container-width: 1440px;
-  --layout-grid-gutter: 24px;
-  --layout-grid-margin: 32px;
+  --layout-max-container-width: 1400px;
+  --layout-grid-gutter: 16px;
+  --layout-grid-margin: 24px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
 
@@ -101,8 +111,8 @@ img {
 
   /* Transitions */
   --transition-fast: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: all 250ms cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-slow: all 400ms cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Sizes */
   --size-avatar-sm: 32px;
@@ -116,15 +126,16 @@ img {
   --size-button-lg: 56px;
 
   /* Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
   --radius-xl: 16px;
 
-  /* Shadows */
-  --shadow-low: 0px 1px 3px rgba(0, 0, 0, 0.05), 0px 1px 2px rgba(0, 0, 0, 0.03);
-  --shadow-med: 0px 4px 6px -1px rgba(0, 0, 0, 0.05), 0px 2px 4px -1px rgba(0, 0, 0, 0.03);
-  --shadow-high: 0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 10px 10px -5px rgba(0, 0, 0, 0.04);
+  /* Shadows — purple-tinted depth */
+  --shadow-low: 0 1px 2px rgba(50, 20, 64, 0.05), 0 8px 20px rgba(73, 34, 91, 0.08);
+  --shadow-med: 0 12px 28px rgba(73, 34, 91, 0.14), 0 4px 10px rgba(50, 20, 64, 0.06);
+  --shadow-high: 0 28px 56px rgba(73, 34, 91, 0.2), 0 10px 20px rgba(50, 20, 64, 0.08);
+  --shadow-glow: 0 0 0 1px rgba(165, 106, 189, 0.22), 0 16px 40px rgba(73, 34, 91, 0.16);
 }
 
 .wn-landing-anchor {
@@ -139,9 +150,10 @@ img {
 
 @media (max-width: 768px) {
   :root {
-    --layout-grid-margin: 16px;
+    --layout-grid-margin: 18px;
     --layout-navbar-height: calc(56px + env(safe-area-inset-top, 0px));
     --layout-grid-gutter: 16px;
+    --layout-max-container-width: 100%;
   }
 }
 
@@ -150,4 +162,3 @@ img {
     --layout-grid-margin: 14px;
   }
 }
-

@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
+  ArrowUpRight,
   Briefcase,
   CalendarDays,
+  FolderKanban,
   Send,
-  Users,
+  Sparkles,
+  TrendingUp,
 } from 'lucide-react';
 import {
   Bar,
@@ -37,6 +40,7 @@ import '@/styles/DesignSystem.css';
 import '@/styles/AdminAnalytics.css';
 import '@/styles/Interviews.css';
 import '@/styles/FreelancerStudio.css';
+import '@/styles/ClientDashboard.css';
 
 const PURPLE = '#49225B';
 const ORANGE = '#F97316';
@@ -59,16 +63,6 @@ function formatCompact(value: number) {
   if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `${(value / 1_000).toFixed(value >= 10_000 ? 0 : 1)}k`;
   return String(value);
-}
-
-function Delta({ value }: { value: number }) {
-  const sign = value > 0 ? '+' : '';
-  return (
-    <span className="wn-metric-card__delta">
-      {sign}
-      {value}%
-    </span>
-  );
 }
 
 const emptyOverview: ClientDashboardOverview = {
@@ -124,7 +118,7 @@ export default function ClientDashboardHome() {
     const rate = overview.proposals.acceptanceRate || 0;
     return [
       { name: 'Accepted', value: Math.max(rate, 1), fill: ORANGE },
-      { name: 'Other', value: Math.max(100 - rate, 1), fill: TEAL },
+      { name: 'Other', value: Math.max(100 - rate, 1), fill: 'rgba(255,255,255,0.22)' },
     ];
   }, [overview.proposals.acceptanceRate]);
 
@@ -152,13 +146,18 @@ export default function ClientDashboardHome() {
     [proposalDistribution]
   );
 
+  const pipelinePct =
+    overview.jobs.total > 0
+      ? Math.round((overview.jobs.inProgress / overview.jobs.total) * 100)
+      : 0;
+
   if (loading) {
     return (
       <DashboardStudioShell>
         <DashboardPageHeader
           hero
-          eyebrow="Client workspace"
-          title="Your hiring command center"
+          eyebrow="Client HQ"
+          title="Hiring command center"
           subtitle="Loading your jobs, proposals, and project insights..."
           actions={
             <Button to="/client/jobs/new" variant="primary">
@@ -175,9 +174,9 @@ export default function ClientDashboardHome() {
     <DashboardStudioShell>
       <DashboardPageHeader
         hero
-        eyebrow="Client workspace"
-        title="Your hiring command center"
-        subtitle="Track postings, proposal flow, interview pipeline, and active project momentum — all in one place."
+        eyebrow="Client HQ"
+        title="Hiring command center"
+        subtitle="Track postings, proposal flow, interviews, and project momentum in one cinematic workspace."
         actions={
           <Button to="/client/jobs/new" variant="primary">
             Post a new job
@@ -185,248 +184,340 @@ export default function ClientDashboardHome() {
         }
       />
 
-      <div className="wn-analytics__layout">
-        <div style={{ display: 'grid', gap: 20 }}>
-          <div className="wn-analytics__hero-row">
-            <section className="wn-analytics-card wn-analytics-card--compact-chart">
-              <div className="wn-analytics-card__header">
-                <div>
-                  <h3 className="wn-analytics-card__title">Hiring activity</h3>
-                  <p className="wn-analytics-card__subtitle">
-                    Jobs posted vs proposals received
-                  </p>
-                </div>
-              </div>
-
-              <div className="wn-chart-kpi wn-chart-kpi--compact">
-                <div>
-                  <strong>{formatCurrency(overview.financial.totalBudget)}</strong>
-                  <span>Posted budget</span>
-                </div>
-                <div>
-                  <strong>{overview.proposals.total}</strong>
-                  <span>Proposals</span>
-                </div>
-                <div>
-                  <strong>{overview.projects.active}</strong>
-                  <span>Active projects</span>
-                </div>
-              </div>
-
-              <div className="wn-analytics-card__chart">
-                <ResponsiveContainer width="100%" height="100%" debounce={50}>
-                  <ComposedChart
-                    data={chartPoints}
-                    margin={
-                      isCompact
-                        ? { top: 8, right: 4, left: 0, bottom: 4 }
-                        : { top: 4, right: 4, left: 0, bottom: 0 }
-                    }
-                  >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#EDE4F3" vertical={false} />
-                    <XAxis
-                      dataKey="label"
-                      tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 10 }}
-                      axisLine={false}
-                      tickLine={false}
-                      interval={isCompact ? 'preserveStartEnd' : 0}
-                      minTickGap={isCompact ? 16 : 8}
-                    />
-                    <YAxis
-                      yAxisId="left"
-                      tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 10 }}
-                      axisLine={false}
-                      tickLine={false}
-                      width={isCompact ? 28 : 32}
-                    />
-                    <YAxis
-                      yAxisId="right"
-                      orientation="right"
-                      tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 10 }}
-                      axisLine={false}
-                      tickLine={false}
-                      width={isCompact ? 24 : 28}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        borderRadius: 12,
-                        border: '1px solid #E7DBEF',
-                        boxShadow: '0 8px 24px rgba(73,34,91,0.12)',
-                        fontSize: 12,
-                      }}
-                    />
-                    <Bar
-                      yAxisId="left"
-                      dataKey="jobs"
-                      fill={PURPLE}
-                      radius={[6, 6, 0, 0]}
-                      barSize={isCompact ? 10 : 14}
-                      name="Jobs posted"
-                    />
-                    <Line
-                      yAxisId="right"
-                      type="monotone"
-                      dataKey="proposals"
-                      stroke={ORANGE}
-                      strokeWidth={2}
-                      dot={false}
-                      name="Proposals"
-                    />
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </div>
-            </section>
-
-            <section className="wn-analytics-card wn-analytics-card--calendar">
-              <DashboardInterviewMiniCalendar interviewsPath="/client/interviews" />
-            </section>
-          </div>
-
-          <div className="wn-finance-strip">
-            <div className="wn-finance-tile wn-finance-tile--purple">
-              <span>Open listings</span>
-              <strong>{formatCurrency(overview.financial.openBudget)}</strong>
+      <div className="wn-client-hq">
+        <div className="wn-client-hq__signal-row">
+          <article className="wn-client-signal wn-client-signal--jobs">
+            <div className="wn-client-signal__icon">
+              <Briefcase size={18} />
             </div>
-            <div className="wn-finance-tile wn-finance-tile--orange">
-              <span>Pending proposals</span>
-              <strong>{overview.proposals.pending}</strong>
+            <div className="wn-client-signal__copy">
+              <span>My jobs</span>
+              <strong>{overview.jobs.total}</strong>
             </div>
-            <div className="wn-finance-tile wn-finance-tile--teal">
-              <span>In-progress spend</span>
-              <strong>{formatCurrency(overview.financial.inProgressBudget)}</strong>
+            <em className="wn-client-signal__delta">
+              <TrendingUp size={12} />
+              {overview.jobs.growthPct > 0 ? '+' : ''}
+              {overview.jobs.growthPct}%
+            </em>
+            <div className="wn-client-signal__meter" aria-hidden>
+              <span style={{ width: `${Math.min(100, Math.max(10, overview.jobs.growthPct))}%` }} />
             </div>
-          </div>
+          </article>
 
-          <div className="wn-analytics__top">
-            <section className="wn-analytics-card wn-status-card">
-              <div>
-                <p className="wn-status-card__label">Job pipeline</p>
-                <p className="wn-status-card__value">{overview.jobs.total} postings</p>
-                <div className="wn-status-card__progress">
-                  <span
-                    style={{
-                      width: `${overview.jobs.total > 0 ? Math.round((overview.jobs.inProgress / overview.jobs.total) * 100) : 0}%`,
-                    }}
-                  />
-                </div>
-                <p className="wn-analytics-card__subtitle">
-                  {overview.jobs.open} open · {overview.jobs.inProgress} in progress · {overview.jobs.closed} closed
-                </p>
-              </div>
-              <div className="wn-status-card__chart">
-                {jobPieData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height="100%" debounce={50}>
-                    <PieChart>
-                      <Pie data={jobPieData} dataKey="value" innerRadius={38} outerRadius={58} stroke="none">
-                        {jobPieData.map((entry) => (
-                          <Cell key={entry.name} fill={entry.fill} />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <p className="wn-empty-inline">Post a job to see distribution</p>
-                )}
-              </div>
-            </section>
+          <article className="wn-client-signal wn-client-signal--hire">
+            <div className="wn-client-signal__icon">
+              <Send size={18} />
+            </div>
+            <div className="wn-client-signal__copy">
+              <span>Hire rate</span>
+              <strong>{overview.proposals.acceptanceRate}%</strong>
+            </div>
+            <em className="wn-client-signal__delta">{overview.proposals.accepted} hired</em>
+            <div className="wn-client-signal__meter" aria-hidden>
+              <span style={{ width: `${overview.proposals.acceptanceRate}%` }} />
+            </div>
+          </article>
 
-            <section className="wn-analytics-card wn-status-card">
-              <div>
-                <p className="wn-status-card__label">Proposal inbox</p>
-                <p className="wn-status-card__value">{overview.proposals.total} received</p>
-                <div className="wn-status-card__progress">
-                  <span style={{ width: `${overview.proposals.acceptanceRate}%` }} />
-                </div>
-                <p className="wn-analytics-card__subtitle">
-                  {overview.proposals.pending} pending · {overview.proposals.accepted} accepted ·{' '}
-                  {overview.proposals.rejected} declined
-                </p>
-              </div>
-              <div className="wn-status-card__chart">
-                {proposalPieData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height="100%" debounce={50}>
-                    <PieChart>
-                      <Pie data={proposalPieData} dataKey="value" innerRadius={38} outerRadius={58} stroke="none">
-                        {proposalPieData.map((entry) => (
-                          <Cell key={entry.name} fill={entry.fill} />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <p className="wn-empty-inline">Proposals appear here once freelancers apply</p>
-                )}
-              </div>
-            </section>
-          </div>
+          <article className="wn-client-signal wn-client-signal--talks">
+            <div className="wn-client-signal__icon">
+              <CalendarDays size={18} />
+            </div>
+            <div className="wn-client-signal__copy">
+              <span>Interviews</span>
+              <strong>{overview.interviews.upcoming}</strong>
+            </div>
+            <em className="wn-client-signal__delta">{overview.interviews.total} total</em>
+            <div className="wn-client-signal__meter" aria-hidden>
+              <span
+                style={{
+                  width: `${
+                    overview.interviews.total > 0
+                      ? Math.round((overview.interviews.upcoming / overview.interviews.total) * 100)
+                      : 0
+                  }%`,
+                }}
+              />
+            </div>
+          </article>
 
-          <div className="wn-metric-row">
-            <article className="wn-metric-card">
-              <div className="wn-metric-card__top">
-                <div className="wn-metric-card__icon">
-                  <Briefcase size={18} />
-                </div>
-                <Delta value={overview.jobs.growthPct} />
-              </div>
-              <p className="wn-metric-card__label">My jobs</p>
-              <p className="wn-metric-card__value">{overview.jobs.total}</p>
-              <div className="wn-metric-card__bar">
-                <span
-                  style={{
-                    width: `${Math.min(100, Math.max(12, overview.jobs.growthPct))}%`,
-                  }}
-                />
-              </div>
-            </article>
-
-            <article className="wn-metric-card">
-              <div className="wn-metric-card__top">
-                <div className="wn-metric-card__icon">
-                  <Send size={18} />
-                </div>
-                <Delta value={overview.proposals.acceptanceRate} />
-              </div>
-              <p className="wn-metric-card__label">Hire rate</p>
-              <p className="wn-metric-card__value">{overview.proposals.acceptanceRate}%</p>
-              <div className="wn-metric-card__bar">
-                <span style={{ width: `${overview.proposals.acceptanceRate}%` }} />
-              </div>
-            </article>
-
-            <article className="wn-metric-card">
-              <div className="wn-metric-card__top">
-                <div className="wn-metric-card__icon">
-                  <CalendarDays size={18} />
-                </div>
-              </div>
-              <p className="wn-metric-card__label">Upcoming interviews</p>
-              <p className="wn-metric-card__value">{overview.interviews.upcoming}</p>
-              <div className="wn-metric-card__bar">
-                <span
-                  style={{
-                    width: `${overview.interviews.total > 0 ? Math.round((overview.interviews.upcoming / overview.interviews.total) * 100) : 0}%`,
-                  }}
-                />
-              </div>
-            </article>
-          </div>
+          <article className="wn-client-signal wn-client-signal--build">
+            <div className="wn-client-signal__icon">
+              <FolderKanban size={18} />
+            </div>
+            <div className="wn-client-signal__copy">
+              <span>Active builds</span>
+              <strong>{overview.projects.active}</strong>
+            </div>
+            <em className="wn-client-signal__delta">{overview.projects.avgProgress}% avg</em>
+            <div className="wn-client-signal__meter" aria-hidden>
+              <span style={{ width: `${overview.projects.avgProgress}%` }} />
+            </div>
+          </article>
         </div>
 
-        <aside className="wn-analytics-side">
-          <section className="wn-campaign-card">
-            <h3>Hiring pulse</h3>
-            <p>Proposal conversion & project progress this month</p>
+        <div className="wn-client-hq__stage">
+          <section className="wn-client-window">
+            <header className="wn-client-window__chrome">
+              <div className="wn-client-window__dots" aria-hidden>
+                <i />
+                <i />
+                <i />
+              </div>
+              <div>
+                <h3>Hiring activity</h3>
+                <p>Jobs posted vs proposals received</p>
+              </div>
+              <span className="wn-client-window__live">
+                <Sparkles size={12} />
+                Live
+              </span>
+            </header>
 
-            <div className="wn-donut-wrap" style={{ height: 120 }}>
+            <div className="wn-client-window__kpis">
+              <div>
+                <strong>{formatCurrency(overview.financial.totalBudget)}</strong>
+                <span>Posted budget</span>
+              </div>
+              <div>
+                <strong>{overview.proposals.total}</strong>
+                <span>Proposals</span>
+              </div>
+              <div>
+                <strong>{overview.projects.active}</strong>
+                <span>Active projects</span>
+              </div>
+            </div>
+
+            <div className="wn-client-window__chart">
+              <ResponsiveContainer width="100%" height="100%" debounce={50}>
+                <ComposedChart
+                  data={chartPoints}
+                  margin={
+                    isCompact
+                      ? { top: 8, right: 4, left: 0, bottom: 4 }
+                      : { top: 4, right: 4, left: 0, bottom: 0 }
+                  }
+                >
+                  <defs>
+                    <linearGradient id="clientJobsBar" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={PURPLE} stopOpacity={1} />
+                      <stop offset="100%" stopColor="#A56ABD" stopOpacity={0.75} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#EDE4F3" vertical={false} />
+                  <XAxis
+                    dataKey="label"
+                    tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 10 }}
+                    axisLine={false}
+                    tickLine={false}
+                    interval={isCompact ? 'preserveStartEnd' : 0}
+                    minTickGap={isCompact ? 16 : 8}
+                  />
+                  <YAxis
+                    yAxisId="left"
+                    tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 10 }}
+                    axisLine={false}
+                    tickLine={false}
+                    width={isCompact ? 28 : 32}
+                  />
+                  <YAxis
+                    yAxisId="right"
+                    orientation="right"
+                    tick={{ fill: '#9CA3AF', fontSize: isCompact ? 9 : 10 }}
+                    axisLine={false}
+                    tickLine={false}
+                    width={isCompact ? 24 : 28}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      borderRadius: 14,
+                      border: '1px solid #E7DBEF',
+                      boxShadow: '0 12px 28px rgba(73,34,91,0.14)',
+                      fontSize: 12,
+                    }}
+                  />
+                  <Bar
+                    yAxisId="left"
+                    dataKey="jobs"
+                    fill="url(#clientJobsBar)"
+                    radius={[8, 8, 0, 0]}
+                    barSize={isCompact ? 10 : 14}
+                    name="Jobs posted"
+                  />
+                  <Line
+                    yAxisId="right"
+                    type="monotone"
+                    dataKey="proposals"
+                    stroke={ORANGE}
+                    strokeWidth={2.5}
+                    dot={false}
+                    name="Proposals"
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
+          </section>
+
+          <section className="wn-client-cal-panel">
+            <DashboardInterviewMiniCalendar interviewsPath="/client/interviews" />
+          </section>
+        </div>
+
+        <div className="wn-client-ledger">
+          <article className="wn-client-ledger__tile wn-client-ledger__tile--a">
+            <span>Open listings</span>
+            <strong>{formatCurrency(overview.financial.openBudget)}</strong>
+            <small>Budget still hiring</small>
+          </article>
+          <article className="wn-client-ledger__tile wn-client-ledger__tile--b">
+            <span>Pending proposals</span>
+            <strong>{overview.proposals.pending}</strong>
+            <small>Waiting on your review</small>
+          </article>
+          <article className="wn-client-ledger__tile wn-client-ledger__tile--c">
+            <span>In-progress spend</span>
+            <strong>{formatCurrency(overview.financial.inProgressBudget)}</strong>
+            <small>Active project capital</small>
+          </article>
+        </div>
+
+        <div className="wn-client-hq__split">
+          <div className="wn-client-hq__main">
+            <div className="wn-client-pipes">
+              <section className="wn-client-pipe">
+                <header className="wn-client-pipe__head">
+                  <div>
+                    <p className="wn-client-pipe__label">Job pipeline</p>
+                    <h3>{overview.jobs.total} postings</h3>
+                  </div>
+                  <div className="wn-client-pipe__chart">
+                    {jobPieData.length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%" debounce={50}>
+                        <PieChart>
+                          <Pie data={jobPieData} dataKey="value" innerRadius={34} outerRadius={52} stroke="none">
+                            {jobPieData.map((entry) => (
+                              <Cell key={entry.name} fill={entry.fill} />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <p className="wn-client-pipe__empty">Post a job</p>
+                    )}
+                  </div>
+                </header>
+                <div className="wn-client-pipe__track" aria-hidden>
+                  <span style={{ width: `${pipelinePct}%` }} />
+                </div>
+                <ul className="wn-client-pipe__legend">
+                  <li>
+                    <i className="is-open" />
+                    {overview.jobs.open} open
+                  </li>
+                  <li>
+                    <i className="is-progress" />
+                    {overview.jobs.inProgress} in progress
+                  </li>
+                  <li>
+                    <i className="is-closed" />
+                    {overview.jobs.closed} closed
+                  </li>
+                </ul>
+              </section>
+
+              <section className="wn-client-pipe">
+                <header className="wn-client-pipe__head">
+                  <div>
+                    <p className="wn-client-pipe__label">Proposal inbox</p>
+                    <h3>{overview.proposals.total} received</h3>
+                  </div>
+                  <div className="wn-client-pipe__chart">
+                    {proposalPieData.length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%" debounce={50}>
+                        <PieChart>
+                          <Pie
+                            data={proposalPieData}
+                            dataKey="value"
+                            innerRadius={34}
+                            outerRadius={52}
+                            stroke="none"
+                          >
+                            {proposalPieData.map((entry) => (
+                              <Cell key={entry.name} fill={entry.fill} />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <p className="wn-client-pipe__empty">Awaiting bids</p>
+                    )}
+                  </div>
+                </header>
+                <div className="wn-client-pipe__track" aria-hidden>
+                  <span style={{ width: `${overview.proposals.acceptanceRate}%` }} />
+                </div>
+                <ul className="wn-client-pipe__legend">
+                  <li>
+                    <i className="is-pending" />
+                    {overview.proposals.pending} pending
+                  </li>
+                  <li>
+                    <i className="is-accepted" />
+                    {overview.proposals.accepted} accepted
+                  </li>
+                  <li>
+                    <i className="is-rejected" />
+                    {overview.proposals.rejected} declined
+                  </li>
+                </ul>
+              </section>
+            </div>
+
+            <section className="wn-client-health">
+              <div className="wn-client-health__orb" aria-hidden>
+                <UsersGlyph />
+              </div>
+              <div className="wn-client-health__copy">
+                <p className="wn-client-pipe__label">Project health</p>
+                <h3>
+                  {overview.projects.active} active · {overview.projects.completed} completed
+                </h3>
+              </div>
+              <div className="wn-client-health__stats">
+                <div>
+                  <strong>{overview.projects.avgProgress}%</strong>
+                  <span>Avg progress</span>
+                </div>
+                <div>
+                  <strong>{overview.projects.completionRate}%</strong>
+                  <span>Completion</span>
+                </div>
+                <div>
+                  <strong>{overview.interviews.total}</strong>
+                  <span>Interviews</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <aside className="wn-client-mission">
+            <div className="wn-client-mission__glow" aria-hidden />
+            <p className="wn-client-mission__eyebrow">Hiring pulse</p>
+            <h3>Conversion this month</h3>
+            <p className="wn-client-mission__caption">
+              Proposal conversion & project progress at a glance
+            </p>
+
+            <div className="wn-client-mission__gauge">
               <ResponsiveContainer width="100%" height="100%" debounce={50}>
                 <PieChart>
                   <Pie
                     data={hireRateData}
                     dataKey="value"
-                    innerRadius={36}
-                    outerRadius={52}
-                    startAngle={180}
-                    endAngle={0}
+                    innerRadius={42}
+                    outerRadius={58}
+                    startAngle={210}
+                    endAngle={-30}
                     stroke="none"
                   >
                     {hireRateData.map((entry) => (
@@ -435,71 +526,70 @@ export default function ClientDashboardHome() {
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
-              <div className="wn-donut-center" style={{ top: 28 }}>
-                <strong style={{ color: 'white' }}>{overview.proposals.acceptanceRate}%</strong>
-                <span style={{ color: 'rgba(255,255,255,0.8)' }}>hired</span>
+              <div className="wn-client-mission__gauge-center">
+                <strong>{overview.proposals.acceptanceRate}%</strong>
+                <span>hired</span>
               </div>
             </div>
 
-            <div className="wn-campaign-stats">
+            <div className="wn-client-mission__stats">
               <div>
                 <span>Pipeline budget</span>
                 <strong>
-                  {formatCompact(overview.financial.openBudget + overview.financial.inProgressBudget)}
+                  {formatCompact(
+                    overview.financial.openBudget + overview.financial.inProgressBudget
+                  )}
                 </strong>
-                <div className="wn-campaign-delta wn-campaign-delta--up">
-                  +{overview.jobs.thisMonth} jobs this month
-                </div>
+                <em>+{overview.jobs.thisMonth} jobs this month</em>
               </div>
               <div>
                 <span>Proposals</span>
                 <strong>{overview.proposals.thisMonth}</strong>
-                <div className="wn-campaign-delta wn-campaign-delta--warn">
-                  {overview.proposals.pending} pending review
-                </div>
+                <em>{overview.proposals.pending} pending review</em>
               </div>
             </div>
 
-            <div className="wn-chart-frame" style={{ width: '100%', height: 48, marginTop: 12, opacity: 0.85 }}>
+            <div className="wn-client-mission__spark">
               <ResponsiveContainer width="100%" height="100%" debounce={50}>
-                <ComposedChart data={chartPoints.slice(-8)} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                  <Bar dataKey="jobs" fill="rgba(255,255,255,0.35)" barSize={6} radius={[4, 4, 0, 0]} />
+                <ComposedChart
+                  data={chartPoints.slice(-8)}
+                  margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+                >
+                  <Bar dataKey="jobs" fill="rgba(255,255,255,0.32)" barSize={6} radius={[4, 4, 0, 0]} />
                   <Line type="monotone" dataKey="proposals" stroke={LIGHT} strokeWidth={2} dot={false} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
 
-            <div className="wn-campaign-promo">
+            <div className="wn-client-mission__cta">
               <p>Active projects are {overview.projects.avgProgress}% complete on average.</p>
-              <Link to="/client/projects">Open projects →</Link>
+              <Link to="/client/projects">
+                Open projects
+                <ArrowUpRight size={14} />
+              </Link>
             </div>
-          </section>
-
-          <section className="wn-analytics-card wn-profile-panel">
-            <div className="wn-profile-ring">
-              <span>
-                <Users size={28} />
-              </span>
-            </div>
-            <h3>Project health</h3>
-            <p>{overview.projects.active} active · {overview.projects.completed} completed</p>
-            <div className="wn-profile-stats">
-              <div>
-                <strong>{overview.projects.avgProgress}%</strong>
-                <span>Avg progress</span>
-              </div>
-              <div>
-                <strong>{overview.projects.completionRate}%</strong>
-                <span>Completion</span>
-              </div>
-              <div>
-                <strong>{overview.interviews.total}</strong>
-                <span>Interviews</span>
-              </div>
-            </div>
-          </section>
-        </aside>
+          </aside>
+        </div>
       </div>
     </DashboardStudioShell>
+  );
+}
+
+function UsersGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" aria-hidden>
+      <path
+        d="M16 11a3 3 0 1 0-2.83-4M8 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+      <path
+        d="M4.5 19a4.5 4.5 0 0 1 9 0M14 19a4 4 0 0 1 6.5-3.1"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }

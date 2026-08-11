@@ -16,17 +16,20 @@ import { jobsApi } from '@/api/jobs.api';
 import { proposalsApi } from '@/api/proposals.api';
 import { projectsApi } from '@/api/projects.api';
 import { interviewsApi } from '@/api/interviews.api';
+import { matchingApi } from '@/api/matching.api';
 import DepositEscrowModal from '@/dashboards/shared/payments/DepositEscrowModal';
 import DashboardPageHeader from '@/dashboards/shared/DashboardPageHeader';
 import EmptyState from '@/dashboards/shared/EmptyState';
 import DashboardStudioShell from '@/dashboards/shared/studio/DashboardStudioShell';
 import DashboardOverview from '@/dashboards/shared/studio/DashboardOverview';
 import DashboardStudioPanel from '@/dashboards/shared/studio/DashboardStudioPanel';
+import FreelancerMatchSuggestions from '@/dashboards/shared/matching/FreelancerMatchSuggestions';
 import ScheduleInterviewModal, {
   type PrefillProposal,
 } from '@/dashboards/shared/interviews/ScheduleInterviewModal';
 import type { Job } from '@/types/job';
 import type { Proposal, ProposalStatus } from '@/types/proposal';
+import type { FreelancerMatchSuggestion } from '@/types/matching';
 import type { CreateInterviewPayload } from '@/types/interview';
 import { getApiErrorMessage } from '@/utils/apiError';
 import { useToast } from '@/hooks/useToast';
@@ -37,6 +40,7 @@ import '@/styles/FreelancerStudio.css';
 import '@/styles/DesignSystem.css';
 import '@/styles/Proposal.css';
 import '@/styles/ClientProposals.css';
+import '@/styles/Matching.css';
 
 const FILTERS: { label: string; value: ProposalStatus | '' }[] = [
   { label: 'All', value: '' },
@@ -84,12 +88,14 @@ export default function JobProposals() {
     title: string;
     amount: number;
   } | null>(null);
+  const [talentSuggestions, setTalentSuggestions] = useState<FreelancerMatchSuggestion[]>([]);
+  const [talentHint, setTalentHint] = useState<string | undefined>();
 
   const loadData = useCallback(async () => {
     if (!jobId) return;
     setLoading(true);
     try {
-      const [jobRes, proposalsRes, nextCounts] = await Promise.all([
+      const [jobRes, proposalsRes, nextCounts, matchRes] = await Promise.all([
         jobsApi.getById(jobId),
         proposalsApi.getByJob(jobId, {
           page,
@@ -97,11 +103,19 @@ export default function JobProposals() {
           status: status || undefined,
         }),
         fetchProposalCounts(jobId),
+        matchingApi.suggestFreelancers(jobId, { page: 1, limit: 8 }).catch(() => null),
       ]);
       setJob(jobRes.data.data);
       setProposals(proposalsRes.data.data);
       setTotalPages(proposalsRes.data.meta?.totalPages || 1);
       setCounts(nextCounts);
+      if (matchRes) {
+        setTalentSuggestions(matchRes.data.data?.suggestions || []);
+        setTalentHint(matchRes.data.meta?.hint);
+      } else {
+        setTalentSuggestions([]);
+        setTalentHint(undefined);
+      }
     } catch (err) {
       toast.error(getApiErrorMessage(err, 'Failed to load proposals.'));
     } finally {
@@ -271,6 +285,10 @@ export default function JobProposals() {
           },
         ]}
       />
+
+      {!loading && talentSuggestions.length > 0 ? (
+        <FreelancerMatchSuggestions suggestions={talentSuggestions} hint={talentHint} />
+      ) : null}
 
       <section className="wn-analytics-card wn-freelancer-studio__toolbar wn-glass-panel">
         <div className="wn-freelancer-studio__pipeline">

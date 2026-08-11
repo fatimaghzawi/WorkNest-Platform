@@ -1,0 +1,482 @@
+{
+  "baseUrl": "https://work-nest-platform-nu.vercel.app",
+  "mode": "frame-synced-pop",
+  "fps": 5,
+  "frames": 516,
+  "chapters": [
+    {
+      "at": 0,
+      "role": "Both",
+      "title": "Client ↔ Freelancer marketplace flow",
+      "body": "Dual live dashboards — Orange = Client · Teal = Freelancer"
+    },
+    {
+      "at": 0.8,
+      "role": "Client",
+      "title": "Client posts a new job",
+      "body": "Typing title, brief, budget, skills & deadline on the real form"
+    },
+    {
+      "at": 2.8,
+      "role": "Client",
+      "title": "Client types the job title",
+      "body": "Starting to fill…"
+    },
+    {
+      "at": 3,
+      "role": "Client",
+      "title": "Client types the job title",
+      "body": "React Analytics Dashboard — Charts, Filters & PDF Export"
+    },
+    {
+      "at": 3.8,
+      "role": "Client",
+      "title": "Client writes the project brief",
+      "body": "Starting to fill…"
+    },
+    {
+      "at": 4,
+      "role": "Client",
+      "title": "Client writes the project brief",
+      "body": "KPI cards · charts · filters · PDF export"
+    },
+    {
+      "at": 4.8,
+      "role": "Client",
+      "title": "Client picks a category",
+      "body": "DevOps"
+    },
+    {
+      "at": 5,
+      "role": "Client",
+      "title": "Client sets the budget",
+      "body": "Starting to fill…"
+    },
+    {
+      "at": 5.2,
+      "role": "Client",
+      "title": "Client sets the budget",
+      "body": "$2,200 USD"
+    },
+    {
+      "at": 6,
+      "role": "Client",
+      "title": "Client adds required skills",
+      "body": "Starting to fill…"
+    },
+    {
+      "at": 6.2,
+      "role": "Client",
+      "title": "Client adds required skills",
+      "body": "React · TypeScript · Node.js"
+    },
+    {
+      "at": 7,
+      "role": "Client",
+      "title": "Client sets the deadline",
+      "body": "2026-08-31"
+    },
+    {
+      "at": 7.2,
+      "role": "Client",
+      "title": "Job is published",
+      "body": "Freelancers can now discover this listing"
+    },
+    {
+      "at": 9.2,
+      "role": "Freelancer",
+      "title": "Freelancer browses open jobs",
+      "body": "Opens the new client listing"
+    },
+    {
+      "at": 11.6,
+      "role": "Freelancer",
+      "title": "Freelancer writes a proposal",
+      "body": "Filling cover letter, price, and timeline live"
+    },
+    {
+      "at": 13,
+      "role": "Freelancer",
+      "title": "Cover letter being typed",
+      "body": "Starting to fill…"
+    },
+    {
+      "at": 13.2,
+      "role": "Freelancer",
+      "title": "Cover letter being typed",
+      "body": "Experience + delivery plan for the dashboard"
+    },
+    {
+      "at": 14,
+      "role": "Freelancer",
+      "title": "Freelancer sets proposal price",
+      "body": "Starting to fill…"
+    },
+    {
+      "at": 14.2,
+      "role": "Freelancer",
+      "title": "Freelancer sets proposal price",
+      "body": "$1,950 — under client budget"
+    },
+    {
+      "at": 15,
+      "role": "Freelancer",
+      "title": "Freelancer sets timeline",
+      "body": "Starting to fill…"
+    },
+    {
+      "at": 15.2,
+      "role": "Freelancer",
+      "title": "Freelancer sets timeline",
+      "body": "2 weeks delivery"
+    },
+    {
+      "at": 16,
+      "role": "Freelancer",
+      "title": "Proposal submitted",
+      "body": "Offer is sent — client will get a notification"
+    },
+    {
+      "at": 18,
+      "role": "Client",
+      "title": "Client gets a notification",
+      "body": "Opening the bell — new proposal alert"
+    },
+    {
+      "at": 20.6,
+      "role": "Client",
+      "title": "Client reviews the proposal",
+      "body": "Reading cover letter, price, and timeline"
+    },
+    {
+      "at": 23,
+      "role": "Client",
+      "title": "Client opens the freelancer profile",
+      "body": "Vetting track record, skills & portfolio before the interview"
+    },
+    {
+      "at": 24.4,
+      "role": "Client",
+      "title": "Freelancer profile overview",
+      "body": "Win rate · projects completed · skills listed"
+    },
+    {
+      "at": 26,
+      "role": "Client",
+      "title": "Reviewing achievements & track record",
+      "body": "Proposals sent / won, pending review, active projects"
+    },
+    {
+      "at": 27.4,
+      "role": "Client",
+      "title": "Track record & achievements",
+      "body": "Proof of delivery before scheduling an interview"
+    },
+    {
+      "at": 29.4,
+      "role": "Client",
+      "title": "Skills on the freelancer profile",
+      "body": "Matching React, TypeScript & Node.js to the brief"
+    },
+    {
+      "at": 30.8,
+      "role": "Client",
+      "title": "Portfolio & past work",
+      "body": "External showcase before the interview invite"
+    },
+    {
+      "at": 32.4,
+      "role": "Sync",
+      "title": "Client schedules an interview",
+      "body": "Fit looks strong — invite goes to the freelancer"
+    },
+    {
+      "at": 33.6,
+      "role": "Freelancer",
+      "title": "Freelancer notification arrives",
+      "body": "Opening alerts / interview calendar"
+    },
+    {
+      "at": 36.6,
+      "role": "Client",
+      "title": "Client returns to proposals",
+      "body": "Ready to accept the winning bid and create the project"
+    },
+    {
+      "at": 38.2,
+      "role": "Client",
+      "title": "Proposal inbox for this job",
+      "body": "Review the submitted offer before hiring"
+    },
+    {
+      "at": 39,
+      "role": "Client",
+      "title": "Zoom: Accept proposal",
+      "body": "Client clicks Accept — this hires the freelancer and creates the project"
+    },
+    {
+      "at": 40.4,
+      "role": "Client",
+      "title": "Confirm: Accept proposal",
+      "body": "Job moves in progress · a project is created · other bids are rejected"
+    },
+    {
+      "at": 42.2,
+      "role": "Client",
+      "title": "Project created — fund escrow",
+      "body": "Opening deposit so the freelancer can start work"
+    },
+    {
+      "at": 43.6,
+      "role": "Client",
+      "title": "Escrow funded · hire complete",
+      "body": "Proposal accepted, project created, and deposit secured"
+    },
+    {
+      "at": 44.6,
+      "role": "Client",
+      "title": "Highlight: project created",
+      "body": "New project appears in My Projects after accept + deposit"
+    },
+    {
+      "at": 46,
+      "role": "Client",
+      "title": "Zoom: new project card",
+      "body": "Accepted proposal → live project with escrow status"
+    },
+    {
+      "at": 47.8,
+      "role": "Freelancer",
+      "title": "Freelancer sees the active project",
+      "body": "Hire + funded escrow unlocks My Projects on the left"
+    },
+    {
+      "at": 49.4,
+      "role": "Freelancer",
+      "title": "Zoom: hired project unlocked",
+      "body": "Freelancer can now open the shared workspace"
+    },
+    {
+      "at": 51,
+      "role": "Sync",
+      "title": "Shared workspace opens",
+      "body": "Same jobId — one board for client & freelancer"
+    },
+    {
+      "at": 52.6,
+      "role": "Sync",
+      "title": "Synced Kanban for this hire",
+      "body": "Both panes locked to the same project"
+    },
+    {
+      "at": 54.4,
+      "role": "Client",
+      "title": "Client fills the Kanban board",
+      "body": "Adding the full sprint backlog onto the shared board"
+    },
+    {
+      "at": 56,
+      "role": "Client",
+      "title": "Adding: Kickoff & requirements alignment",
+      "body": "Confirm KPIs, data sources, and stakeholder export needs."
+    },
+    {
+      "at": 56.2,
+      "role": "Client",
+      "title": "Adding: Dashboard information architecture",
+      "body": "Layout KPI cards, chart grid, and filter rail."
+    },
+    {
+      "at": 56.4,
+      "role": "Client",
+      "title": "Adding: Build interactive chart widgets",
+      "body": "Line, bar, and pie charts with responsive tooltips."
+    },
+    {
+      "at": 56.6,
+      "role": "Client",
+      "title": "Adding: Advanced filters & date ranges",
+      "body": "Multi-select filters with URL-persisted state."
+    },
+    {
+      "at": 56.8,
+      "role": "Client",
+      "title": "Adding: PDF export pipeline",
+      "body": "Printable stakeholder PDF from the live dashboard view."
+    },
+    {
+      "at": 57,
+      "role": "Client",
+      "title": "Adding: QA pass & review pack",
+      "body": "Cross-browser checks and acceptance screenshots."
+    },
+    {
+      "at": 57.2,
+      "role": "Client",
+      "title": "Adding: Stakeholder demo rehearsal",
+      "body": "Walkthrough script and sample dataset for the client review."
+    },
+    {
+      "at": 57.4,
+      "role": "Client",
+      "title": "Adding: Handoff docs & runbook",
+      "body": "README, env notes, and deploy checklist for production."
+    },
+    {
+      "at": 57.6,
+      "role": "Client",
+      "title": "Kanban filled with sprint tasks",
+      "body": "8 cards now on the shared board"
+    },
+    {
+      "at": 59,
+      "role": "Freelancer",
+      "title": "Freelancer reloads the same workspace",
+      "body": "Same jobId → same tasks appear on the left"
+    },
+    {
+      "at": 61.8,
+      "role": "Sync",
+      "title": "Both sides see the same work",
+      "body": "Identical Kanban — client & freelancer stay in sync"
+    },
+    {
+      "at": 64.2,
+      "role": "Client",
+      "title": "Organizing the board",
+      "body": "Moving cards across To do → In progress → Done"
+    },
+    {
+      "at": 65.8,
+      "role": "Client",
+      "title": "Board columns filled with real progress",
+      "body": "Done + In progress + To do — a living sprint"
+    },
+    {
+      "at": 67.2,
+      "role": "Freelancer",
+      "title": "Freelancer sees the updated board",
+      "body": "Reload keeps both sides on the same columns"
+    },
+    {
+      "at": 70.2,
+      "role": "Sync",
+      "title": "Live synced workspace",
+      "body": "Same tasks, same columns — one nest"
+    },
+    {
+      "at": 72.2,
+      "role": "Client",
+      "title": "Client filters the busy board",
+      "body": "Priority & sort on a filled Kanban"
+    },
+    {
+      "at": 73.8,
+      "role": "Client",
+      "title": "Filter: High priority",
+      "body": "Focus the sprint on urgent cards"
+    },
+    {
+      "at": 74.8,
+      "role": "Client",
+      "title": "Sorted by priority",
+      "body": "High-priority work rises first"
+    },
+    {
+      "at": 75.8,
+      "role": "Freelancer",
+      "title": "Opening full task details",
+      "body": "Title, description, priority & deliverables"
+    },
+    {
+      "at": 77.4,
+      "role": "Freelancer",
+      "title": "Task detail modal",
+      "body": "Full scope visible to both collaborators"
+    },
+    {
+      "at": 79.4,
+      "role": "Freelancer",
+      "title": "Uploading project attachments",
+      "body": "Brief, brand palette & wireframes into Project files"
+    },
+    {
+      "at": 80.8,
+      "role": "Freelancer",
+      "title": "Uploaded: project brief",
+      "body": "Shared into Project files for the client"
+    },
+    {
+      "at": 81.6,
+      "role": "Freelancer",
+      "title": "Uploaded: brand palette",
+      "body": "Shared into Project files for the client"
+    },
+    {
+      "at": 82.4,
+      "role": "Freelancer",
+      "title": "Uploaded: wireframes",
+      "body": "Shared into Project files for the client"
+    },
+    {
+      "at": 83.2,
+      "role": "Freelancer",
+      "title": "Project files library filled",
+      "body": "Brief · brand · wireframes ready for the client"
+    },
+    {
+      "at": 84.8,
+      "role": "Client",
+      "title": "Client inspects the shared workspace",
+      "body": "Same board + project files on the hiring side"
+    },
+    {
+      "at": 86.4,
+      "role": "Client",
+      "title": "Client reviews project attachments",
+      "body": "Shared library — briefs, assets, docs"
+    },
+    {
+      "at": 88.4,
+      "role": "Client",
+      "title": "Task deliverables library",
+      "body": "Per-task submissions for acceptance"
+    },
+    {
+      "at": 89.8,
+      "role": "Sync",
+      "title": "Workspace wrap-up",
+      "body": "One jobId · full Kanban · shared files — real synced workflow"
+    },
+    {
+      "at": 91.8,
+      "role": "Freelancer",
+      "title": "Freelancer delivery progress",
+      "body": "Projects list — path to request review"
+    },
+    {
+      "at": 94.4,
+      "role": "Client",
+      "title": "Client accepts delivery",
+      "body": "Releases escrow payment to the freelancer"
+    },
+    {
+      "at": 97.2,
+      "role": "Freelancer",
+      "title": "Freelancer wallet / earnings",
+      "body": "Payment appears after escrow release"
+    },
+    {
+      "at": 99.6,
+      "role": "Client",
+      "title": "Client payments history",
+      "body": "Escrow deposit & release trail"
+    },
+    {
+      "at": 102,
+      "role": "WorkNest",
+      "title": "Complete hire-to-pay journey",
+      "body": "Post → Propose → Notify → Hire → Escrow → Workspace → Pay"
+    }
+  ]
+}

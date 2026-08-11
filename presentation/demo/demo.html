@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WorkNest — Dual Dashboard Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./demo.css" />
+  </head>
+  <body>
+    <div class="reel" id="reel">
+      <div class="reel__stage reel__stage--video" id="stage">
+        <video
+          id="demoVideo"
+          class="reel__video"
+          playsinline
+          preload="auto"
+          src="./assets/worknest-real-demo.webm"
+        ></video>
+        <div class="reel__missing" id="missingVideo">
+          <p><strong>Demo video could not play.</strong></p>
+          <p id="missingDetail">Run <code>npm run record:demo</code> in <code>presentation/</code>.</p>
+        </div>
+      </div>
+
+      <div class="reel__caption">
+        <div>
+          <p class="reel__role" id="captionRole">Both</p>
+          <h2 id="captionTitle">Freelancer ← sync → Client</h2>
+          <p id="captionBody">Dual real dashboards — actions happen together.</p>
+        </div>
+        <div class="reel__chapter" id="captionChapter">01 / 01</div>
+      </div>
+
+      <div class="reel__bar">
+        <button type="button" class="reel__play" id="playBtn" aria-label="Play or pause">▶</button>
+        <div class="reel__track" id="track" title="Seek">
+          <div class="reel__fill" id="fill"></div>
+        </div>
+        <span class="reel__time" id="timeLabel">0:00 / 0:00</span>
+        <button type="button" class="reel__speed" id="speedBtn" title="Playback speed">1x</button>
+        <button type="button" class="reel__fs" id="fsBtn" aria-label="Fullscreen">⛶</button>
+      </div>
+    </div>
+    <script type="module" src="./demo.js"></script>
+  </body>
+</html>
