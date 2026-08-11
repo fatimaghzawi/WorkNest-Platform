@@ -117,8 +117,6 @@ function HookBeat({ beat, opener = false }: { beat: Beat; opener?: boolean }) {
 
 /** Opening poster — brand as bridge between Sarah and Jack. */
 function CoverBeat({ beat }: { beat: Beat }) {
-  const noteParts = (beat.note ?? '').split(/(?<=\.)\s+/).filter(Boolean);
-
   return (
     <div className="relative flex h-full w-full overflow-hidden bg-[#120a1a]">
       {/* Living atmosphere */}
@@ -229,63 +227,51 @@ function CoverBeat({ beat }: { beat: Beat }) {
         delay={0.35}
       />
 
-      {/* Brand center — hero */}
+      {/* Brand center — hero: line → sentence → logo → path */}
       <div className="relative z-20 flex h-full w-full flex-col items-center justify-center px-5 text-center">
-        <motion.div
-          className="relative"
-          initial={{ opacity: 0, scale: 0.86, y: 18 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.15, ease }}
-        >
+        <div className="relative">
           {/* Keystone glow */}
           <motion.div
-            className="absolute left-1/2 top-[28%] h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#14B8A6]/25 blur-3xl md:h-56 md:w-56"
+            className="absolute left-1/2 top-[55%] h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#14B8A6]/25 blur-3xl md:h-56 md:w-56"
             animate={{ opacity: [0.35, 0.7, 0.35], scale: [0.92, 1.08, 0.92] }}
             transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
           />
+
+          <motion.p
+            className="relative mx-auto font-display text-[clamp(1.35rem,3.2vw,2rem)] font-semibold leading-snug text-white"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.55, ease }}
+          >
+            {beat.line}
+          </motion.p>
+
+          {beat.note ? (
+            <motion.p
+              className="relative mx-auto mt-2.5 max-w-lg text-[clamp(0.95rem,1.8vw,1.2rem)] leading-relaxed text-white/65"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.85, duration: 0.55, ease }}
+            >
+              {beat.note}
+            </motion.p>
+          ) : null}
 
           {/* Full wordmark on the dark stage — no white plate */}
           <motion.img
             src="/logo.png"
             alt="WorkNest"
-            className="relative mx-auto h-12 w-auto max-w-[min(82vw,380px)] object-contain object-center mix-blend-screen md:h-[4.25rem]"
+            className="relative mx-auto mt-7 h-12 w-auto max-w-[min(82vw,380px)] object-contain object-center mix-blend-screen md:mt-8 md:h-[4.25rem]"
             initial={{ y: -12, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.45, duration: 0.65, ease }}
+            transition={{ delay: 1.25, duration: 0.65, ease }}
           />
+        </div>
 
-          <motion.p
-            className="relative mx-auto mt-7 max-w-xl font-display text-[clamp(1.15rem,2.8vw,1.75rem)] font-semibold leading-snug text-white/95"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.55, ease }}
-          >
-            {beat.line}
-          </motion.p>
-
-          {noteParts[0] ? (
-            <motion.p
-              className="relative mx-auto mt-3 max-w-lg text-[clamp(0.9rem,1.6vw,1.1rem)] leading-relaxed text-white/60"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9, duration: 0.55 }}
-            >
-              {noteParts[0]}
-            </motion.p>
-          ) : null}
-
-          <motion.p
-            className="relative mt-5 font-display text-sm font-semibold tracking-[0.06em] text-[#F97316] md:text-base"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.5 }}
-          >
-            {noteParts.slice(1).join(' ') || 'WorkNest builds the bridge.'}
-          </motion.p>
-        </motion.div>
-
-        {/* Path — steps light up one by one along the bridge */}
-        <CoverPathSteps />
+        {/* Path — steps light up under the brand */}
+        <div className="mt-8 md:mt-10">
+          <CoverPathSteps />
+        </div>
       </div>
     </div>
   );
@@ -301,10 +287,10 @@ const COVER_PATH = [
 function CoverPathSteps() {
   return (
     <motion.div
-      className="relative mt-8 flex flex-wrap items-center justify-center gap-1.5 md:mt-10 md:gap-2"
+      className="relative flex flex-wrap items-center justify-center gap-1.5 md:gap-2"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay: 1.2, duration: 0.35 }}
+      transition={{ delay: 1.85, duration: 0.35 }}
       aria-label="Find, Meet, Work, Pay"
     >
       {/* Soft rail under the path */}
@@ -316,7 +302,7 @@ function CoverPathSteps() {
         }}
         initial={{ scaleX: 0, opacity: 0 }}
         animate={{ scaleX: 1, opacity: 1 }}
-        transition={{ delay: 1.35, duration: 1.4, ease }}
+        transition={{ delay: 2.0, duration: 1.4, ease }}
       />
 
       {COVER_PATH.map((step, i) => (
@@ -330,7 +316,7 @@ function CoverPathSteps() {
             initial={{ opacity: 0, y: 18, scale: 0.7, filter: 'blur(8px)' }}
             animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
             transition={{
-              delay: 1.45 + i * 0.42,
+              delay: 2.1 + i * 0.42,
               duration: 0.55,
               ease,
             }}
@@ -340,7 +326,7 @@ function CoverPathSteps() {
               className="pointer-events-none absolute inset-y-0 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/35 to-transparent"
               initial={{ left: '-60%', opacity: 0 }}
               animate={{ left: '120%', opacity: [0, 1, 0] }}
-              transition={{ delay: 1.55 + i * 0.42, duration: 0.7, ease: 'easeOut' }}
+              transition={{ delay: 2.2 + i * 0.42, duration: 0.7, ease: 'easeOut' }}
             />
             <span className="relative">{step.label}</span>
           </motion.span>
@@ -352,7 +338,7 @@ function CoverPathSteps() {
               initial={{ opacity: 0, x: -8, scale: 0.5 }}
               animate={{ opacity: 0.85, x: 0, scale: 1 }}
               transition={{
-                delay: 1.7 + i * 0.42,
+                delay: 2.35 + i * 0.42,
                 duration: 0.4,
                 ease,
               }}
@@ -360,7 +346,7 @@ function CoverPathSteps() {
               <motion.span
                 animate={{ x: [0, 4, 0], opacity: [0.55, 1, 0.55] }}
                 transition={{
-                  delay: 2.1 + i * 0.42,
+                  delay: 2.75 + i * 0.42,
                   duration: 1.4,
                   repeat: Infinity,
                   ease: 'easeInOut',
@@ -521,14 +507,16 @@ function ProblemsBeat({ beat }: { beat: Beat }) {
         />
       </div>
 
-      <motion.p
-        className="relative z-10 shrink-0 px-6 pb-5 text-center text-sm font-medium text-wn-orange md:text-base"
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2.7, duration: 0.5 }}
-      >
-        {beat.note}
-      </motion.p>
+      {beat.note ? (
+        <motion.p
+          className="relative z-10 shrink-0 px-6 pb-5 text-center text-sm font-medium text-wn-orange md:text-base"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.7, duration: 0.5 }}
+        >
+          {beat.note}
+        </motion.p>
+      ) : null}
     </div>
   );
 }
@@ -1574,7 +1562,7 @@ function resolveDualPaneRoles(beat: Beat, labels: string[]) {
   ];
 }
 
-/** Smart matching — Tab pops Client or Freelancer UI. */
+/** Smart matching — live Match / Talent radar UI. Tab focuses a side. */
 function RadarBeat({ beat }: { beat: Beat }) {
   const tips = beat.points ?? [];
   const [focus, setFocus] = useState<ManualFocus>('both');
@@ -1819,6 +1807,7 @@ function MoneyBeat({ beat }: { beat: Beat }) {
   const isDeposit = phase === 'deposit';
   const [stage, setStage] = useState<MoneyStage>('idle');
   const [open, setOpen] = useState(false);
+  const celebrate = !isDeposit && !beat.src;
 
   useEffect(() => {
     setStage('idle');
@@ -1866,11 +1855,17 @@ function MoneyBeat({ beat }: { beat: Beat }) {
             : `💰 ${PROJECT_AMOUNT} in freelancer wallet`;
 
   return (
-    <div className="relative flex h-full w-full flex-col bg-transparent">
+    <div className="relative flex h-full w-full flex-col overflow-hidden bg-transparent">
       <CaptionBar beat={beat} />
 
-      <div className="relative z-10 mx-auto w-full max-w-5xl px-4 pb-3 md:px-6">
-        <div className="rounded-2xl bg-wn-surface px-4 py-5 shadow-card ring-1 ring-wn-line md:px-8 md:py-6">
+      {celebrate ? <CompletionVibes active={stage === 'paid'} warming={stage !== 'idle'} /> : null}
+
+      <div
+        className={`relative z-10 mx-auto w-full max-w-5xl px-4 pb-3 md:px-6 ${
+          celebrate ? 'flex min-h-0 flex-1 flex-col justify-center' : ''
+        }`}
+      >
+        <div className="rounded-2xl bg-wn-surface/95 px-4 py-5 shadow-card ring-1 ring-wn-line backdrop-blur-sm md:px-8 md:py-6">
           <div className="flex items-center gap-2 md:gap-3">
             <MoneyNode
               label="SARAH"
@@ -1977,6 +1972,29 @@ function MoneyBeat({ beat }: { beat: Beat }) {
           >
             {status}
           </motion.p>
+
+          {celebrate && stage === 'paid' ? (
+            <motion.div
+              className="mt-6 flex flex-col items-center gap-3"
+              initial={{ opacity: 0, scale: 0.9, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.55, ease }}
+            >
+              <motion.div
+                className="flex h-16 w-16 items-center justify-center rounded-full bg-[#14B8A6] text-2xl text-white shadow-[0_0_40px_rgba(20,184,166,0.55)] md:h-20 md:w-20 md:text-3xl"
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                ✓
+              </motion.div>
+              <p className="font-display text-xl font-bold tracking-wide text-wn-primary md:text-2xl">
+                Delivery complete. Paid.
+              </p>
+              <p className="max-w-md text-center text-sm text-wn-muted md:text-base">
+                Escrow closed. Trust held. The bridge did its job.
+              </p>
+            </motion.div>
+          ) : null}
         </div>
       </div>
 
@@ -2022,6 +2040,86 @@ function MoneyBeat({ beat }: { beat: Beat }) {
             document.body,
           )
         : null}
+    </div>
+  );
+}
+
+function CompletionVibes({ active, warming }: { active: boolean; warming: boolean }) {
+  const sparks = [
+    { left: '12%', top: '22%', color: '#A56ABD', delay: 0 },
+    { left: '22%', top: '68%', color: '#F97316', delay: 0.15 },
+    { left: '78%', top: '28%', color: '#14B8A6', delay: 0.08 },
+    { left: '86%', top: '62%', color: '#A56ABD', delay: 0.22 },
+    { left: '48%', top: '16%', color: '#F97316', delay: 0.12 },
+    { left: '58%', top: '78%', color: '#14B8A6', delay: 0.28 },
+    { left: '34%', top: '42%', color: '#F97316', delay: 0.18 },
+    { left: '70%', top: '48%', color: '#A56ABD', delay: 0.05 },
+  ];
+
+  return (
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
+      <motion.div
+        className="absolute left-1/2 top-[42%] h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#14B8A6]/20 blur-3xl md:h-[36rem] md:w-[36rem]"
+        animate={{
+          opacity: active ? [0.35, 0.7, 0.35] : warming ? 0.22 : 0.08,
+          scale: active ? [0.92, 1.08, 0.92] : 0.95,
+        }}
+        transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute left-[18%] top-[30%] h-48 w-48 rounded-full bg-[#A56ABD]/25 blur-3xl"
+        animate={{ opacity: warming ? [0.2, 0.45, 0.2] : 0.1, scale: [0.9, 1.1, 0.9] }}
+        transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute bottom-[18%] right-[14%] h-52 w-52 rounded-full bg-[#F97316]/22 blur-3xl"
+        animate={{ opacity: warming ? [0.15, 0.4, 0.15] : 0.08, scale: [1, 1.12, 1] }}
+        transition={{ duration: 3.8, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
+      />
+
+      <AnimatePresence>
+        {active
+          ? sparks.map((s, i) => (
+              <motion.span
+                key={i}
+                className="absolute h-2 w-2 rounded-full"
+                style={{ left: s.left, top: s.top, backgroundColor: s.color }}
+                initial={{ opacity: 0, scale: 0, y: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  scale: [0.4, 1.4, 0.2],
+                  y: [0, -48 - (i % 3) * 18, -90],
+                }}
+                transition={{
+                  duration: 1.8,
+                  delay: s.delay,
+                  repeat: Infinity,
+                  repeatDelay: 0.6,
+                  ease: 'easeOut',
+                }}
+              />
+            ))
+          : null}
+      </AnimatePresence>
+
+      {active ? (
+        <>
+          {[0, 1, 2].map((ring) => (
+            <motion.div
+              key={ring}
+              className="absolute left-1/2 top-[48%] h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#14B8A6]/40 md:h-56 md:w-56"
+              initial={{ opacity: 0.55, scale: 0.55 }}
+              animate={{ opacity: 0, scale: 2.1 }}
+              transition={{
+                duration: 2.2,
+                delay: ring * 0.55,
+                repeat: Infinity,
+                ease: 'easeOut',
+              }}
+            />
+          ))}
+        </>
+      ) : null}
     </div>
   );
 }
@@ -2090,15 +2188,15 @@ function MoneyNode({
 }
 
 function ArcBeat({ beat }: { beat: Beat }) {
-  const posters = [
+  const acts = [
     {
       act: '01',
       title: 'FIND',
       line: 'The right job. The right talent.',
-      detail: 'Browse · Match radar · Profile',
+      detail: 'Browse · Match · Profile',
       src: beat.gallery?.[0],
       accent: '#F97316',
-      tilt: -3.5,
+      who: 'Sarah posts. Jack discovers.',
     },
     {
       act: '02',
@@ -2107,7 +2205,7 @@ function ArcBeat({ beat }: { beat: Beat }) {
       detail: 'Interview · Hire · Escrow',
       src: beat.gallery?.[1],
       accent: '#A56ABD',
-      tilt: 1.5,
+      who: 'They meet. She chooses Jack.',
     },
     {
       act: '03',
@@ -2116,185 +2214,264 @@ function ArcBeat({ beat }: { beat: Beat }) {
       detail: 'Workspace · Complete · Wallet',
       src: beat.gallery?.[2],
       accent: '#14B8A6',
-      tilt: 3.5,
+      who: 'Work ships. Escrow unlocks.',
     },
-  ];
+  ] as const;
+
   const [focus, setFocus] = useState<number | null>(null);
-  const focused = focus != null ? posters[focus] : null;
+  const [lit, setLit] = useState(0);
+
+  useEffect(() => {
+    setFocus(null);
+    setLit(0);
+    const timers = [
+      window.setTimeout(() => setLit(1), 450),
+      window.setTimeout(() => setLit(2), 1100),
+      window.setTimeout(() => setLit(3), 1750),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [beat.id]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && focus != null) {
+        e.preventDefault();
+        setFocus(null);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [focus]);
 
   return (
-    <div className="relative flex h-full w-full flex-col overflow-hidden bg-transparent">
+    <div className="relative flex h-full w-full flex-col overflow-hidden bg-[#0c0812]">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background: `
-            radial-gradient(circle at 50% 110%, rgba(73,34,91,0.18) 0%, transparent 45%),
-            radial-gradient(ellipse at 10% 20%, rgba(249,115,22,0.14) 0%, transparent 38%),
-            radial-gradient(ellipse at 90% 25%, rgba(20,184,166,0.12) 0%, transparent 40%),
-            linear-gradient(180deg, #f6f0fa 0%, #efe6f6 100%)
+            radial-gradient(ellipse 55% 45% at 18% 30%, rgba(249,115,22,0.22) 0%, transparent 55%),
+            radial-gradient(ellipse 50% 40% at 50% 55%, rgba(165,106,189,0.2) 0%, transparent 50%),
+            radial-gradient(ellipse 55% 45% at 82% 35%, rgba(20,184,166,0.18) 0%, transparent 55%),
+            linear-gradient(168deg, #16101f 0%, #0c0812 55%, #08050c 100%)
           `,
         }}
       />
 
-      <div className="relative z-10 shrink-0 px-5 pt-6 text-center md:px-8 md:pt-7">
-        <p className="text-[11px] font-bold tracking-[0.3em] text-wn-teal">THE FULL ARC</p>
-        <h1 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-wn-primary md:text-5xl">
+      {/* Sweeping light across the arc */}
+      <motion.div
+        className="pointer-events-none absolute left-0 top-[42%] z-[1] h-24 w-40 -translate-y-1/2 rounded-full bg-white/10 blur-3xl"
+        animate={{ left: ['5%', '85%', '5%'], opacity: [0.15, 0.45, 0.15] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      <div className="relative z-10 flex shrink-0 flex-col items-center px-5 pt-6 text-center md:pt-7">
+        <motion.p
+          className="text-[11px] font-bold tracking-[0.32em] text-[#14B8A6]"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+        >
+          THE FULL JOURNEY
+        </motion.p>
+        <motion.h1
+          className="mt-2 font-display text-[clamp(1.85rem,4.5vw,3.25rem)] font-bold tracking-tight text-white"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.55, ease }}
+        >
           {beat.line}
-        </h1>
-        <p className="mx-auto mt-2 max-w-xl text-sm text-wn-ink/70 md:text-base">{beat.note}</p>
+        </motion.h1>
+        <motion.p
+          className="mt-2 font-display text-base font-semibold tracking-[0.08em] text-white/55 md:text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.25, duration: 0.5 }}
+        >
+          {beat.note}
+        </motion.p>
       </div>
 
-      <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center px-4 pb-6 pt-4 md:px-10">
-        <div className="flex h-full w-full max-w-6xl items-stretch justify-center gap-3 md:gap-5">
-          {posters.map((poster, i) => {
+      {/* Connecting path under the acts */}
+      <div className="pointer-events-none absolute left-[12%] right-[12%] top-[52%] z-[2] hidden h-px md:block">
+        <motion.div
+          className="h-full origin-left bg-gradient-to-r from-[#F97316] via-[#A56ABD] to-[#14B8A6]"
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={{ scaleX: lit >= 3 ? 1 : lit / 3, opacity: 1 }}
+          transition={{ duration: 0.8, ease }}
+        />
+      </div>
+
+      <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center px-3 pb-5 pt-4 md:px-8 md:pb-7">
+        <div className="grid h-full w-full max-w-6xl grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 md:gap-5">
+          {acts.map((act, i) => {
             const isFocus = focus === i;
             const dimmed = focus != null && !isFocus;
+            const revealed = lit > i;
+
             return (
-              <button
-                key={poster.act}
+              <motion.button
+                key={act.act}
                 type="button"
                 onClick={() => setFocus(isFocus ? null : i)}
-                className="group relative h-full min-h-0 w-full max-w-[280px] overflow-hidden rounded-[1.4rem] text-left shadow-lift ring-1 ring-white/50 transition-all duration-300 md:max-w-none"
+                className="group relative min-h-[220px] overflow-hidden rounded-[1.5rem] text-left sm:h-full sm:min-h-0"
+                initial={{ opacity: 0, y: 48, scale: 0.92 }}
+                animate={{
+                  opacity: dimmed ? 0.35 : revealed ? 1 : 0.25,
+                  y: revealed ? 0 : 28,
+                  scale: isFocus ? 1.03 : revealed ? 1 : 0.94,
+                  filter: dimmed ? 'blur(2px)' : 'blur(0px)',
+                }}
+                transition={{ duration: 0.65, delay: 0.15 + i * 0.12, ease }}
                 style={{
-                  transform: dimmed
-                    ? `rotate(${poster.tilt}deg) scale(0.92)`
-                    : isFocus
-                      ? 'rotate(0deg) scale(1.04)'
-                      : `rotate(${poster.tilt}deg)`,
-                  opacity: dimmed ? 0.45 : 1,
-                  zIndex: isFocus ? 20 : 10 - Math.abs(i - 1),
-                  flex: isFocus ? '1.35 1 0%' : '1 1 0%',
+                  zIndex: isFocus ? 20 : 10,
+                  boxShadow: revealed
+                    ? `0 0 0 1px ${act.accent}66, 0 28px 60px rgba(0,0,0,0.45), 0 0 50px ${act.accent}33`
+                    : 'none',
                 }}
               >
-                {poster.src ? (
-                  <img
-                    src={poster.src}
-                    alt={poster.title}
-                    className="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.03]"
+                {act.src ? (
+                  <motion.img
+                    src={act.src}
+                    alt={act.title}
+                    className="absolute inset-0 h-full w-full object-cover object-top"
+                    animate={{ scale: isFocus ? 1.06 : 1 }}
+                    transition={{ duration: 0.6 }}
                   />
                 ) : (
-                  <div className="absolute inset-0" style={{ background: poster.accent }} />
+                  <div className="absolute inset-0" style={{ background: act.accent }} />
                 )}
+
                 <div
                   className="absolute inset-0"
                   style={{
-                    background: `linear-gradient(180deg, rgba(26,16,38,0.15) 0%, rgba(26,16,38,0.25) 40%, ${poster.accent}ee 100%)`,
+                    background: `
+                      linear-gradient(180deg, rgba(8,5,12,0.15) 0%, rgba(8,5,12,0.35) 42%, ${act.accent}f0 100%)
+                    `,
                   }}
                 />
-                <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
-                  <p className="text-[11px] font-bold tracking-[0.28em] text-white/80">{poster.act}</p>
-                  <h2 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-white md:text-4xl">
-                    {poster.title}
-                  </h2>
-                  <p className="mt-2 text-sm font-semibold leading-snug text-white/95 md:text-base">
-                    {poster.line}
-                  </p>
-                  <p className="mt-2 text-[11px] font-medium tracking-wide text-white/75">{poster.detail}</p>
-                </div>
-                <span
-                  className="absolute left-4 top-4 rounded-full px-2.5 py-1 text-[10px] font-bold tracking-[0.16em] text-white"
-                  style={{ background: 'rgba(0,0,0,0.35)' }}
+
+                {/* Act number watermark */}
+                <motion.span
+                  className="pointer-events-none absolute -right-1 top-2 font-display text-[5.5rem] font-black leading-none text-white/[0.08] md:text-[7rem]"
+                  animate={{ opacity: revealed ? 1 : 0 }}
                 >
-                  {isFocus ? 'CLOSE' : 'OPEN'}
-                </span>
-              </button>
+                  {act.act}
+                </motion.span>
+
+                <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
+                  <div className="mb-2 flex items-center gap-2">
+                    <span
+                      className="rounded-full px-2.5 py-1 text-[10px] font-bold tracking-[0.2em] text-white"
+                      style={{ backgroundColor: `${act.accent}` }}
+                    >
+                      ACT {act.act}
+                    </span>
+                    <motion.span
+                      className="h-2 w-2 rounded-full bg-white"
+                      animate={
+                        revealed
+                          ? { scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }
+                          : { opacity: 0.2 }
+                      }
+                      transition={{ duration: 1.6, repeat: Infinity }}
+                    />
+                  </div>
+                  <h2 className="font-display text-3xl font-extrabold tracking-tight text-white md:text-4xl lg:text-5xl">
+                    {act.title}
+                  </h2>
+                  <p className="mt-2 text-sm font-semibold text-white/95 md:text-base">{act.line}</p>
+                  <p className="mt-1.5 text-[12px] text-white/70 md:text-[13px]">{act.who}</p>
+                  <p className="mt-3 text-[10px] font-bold tracking-[0.16em] text-white/55">
+                    {act.detail}
+                  </p>
+                </div>
+
+                {/* Shine on reveal */}
+                {revealed ? (
+                  <motion.span
+                    className="pointer-events-none absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    initial={{ left: '-40%', opacity: 0 }}
+                    animate={{ left: '120%', opacity: [0, 1, 0] }}
+                    transition={{ delay: 0.35 + i * 0.15, duration: 0.9, ease: 'easeOut' }}
+                  />
+                ) : null}
+              </motion.button>
             );
           })}
         </div>
       </div>
 
-      {focused ? (
-        <p className="relative z-10 pb-4 text-center text-[12px] font-semibold text-wn-primary">
-          Showing Act {focused.act} · {focused.title} — click again to put the posters back
-        </p>
-      ) : (
-        <p className="relative z-10 pb-4 text-center text-[12px] font-medium text-wn-faint">
-          Three posters. One freelance story.
-        </p>
-      )}
+      <motion.p
+        className="relative z-10 shrink-0 pb-4 text-center text-[11px] font-medium tracking-[0.14em] text-white/40"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 0.5 }}
+      >
+        {focus != null
+          ? `ACT ${acts[focus].act} · ${acts[focus].title} — click again or Esc`
+          : 'Click an act to focus'}
+      </motion.p>
     </div>
   );
 }
 
+/** Closing slide — high-clarity tech board for presenting what was built. */
 function ClosingBeat({ beat }: { beat: Beat }) {
-  const left = beat.gallery?.[0];
-  const right = beat.gallery?.[1];
-
   return (
-    <div className="relative flex h-full w-full overflow-hidden bg-[#140c1c]">
-      {/* Soft product atmosphere behind the decisions */}
-      <div className="absolute inset-0 grid grid-cols-2 opacity-[0.22]">
-        <div className="relative overflow-hidden">
-          {left ? (
-            <img
-              src={left}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover object-top"
-            />
-          ) : null}
-        </div>
-        <div className="relative overflow-hidden">
-          {right ? (
-            <img
-              src={right}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover object-top"
-            />
-          ) : null}
-        </div>
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-[#140c1c]/80 via-[#140c1c]/92 to-[#140c1c]" />
+    <div className="relative flex h-full w-full overflow-hidden bg-[#F6F0FA]">
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse 60% 40% at 50% -10%, rgba(165,106,189,0.18) 0%, transparent 55%),
+            radial-gradient(ellipse 40% 35% at 100% 100%, rgba(20,184,166,0.1) 0%, transparent 50%)
+          `,
+        }}
+      />
 
-      <div className="relative z-10 flex h-full w-full flex-col justify-center px-4 py-5 md:px-8 md:py-7">
-        <motion.div
-          className="mx-auto w-full max-w-5xl"
-          initial={{ opacity: 0, y: 16 }}
+      <div className="relative z-10 flex h-full w-full flex-col px-5 py-5 md:px-8 md:py-6">
+        <motion.header
+          className="shrink-0 text-center"
+          initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease }}
+          transition={{ duration: 0.4, ease }}
         >
-          <div className="text-center">
-            <img
-              src="/logo.png"
-              alt="WorkNest"
-              className="mx-auto h-9 w-auto max-w-[220px] object-contain mix-blend-screen md:h-11"
-            />
-            <p className="mt-3 text-[10px] font-bold tracking-[0.28em] text-wn-teal md:text-[11px]">
-              TECHNICAL FOUNDATION
-            </p>
-            <h1 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-white md:text-4xl lg:text-[2.65rem]">
-              {beat.line}
-            </h1>
-            <p className="mx-auto mt-2.5 max-w-2xl text-sm leading-relaxed text-white/70 md:text-base">
-              {beat.note}
-            </p>
-          </div>
+          <img
+            src="/logo-clear.png"
+            alt="WorkNest"
+            className="mx-auto h-7 w-auto object-contain md:h-8"
+          />
+          <h1 className="mt-3 font-display text-[clamp(1.5rem,3vw,2.25rem)] font-bold text-wn-primary">
+            {beat.line}
+          </h1>
+          {beat.note ? (
+            <p className="mx-auto mt-1.5 max-w-2xl text-sm text-wn-ink/65 md:text-base">{beat.note}</p>
+          ) : null}
+        </motion.header>
 
-          <ul className="mt-6 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3 md:mt-7 md:gap-3">
-            {closingDecisions.map((item, i) => (
-              <motion.li
-                key={item.title}
-                className="rounded-2xl bg-white/95 px-4 py-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.22)] ring-1 ring-white/50 backdrop-blur-sm md:px-5 md:py-4"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 0.12 + i * 0.05, ease }}
-              >
-                <p className="font-display text-[15px] font-bold tracking-tight text-wn-primary md:text-base">
+        <div className="mx-auto mt-5 grid min-h-0 w-full max-w-6xl flex-1 grid-cols-1 content-center gap-3 sm:grid-cols-2 md:mt-6 md:gap-4">
+          {closingDecisions.map((item, i) => (
+            <motion.article
+              key={item.title}
+              className="flex gap-4 rounded-2xl bg-white px-5 py-4 shadow-[0_10px_28px_rgba(73,34,91,0.08)] ring-1 ring-wn-line md:gap-5 md:px-6 md:py-5"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.08 + i * 0.05, ease }}
+            >
+              <span className="shrink-0 font-display text-3xl font-bold leading-none text-wn-orange md:text-4xl">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div className="min-w-0">
+                <h2 className="font-display text-lg font-bold leading-snug text-wn-primary md:text-xl">
                   {item.title}
-                </p>
-                <p className="mt-1.5 text-[12.5px] leading-snug text-wn-ink/75 md:text-[13px] md:leading-relaxed">
+                </h2>
+                <p className="mt-2 text-[15px] leading-relaxed text-wn-ink/75 md:text-base md:leading-relaxed">
                   {item.line}
                 </p>
-              </motion.li>
-            ))}
-          </ul>
-
-          <div className="mt-6 text-center md:mt-7">
-            <div className="mx-auto h-px w-14 bg-gradient-to-r from-transparent via-wn-orange to-transparent" />
-            <p className="mt-4 font-display text-sm font-semibold tracking-[0.12em] text-white/90">
-              Thank you
-            </p>
-          </div>
-        </motion.div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
       </div>
     </div>
   );

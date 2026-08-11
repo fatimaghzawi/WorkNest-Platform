@@ -1,4 +1,4 @@
-/** Faithful WorkNest Match Radar UI (presentation mock of the real product). */
+/** Presentation mock of the live WorkNest Match / Talent radar UI. */
 
 type JobTile = {
   rank: string;
@@ -27,24 +27,34 @@ type TalentTile = {
 const JOBS: JobTile[] = [
   {
     rank: '01',
-    title: 'Inventory dashboard',
+    title: 'Full-stack inventory dashboard',
     category: 'Full-stack',
     reason: '3 of 4 required skills match',
     budget: '$1,950',
     score: 92,
     band: 'Strong fit',
-    skills: ['React', 'Node', 'API'],
+    skills: ['React', 'TypeScript', 'Node.js'],
     lead: true,
   },
   {
     rank: '02',
-    title: 'Store analytics UI',
+    title: 'Store analytics UI — charts & filters',
     category: 'Frontend',
     reason: '2 of 3 required skills match',
     budget: '$1,200',
     score: 78,
     band: 'Solid fit',
     skills: ['React', 'Charts'],
+  },
+  {
+    rank: '03',
+    title: 'Ops API for warehouse sync',
+    category: 'Backend',
+    reason: 'Skills overlap on Node + API design',
+    budget: '$1,400',
+    score: 64,
+    band: 'Worth a look',
+    skills: ['Node.js', 'API'],
   },
 ];
 
@@ -57,7 +67,7 @@ const TALENT: TalentTile[] = [
     reason: '4 of 4 job skills match',
     score: 94,
     band: 'Strong fit',
-    skills: ['React', 'Node', 'Nest'],
+    skills: ['React', 'TypeScript', 'Node.js', 'API'],
     lead: true,
   },
   {
@@ -68,6 +78,15 @@ const TALENT: TalentTile[] = [
     score: 81,
     band: 'Solid fit',
     skills: ['React', 'UI', 'API'],
+  },
+  {
+    rank: '03',
+    name: 'Leo Park',
+    initials: 'LP',
+    reason: '2 of 4 job skills match',
+    score: 58,
+    band: 'Possible fit',
+    skills: ['React', 'Node.js'],
   },
 ];
 
@@ -133,7 +152,7 @@ export function FreelancerMatchRadarUI() {
             <div className="wn-pres-tile__rank">{job.rank}</div>
             <div className="wn-pres-tile__meter">
               <span className="wn-pres-tile__band">{job.band}</span>
-              <ScoreRing score={job.score} size={job.lead ? 44 : 40} />
+              <ScoreRing score={job.score} size={job.lead ? 44 : 38} />
             </div>
             <div className="wn-pres-tile__body">
               <p className="wn-pres-tile__cat">{job.category}</p>
@@ -182,7 +201,7 @@ export function ClientMatchRadarUI() {
             <div className="wn-pres-tile__rank">{person.rank}</div>
             <div className="wn-pres-tile__meter">
               <span className="wn-pres-tile__band">{person.band}</span>
-              <ScoreRing score={person.score} size={person.lead ? 44 : 40} />
+              <ScoreRing score={person.score} size={person.lead ? 44 : 38} />
             </div>
             <div className="wn-pres-tile__body">
               <div className="wn-pres-tile__person">
