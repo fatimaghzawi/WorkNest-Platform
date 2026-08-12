@@ -107,10 +107,10 @@ function HookBeat({ beat, opener = false }: { beat: Beat; opener?: boolean }) {
         transition={{ duration: 0.6, ease }}
       >
         <UserPerspective perspective={beat.perspective} />
-        <h1 className="mt-5 font-display text-4xl font-bold leading-tight text-wn-primary md:text-6xl">
+        <h1 className="mt-5 font-display text-3xl font-bold leading-tight text-wn-primary short:mt-3 short:text-2xl md:text-6xl md:short:text-4xl">
           {beat.line}
         </h1>
-        <p className="mt-5 text-xl text-wn-orange md:text-2xl">{beat.note}</p>
+        <p className="mt-5 text-lg text-wn-orange short:mt-2 short:text-base md:mt-5 md:text-2xl">{beat.note}</p>
       </motion.div>
     </div>
   );
@@ -229,17 +229,17 @@ function CoverBeat({ beat }: { beat: Beat }) {
       />
 
       {/* Brand center — hero: line → sentence → logo → path */}
-      <div className="relative z-20 flex h-full w-full flex-col items-center justify-center px-5 text-center">
+      <div className="relative z-20 flex h-full w-full flex-col items-center justify-center px-5 pb-14 text-center short:pb-12 short:justify-center md:pb-16">
         <div className="relative">
           {/* Keystone glow */}
           <motion.div
-            className="absolute left-1/2 top-[55%] h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#14B8A6]/25 blur-3xl md:h-56 md:w-56"
+            className="absolute left-1/2 top-[55%] h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#14B8A6]/25 blur-3xl short:h-28 short:w-28 md:h-56 md:w-56"
             animate={{ opacity: [0.35, 0.7, 0.35], scale: [0.92, 1.08, 0.92] }}
             transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
           />
 
           <motion.p
-            className="relative mx-auto font-display text-[clamp(1.35rem,3.2vw,2rem)] font-semibold leading-snug text-white"
+            className="relative mx-auto font-display text-[clamp(1.15rem,2.8vw,2rem)] font-semibold leading-snug text-white short:text-[clamp(1.05rem,2.4vw,1.45rem)]"
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.55, ease }}
@@ -249,7 +249,7 @@ function CoverBeat({ beat }: { beat: Beat }) {
 
           {beat.note ? (
             <motion.p
-              className="relative mx-auto mt-2.5 max-w-lg text-[clamp(0.95rem,1.8vw,1.2rem)] leading-relaxed text-white/65"
+              className="relative mx-auto mt-2.5 max-w-lg text-[clamp(0.9rem,1.8vw,1.2rem)] leading-relaxed text-white/65 short:mt-1.5 short:text-[clamp(0.8rem,1.5vw,0.95rem)]"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.85, duration: 0.55, ease }}
@@ -262,7 +262,7 @@ function CoverBeat({ beat }: { beat: Beat }) {
           <motion.img
             src="/logo.png"
             alt="WorkNest"
-            className="relative mx-auto mt-7 h-12 w-auto max-w-[min(82vw,380px)] object-contain object-center mix-blend-screen md:mt-8 md:h-[4.25rem]"
+            className="relative mx-auto mt-7 h-12 w-auto max-w-[min(82vw,380px)] object-contain object-center mix-blend-screen short:mt-4 short:h-9 md:mt-8 md:h-[4.25rem]"
             initial={{ y: -12, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 1.25, duration: 0.65, ease }}
@@ -270,7 +270,7 @@ function CoverBeat({ beat }: { beat: Beat }) {
         </div>
 
         {/* Path — steps light up under the brand */}
-        <div className="mt-8 md:mt-10">
+        <div className="mt-8 short:mt-4 md:mt-10">
           <CoverPathSteps />
         </div>
       </div>
@@ -309,7 +309,7 @@ function CoverPathSteps() {
       {COVER_PATH.map((step, i) => (
         <span key={step.label} className="relative z-10 flex items-center gap-1.5 md:gap-2">
           <motion.span
-            className="relative overflow-hidden rounded-full px-3.5 py-1.5 text-[11px] font-bold tracking-[0.16em] text-white ring-1 md:px-4 md:py-2 md:text-xs"
+            className="relative overflow-hidden rounded-full px-3 py-1.5 text-[11px] font-bold tracking-[0.16em] text-white ring-1 short:px-2.5 short:py-1 short:text-[10px] md:px-4 md:py-2 md:text-xs"
             style={{
               backgroundColor: `${step.accent}33`,
               boxShadow: `0 0 0 1px ${step.accent}55, 0 10px 28px ${step.accent}33`,
@@ -382,22 +382,22 @@ function CoverPortrait({
 
   return (
     <motion.div
-      className={`absolute top-[18%] z-10 flex -translate-y-0 flex-col items-center md:top-1/2 md:-translate-y-1/2 ${
-        isLeft ? 'left-[5%] md:left-[7%]' : 'right-[5%] md:right-[7%]'
-      } max-md:scale-[0.82]`}
+      className={`absolute top-[14%] z-10 flex -translate-y-0 flex-col items-center short:top-[10%] short:scale-[0.72] md:top-1/2 md:-translate-y-1/2 md:short:scale-[0.78] ${
+        isLeft ? 'left-[4%] md:left-[7%]' : 'right-[4%] md:right-[7%]'
+      } max-md:scale-[0.78]`}
       initial={{ opacity: 0, x: isLeft ? -36 : 36, scale: 0.9 }}
       animate={{ opacity: 1, x: 0, scale: 1 }}
       transition={{ delay, duration: 0.85, ease }}
     >
       <div className="relative">
         <motion.div
-          className="absolute -inset-5 rounded-full blur-2xl md:-inset-6"
+          className="absolute -inset-4 rounded-full blur-2xl short:-inset-3 md:-inset-6"
           style={{ backgroundColor: `${accent}44` }}
           animate={{ opacity: [0.45, 0.85, 0.45], scale: [0.95, 1.08, 0.95] }}
           transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut', delay }}
         />
         <div
-          className="relative h-[4.75rem] w-[4.75rem] overflow-hidden rounded-full bg-white/10 md:h-[7.25rem] md:w-[7.25rem]"
+          className="relative h-[4.25rem] w-[4.25rem] overflow-hidden rounded-full bg-white/10 short:h-14 short:w-14 md:h-[7.25rem] md:w-[7.25rem] md:short:h-[5.25rem] md:short:w-[5.25rem]"
           style={{
             boxShadow: `0 0 0 3px ${accent}, 0 22px 50px ${accent}55`,
           }}
@@ -405,9 +405,9 @@ function CoverPortrait({
           <img src={src} alt={name} className="h-full w-full object-cover object-center" />
         </div>
       </div>
-      <p className="mt-2.5 font-display text-xs font-bold text-white md:mt-3 md:text-base">{name}</p>
+      <p className="mt-2 font-display text-xs font-bold text-white short:mt-1.5 short:text-[11px] md:mt-3 md:text-base md:short:text-sm">{name}</p>
       <p
-        className="mt-0.5 text-[9px] font-bold tracking-[0.2em] md:text-[11px]"
+        className="mt-0.5 text-[9px] font-bold tracking-[0.2em] short:text-[8px] md:text-[11px]"
         style={{ color: accent }}
       >
         {role.toUpperCase()}
@@ -440,16 +440,16 @@ function ProblemsBeat({ beat }: { beat: Beat }) {
         }}
       />
 
-      <div className="relative z-10 shrink-0 px-4 pb-2 pt-5 text-center md:px-8 md:pt-7">
+      <div className="relative z-10 shrink-0 px-4 pb-1.5 pt-4 text-center short:pb-1 short:pt-3 md:px-8 md:pt-7 md:short:pt-4">
         <motion.p
-          className="text-[11px] font-bold tracking-[0.24em] text-wn-accent"
+          className="text-[11px] font-bold tracking-[0.24em] text-wn-accent short:text-[9px]"
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
         >
           {beat.step}
         </motion.p>
         <motion.h1
-          className="mt-2 font-display text-3xl font-bold tracking-tight text-wn-primary md:text-4xl lg:text-[2.75rem]"
+          className="mt-2 font-display text-2xl font-bold tracking-tight text-wn-primary short:mt-1 short:text-xl md:text-4xl lg:text-[2.75rem] md:short:text-2xl"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08, duration: 0.5, ease }}
@@ -458,7 +458,7 @@ function ProblemsBeat({ beat }: { beat: Beat }) {
         </motion.h1>
       </div>
 
-      <div className="relative z-10 mx-auto grid min-h-0 w-full max-w-5xl flex-1 grid-cols-1 content-center gap-4 px-4 pb-4 md:grid-cols-[1fr_auto_1fr] md:gap-5 md:px-8 md:pb-6">
+      <div className="relative z-10 mx-auto grid min-h-0 w-full max-w-5xl flex-1 grid-cols-1 content-center gap-3 overflow-y-auto px-4 pb-14 short:gap-2 short:pb-12 md:grid-cols-[1fr_auto_1fr] md:gap-5 md:px-8 md:pb-6 md:short:pb-14">
         <ProblemChecklist
           side="client"
           name={lists.client.name}
@@ -510,7 +510,7 @@ function ProblemsBeat({ beat }: { beat: Beat }) {
 
       {beat.note ? (
         <motion.p
-          className="relative z-10 shrink-0 px-6 pb-5 text-center text-sm font-medium text-wn-orange md:text-base"
+          className="relative z-10 shrink-0 px-6 pb-14 text-center text-sm font-medium text-wn-orange short:pb-12 short:text-xs md:pb-5 md:text-base md:short:pb-14"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.7, duration: 0.5 }}
@@ -541,7 +541,7 @@ function ProblemChecklist({
 }) {
   return (
     <motion.section
-      className="relative flex flex-col rounded-[1.35rem] bg-wn-surface/95 p-4 shadow-lift ring-1 ring-wn-line md:p-5"
+      className="relative flex min-h-0 flex-col overflow-hidden rounded-[1.35rem] bg-wn-surface/95 p-3 shadow-lift ring-1 ring-wn-line short:p-2.5 md:p-5"
       style={{ boxShadow: `0 18px 40px ${accent}18` }}
       initial={{ opacity: 0, x: side === 'client' ? -28 : 28, y: 12 }}
       animate={{ opacity: 1, x: 0, y: 0 }}
@@ -630,7 +630,7 @@ function ScreenBeat({ beat }: { beat: Beat }) {
   return (
     <div className="relative flex h-full w-full flex-col bg-transparent">
       <CaptionBar beat={beat} />
-      <div className="relative min-h-0 flex-1 px-3 pb-3 pt-1 md:px-5 md:pb-5">
+      <div className="relative min-h-0 flex-1 px-3 pb-14 pt-1 short:pb-12 md:px-5 md:pb-5 md:short:pb-14">
         <FullFrame src={beat.src!} alt={beat.line} url={beat.url} />
       </div>
     </div>
@@ -700,7 +700,7 @@ function SpotlightBeat({ beat }: { beat: Beat }) {
     return (
       <div className="relative flex h-full w-full flex-col bg-transparent">
         <CaptionBar beat={beat} />
-        <div className="relative min-h-0 flex-1 px-3 pb-3 pt-1 md:px-5 md:pb-5">
+        <div className="relative min-h-0 flex-1 px-3 pb-14 pt-1 short:pb-12 md:px-5 md:pb-5 md:short:pb-14">
           {beat.src ? <FullFrame src={beat.src} alt={beat.line} url={beat.url} /> : null}
         </div>
       </div>
@@ -755,8 +755,8 @@ function SpotlightBeat({ beat }: { beat: Beat }) {
 
       <CaptionBar beat={beat} />
 
-      <div className="relative z-10 px-4 md:px-6">
-        <div className="relative mb-2 hidden h-0.5 overflow-hidden rounded-full bg-wn-soft sm:block">
+      <div className="relative z-10 px-4 short:px-3 md:px-6">
+        <div className="relative mb-2 hidden h-0.5 overflow-hidden rounded-full bg-wn-soft short:mb-1 sm:block">
           <motion.div
             className="absolute inset-y-0 left-0 rounded-full"
             style={{ background: `linear-gradient(90deg, ${accent}, #F97316)` }}
@@ -765,7 +765,7 @@ function SpotlightBeat({ beat }: { beat: Beat }) {
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5 short:gap-1 md:gap-2">
           {spots.map((s, i) => {
             const on = i === active;
             const done = i < active;
@@ -778,7 +778,7 @@ function SpotlightBeat({ beat }: { beat: Beat }) {
                   goSpot(i);
                   setPaused(true);
                 }}
-                className={`group relative overflow-hidden rounded-full px-3 py-1.5 text-[10px] font-bold tracking-[0.14em] transition ${
+                className={`group relative overflow-hidden rounded-full px-2.5 py-1 text-[9px] font-bold tracking-[0.14em] transition short:px-2 short:py-0.5 short:text-[8px] md:px-3 md:py-1.5 md:text-[10px] ${
                   on
                     ? 'text-white shadow-soft'
                     : done
@@ -831,9 +831,9 @@ function SpotlightBeat({ beat }: { beat: Beat }) {
         </div>
       </div>
 
-      <div className="relative z-10 min-h-0 flex-1 px-3 pb-3 pt-2 md:px-5 md:pb-5">
+      <div className="relative z-10 min-h-0 flex-1 px-3 pb-14 pt-2 short:pb-12 short:pt-1 md:px-5 md:pb-5 md:short:pb-14">
         <motion.div
-          className="relative mx-auto flex h-full w-full max-w-[1280px] flex-col overflow-hidden rounded-2xl bg-wn-surface ring-1 ring-wn-line"
+          className="relative mx-auto flex h-full w-full max-w-[1280px] flex-col overflow-hidden rounded-2xl bg-wn-surface ring-1 ring-wn-line short:rounded-xl"
           style={{
             boxShadow: `0 0 0 1px ${accent}40, 0 20px 48px rgba(73,34,91,0.12), 0 0 40px ${accent}18`,
           }}
@@ -1127,7 +1127,7 @@ function DualBeat({ beat }: { beat: Beat }) {
       </p>
 
       <div
-        className={`relative grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 pt-1 md:grid-cols-2 md:gap-4 md:px-5 md:pb-5 ${
+        className={`relative grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-14 pt-1 short:gap-2 short:pb-12 md:grid-cols-2 md:gap-4 md:px-5 md:pb-5 md:short:pb-14 ${
           popped ? 'pointer-events-none' : ''
         }`}
       >
@@ -1194,7 +1194,7 @@ function DualBeat({ beat }: { beat: Beat }) {
                 <img
                   src={src}
                   alt={labels[i] ?? beat.line}
-                  className="absolute inset-0 h-full w-full object-cover object-top"
+                  className="absolute inset-0 h-full w-full object-cover object-top short:object-contain"
                 />
               </button>
             </RoleUiFrame>
@@ -1328,14 +1328,14 @@ function FocusedUiPopup({
       >
         {/* Overhead title plate */}
         <motion.div
-          className="mb-3 flex items-center justify-center gap-3"
+          className="mb-3 flex items-center justify-center gap-3 short:mb-1.5 short:scale-90"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
           <span className="h-px w-10 bg-gradient-to-r from-transparent to-white/50 md:w-16" />
           <div
-            className="flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold tracking-[0.22em] text-white shadow-lg"
+            className="flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold tracking-[0.22em] text-white shadow-lg short:px-3 short:py-1 short:text-[10px]"
             style={{
               background: `linear-gradient(110deg, ${accent}, ${accent}cc)`,
               boxShadow: `0 12px 32px ${accent}66`,
@@ -1370,7 +1370,7 @@ function FocusedUiPopup({
             transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
           />
 
-          <div className="relative flex h-[min(74vh,760px)] flex-col overflow-hidden rounded-[1.45rem] bg-white">
+          <div className="relative flex h-[min(62svh,calc(100dvh-7.5rem))] max-h-[760px] flex-col overflow-hidden rounded-[1.45rem] bg-white short:h-[min(58svh,calc(100dvh-6rem))]">
             <FocusCorner className="left-3 top-3" accent={accent} />
             <FocusCorner className="right-3 top-3 rotate-90" accent={accent} />
             <FocusCorner className="bottom-3 left-3 -rotate-90" accent={accent} />
@@ -1383,7 +1383,7 @@ function FocusedUiPopup({
               transition={{ duration: 1.4, delay: 0.25, ease: 'easeOut' }}
             />
 
-            <div className="relative z-10 flex shrink-0 items-center justify-between gap-3 border-b border-wn-line/80 bg-gradient-to-r from-[#F7F2FA] via-white to-[#F7F2FA] px-4 py-2.5 md:px-5">
+            <div className="relative z-10 flex shrink-0 items-center justify-between gap-3 border-b border-wn-line/80 bg-gradient-to-r from-[#F7F2FA] via-white to-[#F7F2FA] px-4 py-2 short:py-1.5 md:px-5 md:py-2.5">
               <div className="flex min-w-0 items-center gap-2.5">
                 <span className="flex gap-1">
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
@@ -1438,7 +1438,7 @@ function FocusedUiPopup({
         </div>
 
         <motion.p
-          className="mt-3 text-center text-[11px] font-semibold tracking-[0.18em] text-white/65"
+          className="mt-3 text-center text-[11px] font-semibold tracking-[0.18em] text-white/65 short:mt-1.5 short:hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.35 }}
@@ -1599,8 +1599,8 @@ function RadarBeat({ beat }: { beat: Beat }) {
         {focus === 'both' ? 'TAB · FOCUS A VIEW' : 'TAB · NEXT · ESC BOTH'}
       </p>
 
-      <div className="relative min-h-0 flex-1 overflow-hidden px-3 pb-3 pt-1 md:px-5 md:pb-4">
-        <div className="grid h-full min-h-0 grid-rows-[1fr_auto] gap-2.5 overflow-hidden">
+      <div className="relative min-h-0 flex-1 overflow-hidden px-3 pb-14 pt-1 short:pb-12 md:px-5 md:pb-4 md:short:pb-14">
+        <div className="grid h-full min-h-0 grid-rows-[1fr_auto] gap-2 overflow-hidden short:gap-1.5">
           <div
             className={`grid min-h-0 grid-cols-1 gap-3 overflow-hidden md:grid-cols-2 ${
               focus !== 'both' ? 'pointer-events-none' : ''
@@ -1654,15 +1654,15 @@ function RadarBeat({ beat }: { beat: Beat }) {
             </RoleUiFrame>
           </div>
 
-          <div className="shrink-0 rounded-2xl bg-white px-3 py-2 shadow-card ring-1 ring-wn-line md:px-4">
-            <p className="mb-1.5 text-[12px] font-bold text-wn-primary">
+          <div className="shrink-0 rounded-2xl bg-white px-3 py-1.5 shadow-card ring-1 ring-wn-line short:py-1 md:px-4 md:py-2">
+            <p className="mb-1 text-[12px] font-bold text-wn-primary short:mb-0.5 short:line-clamp-1 short:text-[11px]">
               Important: this only suggests. It never hires or starts a project.
             </p>
-            <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-1 sm:grid-cols-2 lg:grid-cols-4 short:hidden sm:short:grid">
               {tips.map((tip, i) => (
                 <p
                   key={tip}
-                  className="rounded-xl bg-wn-soft px-2.5 py-1.5 text-[11px] leading-snug text-wn-ink"
+                  className="rounded-xl bg-wn-soft px-2.5 py-1.5 text-[11px] leading-snug text-wn-ink short:px-2 short:py-1 short:text-[10px] short:line-clamp-2"
                 >
                   <span className="font-bold text-wn-teal">{i + 1}. </span>
                   {tip}
@@ -1729,7 +1729,7 @@ function MatchBeat({ beat }: { beat: Beat }) {
   return (
     <div className="relative flex h-full w-full flex-col bg-transparent">
       <CaptionBar beat={beat} />
-      <div className="relative min-h-0 flex-1 px-3 pb-3 pt-1 md:px-5 md:pb-5">
+      <div className="relative min-h-0 flex-1 px-3 pb-14 pt-1 short:pb-12 md:px-5 md:pb-5 md:short:pb-14">
         <div className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-lift ring-1 ring-wn-line">
           <BrowserChrome url={beat.url} onExpand={() => setOpen(true)} />
           <button
@@ -1862,11 +1862,11 @@ function MoneyBeat({ beat }: { beat: Beat }) {
       {celebrate ? <CompletionVibes active={stage === 'paid'} warming={stage !== 'idle'} /> : null}
 
       <div
-        className={`relative z-10 mx-auto w-full max-w-5xl px-4 pb-3 md:px-6 ${
+        className={`relative z-10 mx-auto w-full max-w-5xl px-4 pb-3 short:pb-2 md:px-6 ${
           celebrate ? 'flex min-h-0 flex-1 flex-col justify-center' : ''
         }`}
       >
-        <div className="rounded-2xl bg-wn-surface/95 px-4 py-5 shadow-card ring-1 ring-wn-line backdrop-blur-sm md:px-8 md:py-6">
+        <div className="rounded-2xl bg-wn-surface/95 px-4 py-4 shadow-card ring-1 ring-wn-line backdrop-blur-sm short:rounded-xl short:px-3 short:py-3 md:px-8 md:py-6">
           <div className="flex items-center gap-2 md:gap-3">
             <MoneyNode
               label="SARAH"
@@ -2000,7 +2000,7 @@ function MoneyBeat({ beat }: { beat: Beat }) {
       </div>
 
       {beat.src ? (
-        <div className="relative min-h-0 flex-1 px-3 pb-3 pt-1 md:px-5 md:pb-4">
+        <div className="relative min-h-0 flex-1 px-3 pb-14 pt-1 short:pb-12 md:px-5 md:pb-4 md:short:pb-14">
           <motion.div
             className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-lift ring-1 ring-wn-line"
             initial={{ opacity: 0, y: 18 }}
@@ -2265,9 +2265,9 @@ function ArcBeat({ beat }: { beat: Beat }) {
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      <div className="relative z-10 flex shrink-0 flex-col items-center px-5 pt-6 text-center md:pt-7">
+      <div className="relative z-10 flex shrink-0 flex-col items-center px-5 pt-4 text-center short:pt-3 md:pt-7 md:short:pt-3.5">
         <motion.p
-          className="text-[11px] font-bold tracking-[0.32em] text-[#14B8A6]"
+          className="text-[11px] font-bold tracking-[0.32em] text-[#14B8A6] short:text-[9px]"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
@@ -2275,7 +2275,7 @@ function ArcBeat({ beat }: { beat: Beat }) {
           THE FULL JOURNEY
         </motion.p>
         <motion.h1
-          className="mt-2 font-display text-[clamp(1.85rem,4.5vw,3.25rem)] font-bold tracking-tight text-white"
+          className="mt-2 font-display text-[clamp(1.5rem,3.8vw,3.25rem)] font-bold tracking-tight text-white short:mt-1 short:text-[clamp(1.25rem,3.2vw,1.85rem)]"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.55, ease }}
@@ -2283,7 +2283,7 @@ function ArcBeat({ beat }: { beat: Beat }) {
           {beat.line}
         </motion.h1>
         <motion.p
-          className="mt-2 font-display text-base font-semibold tracking-[0.08em] text-white/55 md:text-lg"
+          className="mt-1.5 font-display text-sm font-semibold tracking-[0.08em] text-white/55 short:mt-1 short:text-xs md:mt-2 md:text-lg"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.25, duration: 0.5 }}
@@ -2302,8 +2302,8 @@ function ArcBeat({ beat }: { beat: Beat }) {
         />
       </div>
 
-      <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center px-3 pb-5 pt-4 md:px-8 md:pb-7">
-        <div className="grid h-full w-full max-w-6xl grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 md:gap-5">
+      <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center px-3 pb-14 pt-3 short:pb-12 short:pt-2 md:px-8 md:pb-7 md:short:pb-14">
+        <div className="grid h-full max-h-full w-full max-w-6xl grid-cols-1 gap-2.5 overflow-y-auto sm:grid-cols-3 sm:gap-3 sm:overflow-visible md:gap-5">
           {acts.map((act, i) => {
             const isFocus = focus === i;
             const dimmed = focus != null && !isFocus;
@@ -2314,7 +2314,7 @@ function ArcBeat({ beat }: { beat: Beat }) {
                 key={act.act}
                 type="button"
                 onClick={() => setFocus(isFocus ? null : i)}
-                className="group relative min-h-[220px] overflow-hidden rounded-[1.5rem] text-left sm:h-full sm:min-h-0"
+                className="group relative min-h-[160px] overflow-hidden rounded-[1.25rem] text-left short:min-h-[140px] sm:h-full sm:min-h-0 md:rounded-[1.5rem]"
                 initial={{ opacity: 0, y: 48, scale: 0.92 }}
                 animate={{
                   opacity: dimmed ? 0.35 : revealed ? 1 : 0.25,
@@ -2377,12 +2377,12 @@ function ArcBeat({ beat }: { beat: Beat }) {
                       transition={{ duration: 1.6, repeat: Infinity }}
                     />
                   </div>
-                  <h2 className="font-display text-3xl font-extrabold tracking-tight text-white md:text-4xl lg:text-5xl">
+                  <h2 className="font-display text-2xl font-extrabold tracking-tight text-white short:text-xl md:text-4xl lg:text-5xl md:short:text-2xl">
                     {act.title}
                   </h2>
-                  <p className="mt-2 text-sm font-semibold text-white/95 md:text-base">{act.line}</p>
-                  <p className="mt-1.5 text-[12px] text-white/70 md:text-[13px]">{act.who}</p>
-                  <p className="mt-3 text-[10px] font-bold tracking-[0.16em] text-white/55">
+                  <p className="mt-1.5 text-sm font-semibold text-white/95 short:mt-1 short:text-xs md:mt-2 md:text-base">{act.line}</p>
+                  <p className="mt-1 text-[12px] text-white/70 short:line-clamp-1 md:mt-1.5 md:text-[13px]">{act.who}</p>
+                  <p className="mt-2 text-[10px] font-bold tracking-[0.16em] text-white/55 short:mt-1.5 short:hidden md:mt-3 md:short:block md:short:line-clamp-1">
                     {act.detail}
                   </p>
                 </div>
@@ -2403,7 +2403,7 @@ function ArcBeat({ beat }: { beat: Beat }) {
       </div>
 
       <motion.p
-        className="relative z-10 shrink-0 pb-4 text-center text-[11px] font-medium tracking-[0.14em] text-white/40"
+        className="relative z-10 shrink-0 pb-14 text-center text-[11px] font-medium tracking-[0.14em] text-white/40 short:pb-12 short:text-[10px] md:pb-4 md:short:pb-14"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.5 }}
@@ -2419,7 +2419,9 @@ function ArcBeat({ beat }: { beat: Beat }) {
 /** Final slide — large QR to the live app. */
 function QrBeat({ beat }: { beat: Beat }) {
   const src = beat.src ?? '/worknest-qr.png';
-  const url = beat.url ?? 'work-nest-platform-nu.vercel.app';
+  const url = beat.url ?? 'https://work-nest-platform-nu.vercel.app/';
+  const href = url.startsWith('http') ? url : `https://${url}`;
+  const label = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
   return (
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#F4F0F8]">
       <div
@@ -2432,26 +2434,39 @@ function QrBeat({ beat }: { beat: Beat }) {
         }}
       />
       <motion.div
-        className="relative z-10 flex flex-col items-center px-6 text-center"
+        className="relative z-10 flex max-h-full flex-col items-center overflow-y-auto px-6 pb-16 pt-4 text-center short:pb-14 short:pt-2"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease }}
       >
-        <img src="/logo-clear.png" alt="WorkNest" className="h-9 w-auto object-contain md:h-10" />
-        <h1 className="mt-5 font-display text-3xl font-bold text-wn-primary md:text-5xl">{beat.line}</h1>
+        <img
+          src="/logo-clear.png"
+          alt="WorkNest"
+          className="h-8 w-auto object-contain short:h-7 md:h-10"
+        />
+        <h1 className="mt-4 font-display text-2xl font-bold text-wn-primary short:mt-2 short:text-xl md:mt-5 md:text-5xl md:short:text-3xl">
+          {beat.line}
+        </h1>
         {beat.note ? (
-          <p className="mt-2 text-base text-wn-ink/65 md:text-lg">{beat.note}</p>
+          <p className="mt-1.5 text-sm text-wn-ink/65 short:mt-1 short:text-xs md:mt-2 md:text-lg">
+            {beat.note}
+          </p>
         ) : null}
-        <div className="mt-7 rounded-[1.75rem] bg-white p-5 shadow-[0_18px_48px_rgba(73,34,91,0.14)] ring-1 ring-wn-line md:mt-8 md:p-7">
+        <div className="mt-5 rounded-[1.5rem] bg-white p-3.5 shadow-[0_18px_48px_rgba(73,34,91,0.14)] ring-1 ring-wn-line short:mt-3 short:rounded-2xl short:p-2.5 md:mt-8 md:rounded-[1.75rem] md:p-7 md:short:mt-4 md:short:p-4">
           <img
-            src={src}
+            src={`${src}?v=2`}
             alt="QR code to open WorkNest"
-            className="h-[min(42vh,320px)] w-[min(42vh,320px)] object-contain"
+            className="h-[min(36svh,280px)] w-[min(36svh,280px)] object-contain short:h-[min(28svh,200px)] short:w-[min(28svh,200px)] md:h-[min(42vh,320px)] md:w-[min(42vh,320px)] md:short:h-[min(30svh,220px)] md:short:w-[min(30svh,220px)]"
           />
         </div>
-        <p className="mt-5 font-display text-sm font-semibold tracking-wide text-wn-primary md:text-base">
-          {url}
-        </p>
+        <a
+          href={href}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-4 font-display text-sm font-semibold tracking-wide text-wn-primary underline-offset-4 transition hover:underline short:mt-2.5 short:text-xs md:mt-5 md:text-base"
+        >
+          {label}
+        </a>
       </motion.div>
     </div>
   );
@@ -2471,7 +2486,7 @@ function ClosingBeat({ beat }: { beat: Beat }) {
         }}
       />
 
-      <div className="relative z-10 flex h-full w-full flex-col px-5 py-5 md:px-8 md:py-6">
+      <div className="relative z-10 flex h-full w-full flex-col px-4 py-3 short:px-3 short:py-2.5 md:px-8 md:py-6 md:short:py-3">
         <motion.header
           className="shrink-0 text-center"
           initial={{ opacity: 0, y: -8 }}
@@ -2481,33 +2496,35 @@ function ClosingBeat({ beat }: { beat: Beat }) {
           <img
             src="/logo-clear.png"
             alt="WorkNest"
-            className="mx-auto h-7 w-auto object-contain md:h-8"
+            className="mx-auto h-6 w-auto object-contain short:h-5 md:h-8"
           />
-          <h1 className="mt-3 font-display text-[clamp(1.5rem,3vw,2.25rem)] font-bold text-wn-primary">
+          <h1 className="mt-2 font-display text-[clamp(1.25rem,2.6vw,2.25rem)] font-bold text-wn-primary short:mt-1 short:text-[clamp(1.1rem,2.2vw,1.5rem)] md:mt-3">
             {beat.line}
           </h1>
           {beat.note ? (
-            <p className="mx-auto mt-1.5 max-w-2xl text-sm text-wn-ink/65 md:text-base">{beat.note}</p>
+            <p className="mx-auto mt-1 max-w-2xl text-xs text-wn-ink/65 short:mt-0.5 short:line-clamp-1 md:mt-1.5 md:text-base">
+              {beat.note}
+            </p>
           ) : null}
         </motion.header>
 
-        <div className="mx-auto mt-5 grid min-h-0 w-full max-w-6xl flex-1 grid-cols-1 content-center gap-3 sm:grid-cols-2 md:mt-6 md:gap-4">
+        <div className="mx-auto mt-3 grid min-h-0 w-full max-w-6xl flex-1 grid-cols-1 content-start gap-2 overflow-y-auto pb-14 short:mt-2 short:gap-1.5 short:pb-12 sm:grid-cols-2 sm:content-center md:mt-6 md:gap-4 md:short:mt-3 md:short:gap-2 md:short:pb-14">
           {closingDecisions.map((item, i) => (
             <motion.article
               key={item.title}
-              className="flex gap-4 rounded-2xl bg-white px-5 py-4 shadow-[0_10px_28px_rgba(73,34,91,0.08)] ring-1 ring-wn-line md:gap-5 md:px-6 md:py-5"
+              className="flex gap-3 rounded-xl bg-white px-3.5 py-2.5 shadow-[0_10px_28px_rgba(73,34,91,0.08)] ring-1 ring-wn-line short:gap-2.5 short:rounded-lg short:px-3 short:py-2 md:gap-5 md:rounded-2xl md:px-6 md:py-5 md:short:gap-3 md:short:px-4 md:short:py-2.5"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.08 + i * 0.05, ease }}
             >
-              <span className="shrink-0 font-display text-3xl font-bold leading-none text-wn-orange md:text-4xl">
+              <span className="shrink-0 font-display text-2xl font-bold leading-none text-wn-orange short:text-xl md:text-4xl md:short:text-2xl">
                 {String(i + 1).padStart(2, '0')}
               </span>
               <div className="min-w-0">
-                <h2 className="font-display text-lg font-bold leading-snug text-wn-primary md:text-xl">
+                <h2 className="font-display text-base font-bold leading-snug text-wn-primary short:text-sm md:text-xl md:short:text-base">
                   {item.title}
                 </h2>
-                <p className="mt-2 text-[15px] leading-relaxed text-wn-ink/75 md:text-base md:leading-relaxed">
+                <p className="mt-1 text-[13px] leading-snug text-wn-ink/75 short:mt-0.5 short:line-clamp-2 short:text-[12px] md:mt-2 md:text-base md:leading-relaxed md:short:line-clamp-3 md:short:text-[13px]">
                   {item.line}
                 </p>
               </div>
@@ -2522,25 +2539,25 @@ function ClosingBeat({ beat }: { beat: Beat }) {
 function CaptionBar({ beat }: { beat: Beat }) {
   return (
     <motion.div
-      className="relative z-20 shrink-0 px-3 pb-2 pt-4 md:px-5 md:pt-5"
+      className="relative z-20 shrink-0 px-3 pb-1.5 pt-3 short:pb-1 short:pt-2 md:px-5 md:pt-5 md:short:pt-2.5"
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, ease }}
     >
-      <div className="rounded-2xl bg-white px-4 py-3 shadow-card ring-1 ring-wn-line md:px-5 md:py-3.5">
-        <div className="mb-1.5 flex flex-wrap items-center gap-2">
+      <div className="rounded-2xl bg-white px-3.5 py-2.5 shadow-card ring-1 ring-wn-line short:rounded-xl short:px-3 short:py-2 md:px-5 md:py-3.5">
+        <div className="mb-1 flex flex-wrap items-center gap-2 short:mb-0.5">
           <UserPerspective perspective={beat.perspective} />
           {beat.step ? (
-            <span className="rounded-full bg-wn-soft px-2.5 py-1 text-[11px] font-bold text-wn-orange ring-1 ring-wn-line">
+            <span className="rounded-full bg-wn-soft px-2.5 py-1 text-[11px] font-bold text-wn-orange ring-1 ring-wn-line short:px-2 short:py-0.5 short:text-[9px]">
               {beat.step}
             </span>
           ) : null}
         </div>
-        <h1 className="font-display text-[1.35rem] font-bold leading-snug text-wn-primary md:text-3xl">
+        <h1 className="font-display text-[1.2rem] font-bold leading-snug text-wn-primary short:text-[1.05rem] md:text-3xl md:short:text-xl">
           {beat.line}
         </h1>
         {beat.note ? (
-          <p className="mt-1.5 max-w-4xl text-[14px] leading-relaxed text-wn-ink/80 md:text-base">
+          <p className="wn-caption-note mt-1 max-w-4xl text-[13px] leading-relaxed text-wn-ink/80 short:mt-0.5 short:text-[12px] md:mt-1.5 md:text-base">
             {beat.note}
           </p>
         ) : null}

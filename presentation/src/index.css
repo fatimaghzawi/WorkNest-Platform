@@ -69,3 +69,38 @@ body,
   font-weight: 700;
   letter-spacing: 0.14em;
 }
+
+/* Short laptop / 720p: denser presentation chrome + radar decks */
+@media (max-height: 800px) {
+  .wn-pres-deck {
+    padding: 0.45rem 0.55rem 0.5rem;
+  }
+
+  .wn-pres-deck__mast {
+    margin-bottom: 0.3rem;
+    padding-bottom: 0.3rem;
+  }
+
+  .wn-pres-deck__kicker {
+    margin-bottom: 0.1rem;
+    font-size: 0.55rem;
+  }
+
+  .wn-caption-note {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Keep bottom nav from covering slide content */
+.wn-stage-pad {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+@media (max-height: 800px) {
+  .wn-stage-pad {
+    padding-bottom: 3.25rem;
+  }
+}

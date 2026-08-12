@@ -372,7 +372,7 @@ export const journey: Beat[] = [
     handoff: 'Take WorkNest with you.',
     layout: 'qr',
     src: SHOTS.qr,
-    url: 'work-nest-platform-nu.vercel.app',
+    url: 'https://work-nest-platform-nu.vercel.app/',
   },
 ];
 

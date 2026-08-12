@@ -3,6 +3,11 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      screens: {
+        // Height-first: small laptop / 720p theatre mode
+        short: { raw: '(max-height: 800px)' },
+        shortish: { raw: '(max-height: 900px)' },
+      },
       colors: {
         wn: {
           primary: '#49225B',
