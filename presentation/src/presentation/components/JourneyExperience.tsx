@@ -73,6 +73,7 @@ export function JourneyExperience({
           {beat.layout === 'spotlight' ? <SpotlightBeat beat={beat} /> : null}
           {beat.layout === 'arc' ? <ArcBeat beat={beat} /> : null}
           {beat.layout === 'closing' ? <ClosingBeat beat={beat} /> : null}
+          {beat.layout === 'qr' ? <QrBeat beat={beat} /> : null}
         </motion.div>
       </AnimatePresence>
     </div>
@@ -2411,6 +2412,47 @@ function ArcBeat({ beat }: { beat: Beat }) {
           ? `ACT ${acts[focus].act} · ${acts[focus].title} — click again or Esc`
           : 'Click an act to focus'}
       </motion.p>
+    </div>
+  );
+}
+
+/** Final slide — large QR to the live app. */
+function QrBeat({ beat }: { beat: Beat }) {
+  const src = beat.src ?? '/worknest-qr.png';
+  const url = beat.url ?? 'work-nest-platform-nu.vercel.app';
+  return (
+    <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#F4F0F8]">
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse 55% 45% at 50% 0%, rgba(165,106,189,0.2) 0%, transparent 55%),
+            radial-gradient(ellipse 40% 35% at 100% 100%, rgba(73,34,91,0.1) 0%, transparent 50%)
+          `,
+        }}
+      />
+      <motion.div
+        className="relative z-10 flex flex-col items-center px-6 text-center"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease }}
+      >
+        <img src="/logo-clear.png" alt="WorkNest" className="h-9 w-auto object-contain md:h-10" />
+        <h1 className="mt-5 font-display text-3xl font-bold text-wn-primary md:text-5xl">{beat.line}</h1>
+        {beat.note ? (
+          <p className="mt-2 text-base text-wn-ink/65 md:text-lg">{beat.note}</p>
+        ) : null}
+        <div className="mt-7 rounded-[1.75rem] bg-white p-5 shadow-[0_18px_48px_rgba(73,34,91,0.14)] ring-1 ring-wn-line md:mt-8 md:p-7">
+          <img
+            src={src}
+            alt="QR code to open WorkNest"
+            className="h-[min(42vh,320px)] w-[min(42vh,320px)] object-contain"
+          />
+        </div>
+        <p className="mt-5 font-display text-sm font-semibold tracking-wide text-wn-primary md:text-base">
+          {url}
+        </p>
+      </motion.div>
     </div>
   );
 }

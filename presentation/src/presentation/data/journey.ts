@@ -36,7 +36,8 @@ export type Beat = {
     | 'money'
     | 'spotlight'
     | 'arc'
-    | 'closing';
+    | 'closing'
+    | 'qr';
   step?: string;
   /** Story chapter for the progress ribbon */
   chapter?: 'GAP' | 'FIND' | 'SPARK' | 'MEET' | 'MATCH' | 'FUND' | 'WORK' | 'PAY' | 'ARC';
@@ -83,6 +84,7 @@ export const SHOTS = {
   workspaceAttachments: '/screenshots/workspace-spotlight-attachments.png',
   workspaceComplete: '/screenshots/workspace-spotlight-complete.png',
   wallet: '/screenshots/user-wallet.png',
+  qr: '/worknest-qr.png',
 } as const;
 
 export const ALL_SHOTS = Object.values(SHOTS);
@@ -360,6 +362,17 @@ export const journey: Beat[] = [
     note: 'Six technical choices that make Find → Meet → Work → Pay trustworthy.',
     handoff: 'That’s the bridge.',
     layout: 'closing',
+  },
+  {
+    id: 'qr',
+    perspective: 'system',
+    chapter: 'ARC',
+    line: 'Explore WorkNest',
+    note: 'Scan to open the live app.',
+    handoff: 'Take WorkNest with you.',
+    layout: 'qr',
+    src: SHOTS.qr,
+    url: 'work-nest-platform-nu.vercel.app',
   },
 ];
 

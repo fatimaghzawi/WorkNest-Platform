@@ -90,8 +90,12 @@ export function PresentationApp() {
     >
       <JourneyExperience index={index} introReplayKey={introReplayKey} />
 
-      {!isCover && !isEnd && beat.id !== 'arc' ? <StoryRibbon chapter={beat.chapter} /> : null}
-      {!isCover && !isEnd && beat.id !== 'arc' ? <CastChip perspective={beat.perspective} /> : null}
+      {!isCover && !isEnd && beat.id !== 'arc' && beat.id !== 'end' ? (
+        <StoryRibbon chapter={beat.chapter} />
+      ) : null}
+      {!isCover && !isEnd && beat.id !== 'arc' && beat.id !== 'end' ? (
+        <CastChip perspective={beat.perspective} />
+      ) : null}
 
       {showChrome ? (
         <>
