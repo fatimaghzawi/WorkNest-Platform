@@ -290,7 +290,29 @@
   background: var(--color-accent-hover);
 }
 
-@media (max-width: 768px) {
+/* Compact desktop before hamburger: small laptops (~769–1100) */
+@media (max-width: 1100px) and (min-width: 1025px) {
+  .wn-navbar {
+    gap: var(--space-1);
+    padding: 0 var(--space-2);
+  }
+
+  .wn-navbar__links {
+    gap: var(--space-2);
+  }
+
+  .wn-navbar__link,
+  .wn-navbar__link-btn {
+    font-size: 13px;
+  }
+
+  .wn-navbar__user-name {
+    display: none;
+  }
+}
+
+/* Hamburger for tablets + small laptops — matches dashboard nav */
+@media (max-width: 1024px) {
   .wn-navbar {
     grid-template-columns: auto 1fr auto;
     height: auto;
@@ -313,19 +335,7 @@
   .wn-navbar__mobile-menu {
     display: block;
   }
-}
 
-@media (max-width: 480px) {
-  .wn-navbar__user-name {
-    display: none;
-  }
-
-  .wn-navbar__logo-container img {
-    height: 28px;
-  }
-}
-
-@media (max-width: 768px) {
   .wn-navbar__mobile-menu a,
   .wn-navbar__mobile-menu .wn-btn {
     min-height: 44px;
@@ -337,5 +347,15 @@
     max-height: calc(100dvh - var(--layout-navbar-height));
     overflow-y: auto;
     padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 480px) {
+  .wn-navbar__user-name {
+    display: none;
+  }
+
+  .wn-navbar__logo-container img {
+    height: 28px;
   }
 }
