@@ -137,6 +137,15 @@
   margin: 0;
   padding: 0;
   flex-wrap: nowrap;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.wn-dash-nav__links::-webkit-scrollbar {
+  display: none;
 }
 
 .wn-dash-nav__link {
@@ -499,17 +508,45 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-@media (max-width: 1024px) {
+/* Dense desktop bar — small laptops before hamburger */
+@media (max-width: 1600px) and (min-width: 1401px) {
+  .wn-dash-nav__bar {
+    gap: 6px;
+    padding: 0 14px;
+  }
+
+  .wn-dash-nav__links {
+    gap: 2px;
+    justify-content: flex-start;
+  }
+
+  .wn-dash-nav__link {
+    padding: 6px 8px;
+    font-size: 12.5px;
+  }
+
+  .wn-dash-nav__badge {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .wn-dash-nav__user-name,
+  .wn-dash-nav__logout--bar {
+    display: none;
+  }
+
+  .wn-dash-nav__actions {
+    gap: 4px;
+  }
+}
+
+/* Hamburger for tablets + small laptops (freelancer/client have many links) */
+@media (max-width: 1400px) {
   .wn-dash-nav__bar {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-  }
-
-  .wn-dash-nav__bar::after {
-    content: '';
-    width: 40px;
-    flex-shrink: 0;
+    padding: 0 16px;
   }
 
   .wn-dash-nav__menu-btn {
@@ -520,10 +557,6 @@
     flex: 1;
     justify-content: center;
     min-width: 0;
-  }
-
-  .wn-dash-nav__bar::after {
-    display: none;
   }
 
   .wn-dash-nav__bar > nav {
@@ -574,6 +607,7 @@
 
   .wn-dash-nav__bar {
     min-height: 56px;
+    padding: 0 var(--space-2);
   }
 
   .wn-dash-nav__mobile {
@@ -613,7 +647,7 @@
   display: none;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1400px) {
   .wn-dash--with-bottom-nav .wn-bottom-nav {
     display: block;
     position: fixed;
@@ -726,7 +760,7 @@
   }
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 1401px) {
   .wn-bottom-nav {
     display: none !important;
   }

@@ -142,7 +142,7 @@ img {
   scroll-margin-top: calc(var(--layout-navbar-height) + 16px);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1400px) {
   :root {
     --layout-bottom-nav-height: calc(56px + env(safe-area-inset-bottom, 0px));
   }

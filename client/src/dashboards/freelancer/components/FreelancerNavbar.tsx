@@ -59,7 +59,7 @@ export default function FreelancerNavbar() {
 
   useEffect(() => {
     const onResize = () => {
-      if (window.innerWidth > 1024) setMobileOpen(false);
+      if (window.innerWidth > 1400) setMobileOpen(false);
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
